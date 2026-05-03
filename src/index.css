@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-white text-black font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  .dark body {
+    @apply bg-black text-white;
+  }
+}
+
+/* In your index.css or tailwind.config.js */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
