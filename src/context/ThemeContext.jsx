@@ -1,26 +1,31 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 
 const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-    // Default to dark theme for this specific project as it was designed in dark mode initially
-    const [isDark, setIsDark] = useState(true);
+    const [isDark, setIsDark] = useState(() => {
+        // Initialise synchronously from localStorage to avoid flash
+        const saved = typeof window !== 'undefined'
+            ? localStorage.getItem('vtrc_theme')
+            : null;
+        return saved ? saved === 'dark' : true; // default = dark (VTRC brand)
+    });
 
-    const toggleTheme = () => {
-        setIsDark(prev => !prev);
-    };
-
-    // Optional: Sync with local storage or system preference
+    // Apply class to <html> immediately — this is what drives all CSS vars,
+    // so there's zero lag vs toggling per-component.
     useEffect(() => {
-        const savedTheme = localStorage.getItem('pixelora_theme');
-        if (savedTheme) {
-            setIsDark(savedTheme === 'dark');
+        const root = document.documentElement;
+        if (isDark) {
+            root.classList.add('dark');
+            root.classList.remove('light');
+        } else {
+            root.classList.add('light');
+            root.classList.remove('dark');
         }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('pixelora_theme', isDark ? 'dark' : 'light');
+        localStorage.setItem('vtrc_theme', isDark ? 'dark' : 'light');
     }, [isDark]);
+
+    const toggleTheme = useCallback(() => setIsDark(prev => !prev), []);
 
     return (
         <ThemeContext.Provider value={{ isDark, toggleTheme }}>
@@ -30,9 +35,7 @@ export const ThemeProvider = ({ children }) => {
 };
 
 export const useTheme = () => {
-    const context = useContext(ThemeContext);
-    if (context === undefined) {
-        throw new Error('useTheme must be used within a ThemeProvider');
-    }
-    return context;
+    const ctx = useContext(ThemeContext);
+    if (!ctx) throw new Error('useTheme must be used within a ThemeProvider');
+    return ctx;
 };

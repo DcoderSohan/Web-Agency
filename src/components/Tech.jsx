@@ -1,59 +1,92 @@
-import React from 'react';
+import React from "react";
 import {
-    SiMongodb, SiExpress, SiReact, SiNodedotjs,
-    SiTailwindcss, SiFramer, SiThreedotjs, SiGreensock
-} from 'react-icons/si';
-import { useTheme } from '../context/ThemeContext';
+  SiMongodb, SiExpress, SiReact, SiNodedotjs,
+  SiTailwindcss, SiDocker, SiKubernetes,
+  SiPostgresql, SiTypescript, SiNextdotjs, SiGraphql,
+} from "react-icons/si";
+import { BsAmazon } from "react-icons/bs";
+import { motion } from "framer-motion";
+
+const techs = [
+  { name: "React",      icon: <SiReact />,      color: "group-hover:text-cyan-400" },
+  { name: "Next.js",    icon: <SiNextdotjs />,  color: "group-hover:text-[#3B82F6]" },
+  { name: "TypeScript", icon: <SiTypescript />, color: "group-hover:text-blue-400" },
+  { name: "Node.js",    icon: <SiNodedotjs />,  color: "group-hover:text-green-400" },
+  { name: "MongoDB",    icon: <SiMongodb />,    color: "group-hover:text-emerald-400" },
+  { name: "PostgreSQL", icon: <SiPostgresql />, color: "group-hover:text-sky-400" },
+  { name: "Docker",     icon: <SiDocker />,     color: "group-hover:text-sky-500" },
+  { name: "Kubernetes", icon: <SiKubernetes />, color: "group-hover:text-blue-500" },
+  { name: "AWS",        icon: <BsAmazon />,     color: "group-hover:text-orange-400" },
+  { name: "GraphQL",    icon: <SiGraphql />,    color: "group-hover:text-pink-500" },
+  { name: "Tailwind",   icon: <SiTailwindcss />,color: "group-hover:text-sky-400" },
+  { name: "Express",    icon: <SiExpress />,    color: "group-hover:text-[#3B82F6]" },
+];
+
+const scrollItems = [...techs, ...techs];
 
 const Tech = () => {
-    const { isDark } = useTheme();
-    const techs = [
-        { name: 'MongoDB', icon: <SiMongodb />, color: 'hover:text-emerald-500' },
-        { name: 'Express', icon: <SiExpress />, color: 'hover:text-gray-400' },
-        { name: 'React', icon: <SiReact />, color: 'hover:text-cyan-400' },
-        { name: 'Node.js', icon: <SiNodedotjs />, color: 'hover:text-green-500' },
-        { name: 'Tailwind', icon: <SiTailwindcss />, color: 'hover:text-sky-400' },
-        { name: 'Framer', icon: <SiFramer />, color: 'hover:text-pink-500' },
-        { name: 'Three.js', icon: <SiThreedotjs />, color: isDark ? 'hover:text-white' : 'hover:text-gray-900' },
-        { name: 'GSAP', icon: <SiGreensock />, color: 'hover:text-lime-400' },
-    ];
+  return (
+    <section
+      id="solutions"
+      className="t-section-alt py-24 overflow-hidden border-y border-[#3B82F6]/08"
+    >
+      <div className="max-w-7xl mx-auto px-6 mb-12">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="flex items-center gap-4 mb-4"
+            >
+              <div className="w-8 h-[1px] bg-[#3B82F6] rounded-full" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#3B82F6]">
+                02 — Technology Stack
+              </span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-2xl font-light t-text-muted"
+            >
+              Powered by enterprise-grade tools.
+            </motion.p>
+          </div>
+        </div>
+      </div>
 
-    // We double the array to ensure the loop is seamless
-    const scrollItems = [...techs, ...techs];
-
-    return (
-        <section className={`py-20 overflow-hidden border-y transition-colors duration-500 ${isDark ? 'bg-[#0D0D0F] border-white/5' : 'bg-gray-50 border-black/5'}`}>
-            <div className="max-w-7xl mx-auto px-6 mb-12 text-center lg:text-left">
-                <h2 className="text-[10px] uppercase tracking-[0.5em] text-purple-500 font-bold mb-4">
-                    02 — The Arsenal
-                </h2>
-                <p className={`text-2xl font-light ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Powered by the cutting edge.</p>
+      <div className="relative flex overflow-hidden">
+        {/* Scrolling strip */}
+        <div className="flex whitespace-nowrap animate-scroll py-4">
+          {scrollItems.map((tech, index) => (
+            <div
+              key={index}
+              className={`group flex items-center gap-4 px-10 py-5 mx-3 border rounded-xl
+                transition-all duration-300 cursor-default t-card
+                hover:border-[#3B82F6]/30`}
+              style={{
+                background: 'var(--tech-item-bg)',
+                borderColor: 'var(--tech-item-border)',
+              }}
+            >
+              <span className={`text-3xl transition-colors duration-300 t-text-subtle ${tech.color}`}>
+                {tech.icon}
+              </span>
+              <span className="text-base font-medium tracking-tight t-text-muted group-hover:t-text transition-colors duration-300">
+                {tech.name}
+              </span>
             </div>
+          ))}
+        </div>
 
-            <div className="relative flex overflow-hidden">
-                {/* The Scrolling Container */}
-                <div className="flex whitespace-nowrap animate-scroll py-4">
-                    {scrollItems.map((tech, index) => (
-                        <div
-                            key={index}
-                            className={`flex items-center gap-4 px-12 py-6 mx-4 backdrop-blur-md border rounded-xl transition-all duration-500 group ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20' : 'bg-black/5 border-black/10 hover:bg-black/10 hover:border-black/20'}`}
-                        >
-                            <span className={`text-4xl transition-colors duration-500 ${isDark ? 'text-gray-600' : 'text-gray-400'} ${tech.color}`}>
-                                {tech.icon}
-                            </span>
-                            <span className={`text-xl font-medium tracking-tight transition-colors duration-500 ${isDark ? 'text-gray-500 group-hover:text-white' : 'text-gray-600 group-hover:text-black'}`}>
-                                {tech.name}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Gradient Fades for the edges to make it look "Cinematic" */}
-                <div className={`absolute inset-y-0 left-0 w-32 bg-gradient-to-r to-transparent z-10 ${isDark ? 'from-[#0D0D0F]' : 'from-gray-50'}`} />
-                <div className={`absolute inset-y-0 right-0 w-32 bg-gradient-to-l to-transparent z-10 ${isDark ? 'from-[#0D0D0F]' : 'from-gray-50'}`} />
-            </div>
-        </section>
-    );
+        {/* Edge fades — match section bg */}
+        <div className="absolute inset-y-0 left-0 w-32 t-fade-left z-10" />
+        <div className="absolute inset-y-0 right-0 w-32 t-fade-right z-10" />
+      </div>
+    </section>
+  );
 };
 
 export default Tech;

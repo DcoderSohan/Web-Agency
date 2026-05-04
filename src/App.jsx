@@ -5,12 +5,13 @@ import Tech from "./components/Tech"
 import WhyChooseUs from "./components/WhyChooseUs"
 import Clients from "./components/Clients"
 import Footer from "./components/Footer"
-
+import CustomCursor from "./components/CustomCursor"
+import { ThemeProvider } from "./context/ThemeContext"
 
 function App() {
-
   return (
-    <>
+    <ThemeProvider>
+      <CustomCursor />
       <Navbar />
       <Hero />
       <AboutSection />
@@ -18,7 +19,7 @@ function App() {
       <WhyChooseUs />
       <Clients />
       <Footer />
-    </>
+    </ThemeProvider>
   )
 }
 
