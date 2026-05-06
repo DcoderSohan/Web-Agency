@@ -5,6 +5,7 @@ import Tech from "./components/Tech"
 import WhyChooseUs from "./components/WhyChooseUs"
 import Clients from "./components/Clients"
 import Footer from "./components/Footer"
+import LogoAnimation from "./components/LogoAnimation"
 import CustomCursor from "./components/CustomCursor"
 import { ThemeProvider } from "./context/ThemeContext"
 
