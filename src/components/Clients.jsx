@@ -1,162 +1,188 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const reviews = [
   {
     company: "NEXORA CORP",
     sector: "FinTech",
-    quote:
-      "VTRC Technologies transformed our legacy banking infrastructure into a real-time, cloud-native platform. The results exceeded every benchmark we had set.",
+    quote: "VTRC Technologies transformed our legacy banking infrastructure into a real-time, cloud-native platform. The results exceeded every benchmark we had set.",
     person: "Chief Technology Officer",
     year: "2025",
+    accent: "#3B82F6",
   },
   {
     company: "ASTRA HEALTH",
     sector: "HealthTech",
-    quote:
-      "The HIPAA-compliant data platform VTRC built for us processes over 2 million records daily with zero downtime. Truly future-ready engineering.",
+    quote: "The HIPAA-compliant data platform processes over 2 million records daily with zero downtime. Truly future-ready engineering.",
     person: "Head of Engineering",
     year: "2025",
+    accent: "#60A5FA",
   },
   {
-    company: "MERIDIAN LOGISTICS",
+    company: "MERIDIAN LOG",
     sector: "Supply Chain",
-    quote:
-      "Our route optimization AI reduced delivery costs by 34% in the first quarter. VTRC's team is exceptionally reliable and deeply skilled.",
+    quote: "Our route optimization AI reduced delivery costs by 34% in the first quarter. VTRC's team is exceptionally reliable.",
     person: "Operations Director",
     year: "2026",
+    accent: "#93C5FD",
   },
   {
-    company: "SOLARIS ENERGY",
+    company: "SOLARIS",
     sector: "CleanTech",
-    quote:
-      "The IoT monitoring dashboard VTRC built gives us real-time visibility across 200+ sites. A seamless blend of elegant design and robust engineering.",
+    quote: "The IoT monitoring dashboard gives us real-time visibility across 200+ sites. A seamless blend of design and engineering.",
     person: "VP of Digital Products",
     year: "2026",
+    accent: "#FFFFFF",
   },
 ];
 
-const Clients = () => {
-  const { isDark } = useTheme();
-  const [expandedIndex, setExpandedIndex] = useState(0);
+// ─── Progress Dot: own component so hooks are called correctly ───
+const ProgressDot = ({ index, total, progress }) => {
+  const start = index / total;
+  const mid   = (index + 0.5) / total;
+  const end   = (index + 1) / total;
+
+  const scale   = useTransform(progress, [start, mid, end], [0.5, 1.4, 0.5]);
+  const opacity = useTransform(progress, [start, mid, end], [0.2, 1,   0.2]);
 
   return (
-    <section
-      id="about-clients"
-      className="t-section-alt py-32 px-4 overflow-hidden border-t border-[#3B82F6]/08"
+    <motion.div
+      style={{ scale, opacity, willChange: "transform, opacity" }}
+      className="w-1.5 h-1.5 rounded-full bg-white"
+    />
+  );
+};
+
+// ─── Perspective Card ───
+const PerspectiveCard = ({ item, index, total, progress }) => {
+  const start  = index / total;
+  const center = (index + 0.5) / total;
+  const end    = (index + 1) / total;
+
+  const z        = useTransform(progress, [start, center, end], [-700, 0, 700]);
+  const opacity  = useTransform(progress, [start, center, end], [0, 1, 0]);
+  const scale    = useTransform(progress, [start, center, end], [0.8, 1, 1.2]);
+  const rotateX  = useTransform(progress, [start, center, end], [25, 0, -25]);
+  const visibility = useTransform(progress, (v) =>
+    v > start - 0.15 && v < end + 0.15 ? "visible" : "hidden"
+  );
+
+  return (
+    <motion.div
+      style={{ z, opacity, scale, rotateX, visibility, transformStyle: "preserve-3d", willChange: "transform, opacity" }}
+      className="absolute w-[90%] max-w-3xl bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-[3rem] p-10 md:p-20 shadow-2xl overflow-hidden group"
     >
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-4 mb-6"
-          >
-            <div className="w-8 h-[1px] bg-[#3B82F6] rounded-full" />
-            <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#3B82F6]">
-              04 — Client Stories
-            </span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-extrabold tracking-tight t-text"
-          >
-            Trusted by Industry{" "}
-            <span
-              style={{
-                background: "linear-gradient(135deg, #3B82F6, #93C5FD)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              Leaders.
-            </span>
-          </motion.h2>
+      {/* Accent glow */}
+      <div
+        className="absolute -top-40 -right-40 w-80 h-80 blur-[100px] opacity-10 group-hover:opacity-25 transition-opacity duration-700 pointer-events-none"
+        style={{ backgroundColor: item.accent }}
+      />
+
+      <div className="relative z-10 flex flex-col gap-10">
+        {/* Company header */}
+        <div className="flex justify-between items-start">
+          <div>
+            <h4 className="text-3xl md:text-5xl font-black uppercase tracking-tight mb-3" style={{ fontFamily: "Orbitron, sans-serif" }}>
+              {item.company}
+            </h4>
+            <div className="flex items-center gap-3">
+              <span className="w-10 h-[1px] bg-white/20" />
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 italic">{item.sector}</span>
+            </div>
+          </div>
+          <div className="text-6xl text-white/05 font-black italic select-none">"</div>
         </div>
 
-        {/* FILMSTRIP TESTIMONIALS */}
-        <div className="flex flex-col md:flex-row h-auto md:h-[480px] gap-3">
-          {reviews.map((item, i) => (
-            <motion.div
-              key={i}
-              onMouseEnter={() => setExpandedIndex(i)}
-              animate={{ flex: expandedIndex === i ? 4 : 1 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="relative overflow-hidden group cursor-pointer rounded-2xl border p-8
-                                flex flex-col justify-between t-card hover:border-[#3B82F6]/30 transition-colors duration-400"
-              id={`testimonial-${i}`}
-            >
-              {/* Glow on active */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br from-[#3B82F6]/06 to-transparent
-                                transition-opacity duration-500 ${expandedIndex === i ? "opacity-100" : "opacity-0"}`}
-              />
+        {/* Quote */}
+        <p className="text-xl md:text-3xl leading-snug text-white/70 font-light italic tracking-tight">
+          "{item.quote}"
+        </p>
 
-              {/* Top: company + sector + year */}
-              <div className="relative z-10 flex justify-between items-start">
-                <div>
-                  <motion.h4
-                    animate={{
-                      rotate: expandedIndex === i ? 0 : -90,
-                      x: expandedIndex === i ? 0 : -10,
-                      y: expandedIndex === i ? 0 : 50,
-                    }}
-                    className={`text-xl font-bold whitespace-nowrap origin-left transition-colors ${
-                      expandedIndex === i ? "t-text" : "t-text-subtle"
-                    }`}
-                  >
-                    {item.company}
-                  </motion.h4>
-                  {expandedIndex === i && (
-                    <motion.span
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-[10px] font-bold uppercase tracking-widest text-[#3B82F6] mt-1 block"
-                    >
-                      {item.sector}
-                    </motion.span>
-                  )}
-                </div>
-                <span className="text-[10px] font-mono t-text-subtle">
-                  {item.year}
-                </span>
-              </div>
+        {/* Footer */}
+        <div className="flex items-center justify-between border-t border-white/05 pt-10">
+          <div className="flex items-center gap-5">
+            <div className="w-12 h-12 rounded-full bg-white/05 border border-white/10 flex items-center justify-center text-lg font-bold">
+              {item.company.charAt(0)}
+            </div>
+            <div>
+              <p className="text-sm font-black uppercase tracking-tight text-white mb-1" style={{ fontFamily: "Orbitron, sans-serif" }}>
+                {item.person}
+              </p>
+              <p className="text-[10px] text-white/20 uppercase tracking-[0.4em] font-medium">
+                Year of Excellence • {item.year}
+              </p>
+            </div>
+          </div>
+          <div className="hidden md:flex gap-2">
+            {["Verified", "Success", "Impact"].map((tag) => (
+              <span key={tag} className="text-[8px] uppercase tracking-widest px-4 py-2 border border-white/05 rounded-full text-white/20">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
-              {/* Quote */}
-              <motion.div
-                animate={{
-                  opacity: expandedIndex === i ? 1 : 0,
-                  y: expandedIndex === i ? 0 : 20,
-                }}
-                className="relative z-10 max-w-lg"
-              >
-                <div className="w-8 h-[1px] bg-[#3B82F6] mb-6" />
-                <p className="text-lg md:text-xl leading-relaxed t-text-muted mb-8 font-light">
-                  "{item.quote}"
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-[1px] bg-[#3B82F6]/60" />
-                  <span className="text-xs uppercase tracking-widest t-text-subtle">
-                    {item.person}
-                  </span>
-                </div>
-              </motion.div>
+// ─── Clients Section ───
+const Clients = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
 
-              {/* Collapsed indicator */}
-              {expandedIndex !== i && (
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col gap-1">
-                  <div className="w-1 h-1 bg-[#3B82F6]/30 rounded-full" />
-                  <div className="w-1 h-1 bg-[#3B82F6]/30 rounded-full" />
-                  <div className="w-1 h-1 bg-[#3B82F6]/30 rounded-full" />
-                </div>
-              )}
-            </motion.div>
+  // Pre-compute kinetic text transforms at hook level (not inside JSX)
+  const textX1 = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const textX2 = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
+
+  return (
+    <section ref={containerRef} className="relative h-[400vh] bg-black overflow-hidden border-t border-white/05">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
+
+        {/* Kinetic background typography */}
+        <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none opacity-[0.025]">
+          <motion.p style={{ x: textX1, willChange: "transform" }} className="text-[18vw] font-black whitespace-nowrap leading-none">
+            IMPACT • TRUST • IMPACT • TRUST
+          </motion.p>
+          <motion.p style={{ x: textX2, willChange: "transform" }} className="text-[18vw] font-black whitespace-nowrap leading-none">
+            CLIENTS • VOICES • CLIENTS • VOICES
+          </motion.p>
+        </div>
+
+        {/* Header */}
+        <div className="absolute top-20 left-10 md:left-20 z-20">
+          <motion.span
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="text-[10px] font-bold uppercase tracking-[0.8em] text-white/30 block mb-6"
+          >
+            Global Impact
+          </motion.span>
+          <h2 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-[0.85]" style={{ fontFamily: "Orbitron, sans-serif" }}>
+            Trusted <br /> <span className="text-white/20">Voices.</span>
+          </h2>
+        </div>
+
+        {/* 3D card field */}
+        <div className="relative w-full h-full flex items-center justify-center" style={{ perspective: "2000px" }}>
+          {reviews.map((item, index) => (
+            <PerspectiveCard
+              key={index}
+              item={item}
+              index={index}
+              total={reviews.length}
+              progress={scrollYProgress}
+            />
+          ))}
+        </div>
+
+        {/* Progress dots — each dot is its own component to respect hooks rules */}
+        <div className="absolute right-10 md:right-20 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-30">
+          {reviews.map((_, i) => (
+            <ProgressDot key={i} index={i} total={reviews.length} progress={scrollYProgress} />
           ))}
         </div>
       </div>

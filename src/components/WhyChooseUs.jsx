@@ -53,7 +53,7 @@ const PageSpeedCard = () => {
             <div className="flex items-center justify-center py-4">
                 <div className="relative w-32 h-32">
                     <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(59,130,246,0.1)" strokeWidth="8" />
+                        <circle cx="50" cy="50" r={radius} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8" />
                         <circle
                             cx="50" cy="50" r={radius} fill="none"
                             stroke="url(#gauge-grad)" strokeWidth="8"
@@ -64,8 +64,8 @@ const PageSpeedCard = () => {
                         />
                         <defs>
                             <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#3B82F6" />
-                                <stop offset="100%" stopColor="#93C5FD" />
+                                <stop offset="0%" stopColor="#ffffff" />
+                                <stop offset="100%" stopColor="#444444" />
                             </linearGradient>
                         </defs>
                     </svg>
@@ -104,7 +104,7 @@ const TimelineCard = () => (
         <h3 className="bento-title mt-2 mb-6">From Brief to Live in 5 Weeks</h3>
         <div className="relative">
             {/* connector line */}
-            <div className="absolute top-5 left-5 right-5 h-px bg-[#3B82F6]/15 hidden md:block" />
+            <div className="absolute top-5 left-5 right-5 h-px bg-white/10 hidden md:block" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {steps.map((s, i) => (
                     <motion.div
@@ -115,8 +115,8 @@ const TimelineCard = () => (
                         transition={{ delay: i * 0.12 }}
                         className="flex flex-col items-center text-center gap-2"
                     >
-                        <div className="relative z-10 w-10 h-10 rounded-full border-2 border-[#3B82F6] bg-[#3B82F6]/10
-                            flex items-center justify-center text-[10px] font-extrabold text-[#3B82F6]">
+                        <div className="relative z-10 w-10 h-10 rounded-full border-2 border-white bg-white/10
+                            flex items-center justify-center text-[10px] font-extrabold text-white">
                             {s.n}
                         </div>
                         <p className="text-[11px] font-bold t-text uppercase tracking-wide">{s.label}</p>
@@ -134,11 +134,11 @@ const TimelineCard = () => (
 const CodeCard = () => {
     const { isDark } = useTheme();
     const lines = [
-        { tokens: [{ t: 'const ', c: 'text-[#C084FC]' }, { t: 'vtrc', c: 'text-[#60A5FA]' }, { t: ' = {', c: 't-text-muted' }] },
-        { tokens: [{ t: '  stack', c: 'text-[#60A5FA]' }, { t: ': [', c: 't-text-muted' }, { t: '"React"', c: 'text-emerald-400' }, { t: ', ...],', c: 't-text-muted' }] },
-        { tokens: [{ t: '  speed', c: 'text-[#60A5FA]' }, { t: ': ', c: 't-text-muted' }, { t: '"100/100"', c: 'text-emerald-400' }, { t: ',', c: 't-text-muted' }] },
-        { tokens: [{ t: '  seo  ', c: 'text-[#60A5FA]' }, { t: ': ', c: 't-text-muted' }, { t: '"Optimised"', c: 'text-emerald-400' }, { t: ',', c: 't-text-muted' }] },
-        { tokens: [{ t: '  ship ', c: 'text-[#60A5FA]' }, { t: ': ', c: 't-text-muted' }, { t: '"5 Weeks"', c: 'text-emerald-400' }, { t: ',', c: 't-text-muted' }] },
+        { tokens: [{ t: 'const ', c: 'text-white' }, { t: 'vtrc', c: 'text-zinc-400' }, { t: ' = {', c: 't-text-muted' }] },
+        { tokens: [{ t: '  stack', c: 'text-zinc-400' }, { t: ': [', c: 't-text-muted' }, { t: '"React"', c: 'text-zinc-200' }, { t: ', ...],', c: 't-text-muted' }] },
+        { tokens: [{ t: '  speed', c: 'text-zinc-400' }, { t: ': ', c: 't-text-muted' }, { t: '"100/100"', c: 'text-zinc-200' }, { t: ',', c: 't-text-muted' }] },
+        { tokens: [{ t: '  seo  ', c: 'text-zinc-400' }, { t: ': ', c: 't-text-muted' }, { t: '"Optimised"', c: 'text-zinc-200' }, { t: ',', c: 't-text-muted' }] },
+        { tokens: [{ t: '  ship ', c: 'text-zinc-400' }, { t: ': ', c: 't-text-muted' }, { t: '"5 Weeks"', c: 'text-zinc-200' }, { t: ',', c: 't-text-muted' }] },
         { tokens: [{ t: '};', c: 't-text-muted' }] },
     ];
 
@@ -220,8 +220,8 @@ const ConversionCard = () => {
                             transition={{ delay: 0.3 + i * 0.07, duration: 0.5, ease: 'easeOut' }}
                             style={{ height: `${h}%`, originY: 1 }}
                             className={`w-full rounded-t-sm ${i >= 9
-                                ? 'bg-gradient-to-t from-[#3B82F6] to-[#93C5FD]'
-                                : 'bg-[#3B82F6]/20'
+                                ? 'bg-gradient-to-t from-white to-zinc-400'
+                                : 'bg-white/10'
                             }`}
                         />
                         <span className="text-[8px] t-text-faint">{months[i]}</span>
@@ -378,8 +378,8 @@ const WhyChooseUs = () => {
                         viewport={{ once: true }}
                         className="flex items-center gap-4 mb-5"
                     >
-                        <div className="w-8 h-[1px] bg-[#3B82F6] rounded-full" />
-                        <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#3B82F6]">
+                        <div className="w-8 h-[1px] bg-white rounded-full" />
+                        <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-white">
                             03 — Why Choose VTRC
                         </span>
                     </motion.div>
@@ -394,7 +394,7 @@ const WhyChooseUs = () => {
                         >
                             We build websites that{' '}
                             <span style={{
-                                background: 'linear-gradient(120deg, #3B82F6 0%, #93C5FD 60%)',
+                                background: 'linear-gradient(120deg, #ffffff 0%, #444444 60%)',
                                 WebkitBackgroundClip: 'text',
                                 WebkitTextFillColor: 'transparent',
                                 backgroundClip: 'text',
@@ -444,7 +444,7 @@ const WhyChooseUs = () => {
                             transition={{ delay: i * 0.07 }}
                             className="t-section flex flex-col items-center text-center gap-2 px-4 py-6 group cursor-default"
                         >
-                            <span className="text-[#3B82F6] group-hover:scale-110 transition-transform">{s.icon}</span>
+                            <span className="text-white group-hover:scale-110 transition-transform">{s.icon}</span>
                             <span className="text-xl font-extrabold gradient-text">{s.val}</span>
                             <span className="text-[10px] t-text-subtle uppercase tracking-wide leading-tight">{s.label}</span>
                         </motion.div>
@@ -462,9 +462,9 @@ const WhyChooseUs = () => {
                     <a
                         href="#contact"
                         className="group flex items-center gap-3 px-8 py-4 rounded-full
-                            text-[12px] font-bold uppercase tracking-[0.18em] text-white
-                            bg-[#3B82F6] hover:bg-[#2563EB] transition-all duration-300
-                            shadow-lg shadow-[#3B82F6]/25 hover:shadow-[#3B82F6]/45 hover:-translate-y-0.5"
+                            text-[12px] font-bold uppercase tracking-[0.18em] text-black
+                            bg-white hover:bg-zinc-200 transition-all duration-300
+                            shadow-lg shadow-white/5 hover:shadow-white/10 hover:-translate-y-0.5"
                     >
                         Start Your Project
                         <FiArrowUpRight size={14} className="group-hover:rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />

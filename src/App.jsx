@@ -1,27 +1,28 @@
-import Navbar from "./components/Navbar"
-import Hero from "./components/Hero"
-import AboutSection from "./components/About"
-import Tech from "./components/Tech"
-import WhyChooseUs from "./components/WhyChooseUs"
-import Clients from "./components/Clients"
-import Footer from "./components/Footer"
-import LogoAnimation from "./components/LogoAnimation"
-import CustomCursor from "./components/CustomCursor"
-import { ThemeProvider } from "./context/ThemeContext"
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import CustomCursor from "./components/CustomCursor";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   return (
     <ThemeProvider>
-      <CustomCursor />
-      <Navbar />
-      <Hero />
-      <AboutSection />
-      <Tech />
-      <WhyChooseUs />
-      <Clients />
-      <Footer />
+      <Router>
+        <CustomCursor />
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about-us" element={<About />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
     </ThemeProvider>
-  )
+  );
 }
 
-export default App
+export default App;

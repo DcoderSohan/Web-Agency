@@ -8,18 +8,18 @@ import { BsAmazon } from "react-icons/bs";
 import { motion } from "framer-motion";
 
 const techs = [
-  { name: "React",      icon: <SiReact />,      color: "group-hover:text-cyan-400" },
-  { name: "Next.js",    icon: <SiNextdotjs />,  color: "group-hover:text-[#3B82F6]" },
-  { name: "TypeScript", icon: <SiTypescript />, color: "group-hover:text-blue-400" },
-  { name: "Node.js",    icon: <SiNodedotjs />,  color: "group-hover:text-green-400" },
-  { name: "MongoDB",    icon: <SiMongodb />,    color: "group-hover:text-emerald-400" },
-  { name: "PostgreSQL", icon: <SiPostgresql />, color: "group-hover:text-sky-400" },
-  { name: "Docker",     icon: <SiDocker />,     color: "group-hover:text-sky-500" },
-  { name: "Kubernetes", icon: <SiKubernetes />, color: "group-hover:text-blue-500" },
-  { name: "AWS",        icon: <BsAmazon />,     color: "group-hover:text-orange-400" },
-  { name: "GraphQL",    icon: <SiGraphql />,    color: "group-hover:text-pink-500" },
-  { name: "Tailwind",   icon: <SiTailwindcss />,color: "group-hover:text-sky-400" },
-  { name: "Express",    icon: <SiExpress />,    color: "group-hover:text-[#3B82F6]" },
+  { name: "React",      icon: <SiReact />,      color: "group-hover:text-white" },
+  { name: "Next.js",    icon: <SiNextdotjs />,  color: "group-hover:text-white" },
+  { name: "TypeScript", icon: <SiTypescript />, color: "group-hover:text-white" },
+  { name: "Node.js",    icon: <SiNodedotjs />,  color: "group-hover:text-white" },
+  { name: "MongoDB",    icon: <SiMongodb />,    color: "group-hover:text-white" },
+  { name: "PostgreSQL", icon: <SiPostgresql />, color: "group-hover:text-white" },
+  { name: "Docker",     icon: <SiDocker />,     color: "group-hover:text-white" },
+  { name: "Kubernetes", icon: <SiKubernetes />, color: "group-hover:text-white" },
+  { name: "AWS",        icon: <BsAmazon />,     color: "group-hover:text-white" },
+  { name: "GraphQL",    icon: <SiGraphql />,    color: "group-hover:text-white" },
+  { name: "Tailwind",   icon: <SiTailwindcss />,color: "group-hover:text-white" },
+  { name: "Express",    icon: <SiExpress />,    color: "group-hover:text-white" },
 ];
 
 const scrollItems = [...techs, ...techs];
@@ -39,8 +39,8 @@ const Tech = () => {
               viewport={{ once: true }}
               className="flex items-center gap-4 mb-4"
             >
-              <div className="w-8 h-[1px] bg-[#3B82F6] rounded-full" />
-              <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#3B82F6]">
+              <div className="w-8 h-[1px] bg-white rounded-full" />
+              <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-white">
                 02 — Technology Stack
               </span>
             </motion.div>

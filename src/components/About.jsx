@@ -24,7 +24,7 @@ const About = () => {
 
             {/* Background accent */}
             <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#3B82F6]/04 blur-[120px]" />
+                <div className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-white/02 blur-[120px]" />
             </div>
             <div className="absolute inset-0 vtrc-grid pointer-events-none" />
 
@@ -37,8 +37,8 @@ const About = () => {
                     viewport={{ once: true }}
                     className="flex items-center gap-4 mb-16"
                 >
-                    <div className="w-8 h-[1px] bg-[#3B82F6] rounded-full" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#3B82F6]">
+                    <div className="w-8 h-[1px] bg-white rounded-full" />
+                    <span className="text-[11px] font-bold uppercase tracking-[0.4em] text-white">
                         01 — About VTRC
                     </span>
                 </motion.div>
@@ -79,7 +79,7 @@ const About = () => {
                     >
                         VTRC Technologies delivers{' '}
                         <span className="t-text font-medium">intelligent, scalable</span>, and{' '}
-                        <span className="text-[#3B82F6] font-medium">future-ready solutions</span> that
+                        <span className="text-zinc-400 font-medium">future-ready solutions</span> that
                         transform how businesses connect, operate, and grow.
                     </motion.p>
 
@@ -96,7 +96,7 @@ const About = () => {
                             { title: 'AI & Automation',   desc: 'Intelligent workflows that eliminate inefficiency and drive growth.' },
                         ].map((item) => (
                             <div key={item.title} className="flex items-start gap-4 group">
-                                <div className="w-2 h-2 rounded-full bg-[#3B82F6] mt-2 flex-shrink-0 group-hover:scale-150 transition-transform" />
+                                <div className="w-2 h-2 rounded-full bg-white mt-2 flex-shrink-0 group-hover:scale-150 transition-transform" />
                                 <div>
                                     <p className="font-semibold t-text text-sm mb-1">{item.title}</p>
                                     <p className="text-sm t-text-subtle font-light">{item.desc}</p>
@@ -120,7 +120,7 @@ const About = () => {
                             <div
                                 className="text-4xl md:text-5xl font-extrabold mb-2"
                                 style={{
-                                    background: 'linear-gradient(135deg, #3B82F6, #93C5FD)',
+                                    background: 'linear-gradient(135deg, #ffffff, #444444)',
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent',
                                     backgroundClip: 'text',
@@ -128,7 +128,7 @@ const About = () => {
                             >
                                 {stat.value}
                             </div>
-                            <p className="text-xs font-semibold uppercase tracking-wider t-text-subtle group-hover:text-[#3B82F6] transition-colors">
+                            <p className="text-xs font-semibold uppercase tracking-wider t-text-subtle group-hover:text-white transition-colors">
                                 {stat.label}
                             </p>
                         </motion.div>
