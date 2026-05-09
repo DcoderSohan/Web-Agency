@@ -1,18 +1,16 @@
 import React from "react";
 import Hero from "../components/Hero";
-import AboutSection from "../components/About";
-import Tech from "../components/Tech";
-import Procedure from "../components/Procedure";
-import Clients from "../components/Clients";
+import Statement from "../components/Statement";
+import FeaturedWork from "../components/FeaturedWork";
+import CTA from "../components/CTA";
 
 const Home = () => {
     return (
         <>
             <Hero />
-            {/* <AboutSection /> */}
-            <Tech />
-            <Procedure />
-            <Clients />
+            <Statement />
+            <FeaturedWork />
+            <CTA />
         </>
     );
 };

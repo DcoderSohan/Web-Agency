@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=Geist:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#5f6161",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#c4c7c7",
+                    "surface-container-highest": "#e3e2e2",
+                    "inverse-primary": "#c8c6c5",
+                    "background": "#faf9f9",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f4f3f3",
+                    "on-secondary-fixed-variant": "#454747",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#1a1c1c",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "outline": "#747878",
+                    "tertiary": "#000000",
+                    "surface-dim": "#dadada",
+                    "surface-variant": "#e3e2e2",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "primary-container": "#1c1b1b",
+                    "primary-fixed": "#e5e2e1",
+                    "inverse-surface": "#2f3131",
+                    "on-primary-container": "#858383",
+                    "on-surface-variant": "#444748",
+                    "inverse-on-surface": "#f1f0f0",
+                    "surface-container-high": "#e9e8e8",
+                    "secondary-container": "#dcdddd",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "on-error": "#ffffff",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-container": "#eeeeee",
+                    "surface": "#faf9f9",
+                    "on-tertiary-container": "#838484",
+                    "on-background": "#1a1c1c",
+                    "tertiary-container": "#1a1c1c",
+                    "surface-bright": "#faf9f9",
+                    "error-container": "#ffdad6",
+                    "secondary": "#5d5f5f",
+                    "on-primary-fixed-variant": "#474646",
+                    "primary": "#000000",
+                    "surface-tint": "#5f5e5e",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-primary-fixed": "#1c1b1b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "64px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Syne"],
+                    "body-md": ["Geist"],
+                    "headline-md": ["Syne"],
+                    "label-mono": ["JetBrains Mono"],
+                    "body-lg": ["Geist"],
+                    "headline-lg": ["Syne"],
+                    "display-xl": ["Syne"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["40px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "label-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-xl": ["120px", {"lineHeight": "110px", "letterSpacing": "-0.04em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #faf9f9;
+            color: #1a1c1c;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="w-full top-0 sticky bg-background border-b-2 border-primary z-50">
+<div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<a class="font-headline-md text-headline-md font-bold tracking-tighter text-primary" href="#">VTRC TECHNOLOGIES</a>
+<div class="hidden md:flex items-center gap-gutter">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-mono text-label-mono" href="#">Work</a>
+<a class="text-secondary font-medium hover:text-primary transition-all duration-200 font-label-mono text-label-mono" href="#">Services</a>
+<a class="text-secondary font-medium hover:text-primary transition-all duration-200 font-label-mono text-label-mono" href="#">Careers</a>
+<a class="text-secondary font-medium hover:text-primary transition-all duration-200 font-label-mono text-label-mono" href="#">Contact</a>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 border-2 border-primary hover:bg-background hover:text-primary transition-all duration-200 font-label-mono text-label-mono scale-95 active:scale-90">
+                Start a Project
+            </button>
+</div>
+</nav>
+<main class="overflow-x-hidden">
+<!-- Hero Section -->
+<section class="px-margin-desktop py-24 max-w-container-max mx-auto flex flex-col items-start">
+<div class="mb-8 px-4 py-1 bg-primary text-on-primary inline-block font-label-mono text-label-mono">
+                ESTABLISHED 2024
+            </div>
+<h1 class="font-display-xl text-[64px] md:text-[100px] lg:text-display-xl uppercase max-w-full md:max-w-5xl mb-12 break-words">
+                WE BUILD FOR PERMANENCE
+            </h1>
+<div class="w-full border-t-2 border-primary pt-8 flex flex-col md:flex-row justify-between items-end gap-gutter md:items-start">
+<p class="font-body-lg text-body-lg max-w-2xl text-secondary">
+                    Engineering digital infrastructure that defies obsolescence. We don't chase trends; we establish standards. Our architectural rigor ensures your systems remain operational while others crumble.
+                </p>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-4xl">arrow_downward</span>
+<span class="font-label-mono text-label-mono uppercase tracking-widest">Scroll to explore</span>
+</div>
+</div>
+</section>
+<!-- Statement Section -->
+<section class="bg-primary text-on-primary py-32 px-margin-desktop">
+<div class="max-w-container-max mx-auto">
+<h2 class="font-headline-lg text-headline-lg uppercase mb-8">
+                    WE REJECT THE NOISE
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter border-t border-on-primary-container pt-8 items-start">
+<p class="font-body-lg text-body-lg text-on-primary-container max-w-full">
+                        The modern web is cluttered with ephemeral vanity metrics and decorative fluff. VTRC strips away the unnecessary to reveal the core structural integrity of your vision.
+                    </p>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between border-b border-on-primary-container pb-2">
+<span class="font-label-mono text-label-mono uppercase">Precision</span>
+<span class="font-label-mono text-label-mono">100%</span>
+</div>
+<div class="flex justify-between border-b border-on-primary-container pb-2">
+<span class="font-label-mono text-label-mono uppercase">Clarity</span>
+<span class="font-label-mono text-label-mono">INFINITE</span>
+</div>
+<div class="flex justify-between border-b border-on-primary-container pb-2">
+<span class="font-label-mono text-label-mono uppercase">Durability</span>
+<span class="font-label-mono text-label-mono">ABSOLUTE</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Work Section (Bento Grid) -->
+<section class="px-margin-desktop py-24 max-w-container-max mx-auto">
+<div class="flex justify-between items-end mb-12">
+<h2 class="font-headline-md text-headline-md uppercase">Featured Work</h2>
+<div class="font-label-mono text-label-mono border-2 border-primary px-4 py-2 uppercase">Selected Output 01-03</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Case Study 1: THE MONOLITH -->
+<div class="md:col-span-8 group relative border-2 border-primary overflow-hidden">
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-500" data-alt="A massive, brutalist concrete skyscraper reaching into a stark gray sky, captured from a low-angle perspective to emphasize its monumental scale. The lighting is cold and diffused, creating a clinical and authoritative mood. The architecture features sharp edges and repetitive geometric patterns in a high-contrast black and white aesthetic, embodying structural honesty and minimalist design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2d3B4lhZoFv0OsstqUPAh1rfIcaivks99_3TquYJHIYXU1nXgPKOPhWAzkzF-oMQGDWOpT3ITITIvf7pvz9WzCeOK-48PHAinZjOYZEgqnFIWkNqP2HiE_dq9_w9RdS0Y6OMJzvIa9RjUYMvb4bzUpTVllHaKhH0sVIuvXwDVgP9oLXyOKWDXblk8-fJO-9VbWhzc-xAEi8guNNc9oKhEDOf_P2FQcPImMb2q585XzyYSICuWse-q9FocvEpolxIufxhlUMfjyw"/>
+</div>
+<div class="p-8 bg-background border-t-2 border-primary flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md uppercase">THE MONOLITH</h3>
+<p class="font-label-mono text-label-mono text-secondary mt-2">Centralized Data Core v2.0</p>
+</div>
+<span class="material-symbols-outlined text-4xl group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Case Study 2: VOID SYSTEM -->
+<div class="md:col-span-4 group border-2 border-primary flex flex-col">
+<div class="p-8 flex-grow bg-primary text-on-primary">
+<div class="mb-12 font-label-mono text-label-mono border border-on-primary px-3 py-1 inline-block">SYSTEM ARCHITECTURE</div>
+<h3 class="font-headline-md text-headline-md uppercase mb-4">VOID SYSTEM</h3>
+<p class="font-body-md text-body-md text-on-primary-container">
+                            A zero-latency communication protocol designed for hyper-secure environments where failure is not an option.
+                        </p>
+</div>
+<div class="aspect-square bg-surface-container overflow-hidden border-t-2 border-primary">
+<img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-500" data-alt="A close-up photograph of high-tech server racks with glowing white indicator lights against a deep black background. The focus is sharp on the metallic textures and cooling fins, creating an atmosphere of technological precision and silent power. The image follows a strict monochromatic palette with stark lighting that highlights the engineered details of the digital infrastructure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWx1VjpAHhcCPno6S_VkmIzAnCNpdCIH_Okylebt9pQ9AfBgbyLsYmjQ0K8KWWO06UBb_H6roahIUdYJB23HilNiqbW91BSXZEEHA0IM7OASdshJXCp-_BJ3ZFhP29j8802MCcnZJgM3uy0bMg52Ph47w-vicdRm1sBiwLb-n9NVy4DoBTM7dIVJmhy2PMLUSpkpK2cQuDbwuJSENizx07g-aE5iazR4t0zrS2K0rPdy20AXWEBuu5JyJmeLbvAIOaAp-0WoMp3A"/>
+</div>
+</div>
+<!-- Case Study 3: CHRONOS -->
+<div class="md:col-span-12 group border-2 border-primary relative overflow-hidden">
+<div class="grid grid-cols-1 md:grid-cols-2">
+<div class="aspect-[16/9] md:aspect-auto bg-surface-container overflow-hidden border-r-0 md:border-r-2 border-primary">
+<img class="w-full h-full object-cover grayscale group-hover:scale-105 transition-transform duration-500" data-alt="A clean, minimalist laboratory setting featuring high-precision instrumentation on a polished white surface. The lighting is bright and sterile, emphasizing the clinical clarity of the environment. Simple geometric shapes and long shadows create a sense of deep time and permanence. The color scheme is limited to whites, grays, and deep blacks to maintain the brand's brutalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKF_7qJO4JpmV1CKeJbHyx3W9ZyJ3uGly2f7is6MtmvWZtyv6aFPJ93LSS8VF15P_NgL-KFXVkLI6s2s0kGM0aE_HiFClaNQmVjcf2uEIDQCc-68_U80oWithdNBmUEBZv2wmR5gnFCAmVtaNlm9XUwlpWpD4oogNEq16qKKlbkL7zOZ8u4W84kuaReLSpY5H8iX5jDWMD7JITgjOqZIr-uek5nJAJdhkq2UIb3tZtp0QOwBSMcMfymJBWK9152zuUFmShLw20aA"/>
+</div>
+<div class="p-12 flex flex-col justify-center bg-background">
+<h3 class="font-headline-lg text-headline-lg uppercase mb-6 text-[40px] md:text-headline-lg">CHRONOS</h3>
+<p class="font-body-lg text-body-lg text-secondary mb-8">
+                                Universal time-sync engine for distributed ledgers. Precise to the nanosecond. Built to last for centuries.
+                            </p>
+<button class="w-fit border-2 border-primary px-10 py-4 font-label-mono text-label-mono uppercase hover:bg-primary hover:text-on-primary transition-all duration-200">
+                                View Technical Specs
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-32 px-margin-desktop bg-surface-container-low border-y-2 border-primary">
+<div class="max-w-container-max mx-auto text-center flex flex-col items-center">
+<div class="font-label-mono text-label-mono mb-8 tracking-[0.5em] uppercase">Ready for integration?</div>
+<h2 class="font-headline-lg text-headline-lg uppercase mb-12 max-w-4xl">
+                    YOUR LEGACY IS OUR BLUEPRINT.
+                </h2>
+<div class="flex flex-col md:flex-row gap-gutter">
+<button class="bg-primary text-on-primary px-12 py-6 border-2 border-primary font-label-mono text-label-mono uppercase hover:bg-background hover:text-primary transition-all duration-200 text-lg">
+                        Initialize Project
+                    </button>
+<button class="bg-transparent text-primary px-12 py-6 border-2 border-primary font-label-mono text-label-mono uppercase hover:bg-primary hover:text-on-primary transition-all duration-200 text-lg">
+                        Request Audit
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-background border-t-2 border-primary mt-24">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center w-full px-margin-desktop py-gutter max-w-container-max mx-auto">
+<div class="flex flex-col gap-4 mb-8 md:mb-0">
+<span class="font-headline-md text-headline-md font-bold text-primary">VTRC</span>
+<p class="font-label-mono text-label-mono text-secondary max-w-xs uppercase">
+                    VTRC Technologies: Engineering the infrastructure of the next century.
+                </p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div class="flex flex-col gap-2">
+<span class="font-label-mono text-label-mono font-bold uppercase mb-2">Navigation</span>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Work</a>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Services</a>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Careers</a>
+</div>
+<div class="flex flex-col gap-2">
+<span class="font-label-mono text-label-mono font-bold uppercase mb-2">Legal</span>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Privacy</a>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Terms</a>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">Contact</a>
+</div>
+<div class="flex flex-col gap-2 col-span-2 md:col-span-1">
+<span class="font-label-mono text-label-mono font-bold uppercase mb-2">Network</span>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">X / Twitter</a>
+<a class="text-secondary hover:text-primary underline font-label-mono text-label-mono" href="#">GitHub</a>
+</div>
+</div>
+</div>
+<div class="w-full border-t border-primary/20 px-margin-desktop py-6 max-w-container-max mx-auto flex flex-col md:flex-row justify-between opacity-80 transition-opacity hover:opacity-100">
+<span class="font-label-mono text-label-mono">© 2024 VTRC TECHNOLOGIES. ALL RIGHTS RESERVED.</span>
+<span class="font-label-mono text-label-mono">37.7749° N, 122.4194° W</span>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&amp;family=Geist:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-surface-variant": "#444748",
+                        "on-secondary-container": "#5f6161",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#e3e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "surface-container-high": "#e9e8e8",
+                        "surface-bright": "#faf9f9",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "outline": "#747878",
+                        "on-tertiary-container": "#838484",
+                        "surface-variant": "#e3e2e2",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "secondary-container": "#dcdddd",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-primary-container": "#858383",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "surface-container-low": "#f4f3f3",
+                        "surface-container": "#eeeeee",
+                        "secondary-fixed": "#e2e2e2",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1a1c1c",
+                        "surface-tint": "#5f5e5e",
+                        "on-error": "#ffffff",
+                        "surface": "#faf9f9",
+                        "tertiary-container": "#1a1c1c",
+                        "on-primary-fixed": "#1c1b1b",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "primary-container": "#1c1b1b",
+                        "inverse-on-surface": "#f1f0f0",
+                        "outline-variant": "#c4c7c7",
+                        "on-tertiary": "#ffffff",
+                        "background": "#faf9f9",
+                        "secondary": "#5d5f5f",
+                        "inverse-surface": "#2f3131"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "gutter": "24px",
+                        "container-max": "1440px",
+                        "margin-desktop": "64px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-md": ["Syne"],
+                        "headline-lg-mobile": ["Syne"],
+                        "headline-lg": ["Syne"],
+                        "display-xl": ["Syne"],
+                        "body-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-mono": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["40px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-xl": ["120px", {"lineHeight": "110px", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .brutalist-border {
+            border: 2px solid #000000;
+        }
+        .brutalist-border-thin {
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- Top Navigation -->
+<nav class="bg-background dark:bg-background border-b border-primary dark:border-outline-variant fixed docked full-width top-0 z-50">
+<div class="flex justify-between items-center w-full px-8 md:px-16 py-6 max-w-container-max mx-auto">
+<div class="font-display-xl text-title-md md:text-display-xl font-extrabold tracking-tighter text-primary dark:text-primary">
+                VTRC Technologies
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Work</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Services</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Careers</a>
+<a class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Contact</a>
+<button class="brutalist-border bg-primary text-on-primary px-6 py-2 font-label-sm text-label-sm uppercase tracking-widest hover:bg-surface-bright hover:text-primary transition-all duration-200 active:translate-y-0.5">
+                    Start a Project
+                </button>
+</div>
+<button class="md:hidden material-symbols-outlined">menu</button>
+</div>
+</nav>
+<main class="pt-40 pb-20 px-8 md:px-16 max-w-container-max mx-auto">
+<!-- Hero Section / Brand Identity -->
+<header class="mb-24">
+<h1 class="font-display-xl text-display-xl uppercase leading-none mb-4">THE JOURNAL</h1>
+<div class="h-1 bg-primary w-full mb-6"></div>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<p class="font-label-mono text-label-mono uppercase tracking-[0.2em] text-on-surface-variant">Technical Dispatches from the Vanguard of Infrastructure</p>
+<div class="flex gap-4">
+<span class="font-label-mono text-label-mono bg-surface-container px-3 py-1 brutalist-border-thin">ISSUE 004</span>
+<span class="font-label-mono text-label-mono bg-surface-container px-3 py-1 brutalist-border-thin">2024 VOL. I</span>
+</div>
+</div>
+</header>
+<!-- Featured Article Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-24 items-stretch">
+<div class="lg:col-span-7 brutalist-border overflow-hidden bg-surface-container group cursor-pointer">
+<img class="w-full h-[600px] object-cover grayscale brightness-90 group-hover:scale-105 transition-transform duration-700" data-alt="A high-contrast greyscale photograph of a brutalist concrete building facade featuring sharp geometric angles and repeating vertical lines. The lighting is harsh and dramatic, casting deep black shadows against the textured grey concrete surfaces. The composition emphasizes the monumental scale and architectural rigor of the structure against a clear, high-key sky." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkCzEH2QUeDVbfpvgMW7ctmGguJFk0TFw74t65t_RNDi3SYvdNA7fVvHjBmV52W2mFUC4pztlOYS7r3I6xZI42NvzSSXqPXIcsV4k05R-ZMtxCCu935YQeXudwiFAqZvScmaCLgej4Af4_H-s_QAcHaNo851Tf6eehLY1YSxHkvosZElgECb1WiA1oPYTH-r_kXvYDfcM-FzR9Zyq5CBEn_fnND9ZV0M2UvoPgD651-8oYGZzeqzQSD7DhALZjCVC2C0CKmGvZKw"/>
+</div>
+<div class="lg:col-span-5 flex flex-col justify-between py-4">
+<div>
+<div class="flex items-center gap-4 mb-6">
+<span class="font-label-mono text-label-mono text-primary brutalist-border px-3 py-1">ARCHITECTURE</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">AUG 14, 2024</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg leading-[1.1] mb-8 hover:underline decoration-4 underline-offset-8 cursor-pointer">PERMANENCE IN THE DIGITAL AGE: RECLAIMING THE MONOLITH</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg">
+                        An examination of physical infrastructure's role in a decentralized world. We argue for the return of architectural density and the elimination of decorative superfluity in technical environments.
+                    </p>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<span class="font-label-mono text-label-mono uppercase tracking-widest font-bold group-hover:translate-x-2 transition-transform">Read Investigation</span>
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_forward</span>
+</div>
+</div>
+</section>
+<!-- Secondary Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+<!-- Article 02 -->
+<article class="flex flex-col border-t-2 border-primary pt-8">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-mono text-label-mono bg-primary text-on-primary px-3 py-0.5">SYSTEMS</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">JUL 28, 2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 hover:tracking-tight transition-all duration-300">LOW-LATENCY BRUTALISM</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">
+                    Stripping back the protocol layers for maximum structural efficiency. A technical deep-dive into zero-overhead network topologies.
+                </p>
+<div class="flex items-center justify-between border-b brutalist-border-thin pb-4 hover:bg-surface-container px-2 transition-colors cursor-pointer">
+<span class="font-label-mono text-label-mono">READ FULL PAPER</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</div>
+</article>
+<!-- Article 03 -->
+<article class="flex flex-col border-t-2 border-primary pt-8">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-mono text-label-mono bg-primary text-on-primary px-3 py-0.5">ETHICS</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">JUL 15, 2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 hover:tracking-tight transition-all duration-300">THE MORALITY OF THE GRID</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">
+                    Why visual order dictates operational integrity. Exploring the philosophical connection between strict layouts and software reliability.
+                </p>
+<div class="flex items-center justify-between border-b brutalist-border-thin pb-4 hover:bg-surface-container px-2 transition-colors cursor-pointer">
+<span class="font-label-mono text-label-mono">READ FULL PAPER</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</div>
+</article>
+<!-- Article 04 -->
+<article class="flex flex-col border-t-2 border-primary pt-8">
+<div class="flex justify-between items-center mb-6">
+<span class="font-label-mono text-label-mono bg-primary text-on-primary px-3 py-0.5">HARDWARE</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">JUN 30, 2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-4 hover:tracking-tight transition-all duration-300">BARE METAL OPTIMIZATION</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">
+                    Bypassing the hypervisor for direct silicon engagement. Performance metrics from the latest VTRC node deployments.
+                </p>
+<div class="flex items-center justify-between border-b brutalist-border-thin pb-4 hover:bg-surface-container px-2 transition-colors cursor-pointer">
+<span class="font-label-mono text-label-mono">READ FULL PAPER</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</div>
+</article>
+</section>
+<!-- Newsletter / Subscription Hook -->
+<section class="mt-32 brutalist-border p-12 bg-surface-container-low flex flex-col md:flex-row items-center gap-12">
+<div class="md:w-1/2">
+<h2 class="font-headline-lg text-headline-md mb-4">ENGINEERED UPDATES.</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Subscribe to receive monthly technical bulletins. No marketing, only documentation.</p>
+</div>
+<div class="md:w-1/2 w-full">
+<form class="flex flex-col gap-4">
+<input class="w-full bg-transparent border-b-2 border-primary py-4 font-label-mono text-label-mono placeholder:text-outline focus:outline-none" placeholder="TERMINAL@ORGANIZATION.COM" type="email"/>
+<button class="bg-primary text-on-primary py-4 font-label-mono text-label-mono uppercase tracking-[0.3em] brutalist-border hover:bg-surface-bright hover:text-primary transition-colors">ESTABLISH CONNECTION</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-background dark:bg-surface-container-lowest border-t border-primary dark:border-outline-variant">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-8 md:px-16 py-16 w-full max-w-container-max mx-auto">
+<div class="md:col-span-6">
+<div class="font-display-xl text-headline-lg font-black tracking-tighter text-primary dark:text-primary mb-8">
+                    VTRC TECHNOLOGIES
+                </div>
+<p class="font-label-mono text-label-mono uppercase tracking-widest text-on-surface-variant mb-4">BUILT FOR PERMANENCE.</p>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm">Architecting the next century of digital and physical infrastructure with clinical precision.</p>
+</div>
+<div class="md:col-span-3">
+<p class="font-label-mono text-label-mono font-bold mb-8 uppercase tracking-widest">Navigation</p>
+<ul class="space-y-4">
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">Work</a></li>
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">Services</a></li>
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">Careers</a></li>
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="md:col-span-3">
+<p class="font-label-mono text-label-mono font-bold mb-8 uppercase tracking-widest">Connect</p>
+<ul class="space-y-4">
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">Twitter/X</a></li>
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">LinkedIn</a></li>
+<li><a class="font-body-lg text-body-lg text-on-surface-variant hover:tracking-widest transition-all duration-300 hover:text-primary block" href="#">GitHub</a></li>
+</ul>
+</div>
+<div class="md:col-span-12 pt-16 mt-16 border-t brutalist-border-thin flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label-mono text-label-mono text-on-surface-variant">© 2024 VTRC TECHNOLOGIES. ALL RIGHTS RESERVED.</p>
+<div class="flex gap-8">
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary" href="#">PRIVACY</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary" href="#">TERMS</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
