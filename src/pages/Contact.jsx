@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const Contact = () => {
   // Easily change the map location here
@@ -7,6 +7,10 @@ const Contact = () => {
     lng: 73.3370135,
     name: "RATNAGIRI, MAHARASHTRA"
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen overflow-x-hidden">

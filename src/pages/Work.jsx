@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Work = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
       {/* Container wrapper for centering */}
@@ -179,9 +185,9 @@ const Work = () => {
           <p className="max-w-[600px] w-full font-['Geist'] text-[18px] leading-[1.6] text-[#858383] mb-12 m-0">
             Our queue for Q4 is opening. We seek partners who value structural integrity and long-form digital strategy.
           </p>
-          <button className="bg-white text-black px-12 py-5 border-2 border-transparent font-['JetBrains_Mono'] text-[12px] font-bold uppercase cursor-pointer hover:bg-transparent hover:text-white hover:border-white transition-colors duration-200 tracking-widest w-full md:w-auto">
+          <Link to="/contact-us" className="bg-white text-black px-12 py-5 border-2 border-transparent font-['JetBrains_Mono'] text-[12px] font-bold uppercase cursor-pointer hover:bg-transparent hover:text-white hover:border-white transition-colors duration-200 tracking-widest w-full md:w-auto">
             Contact Strategy Team
-          </button>
+          </Link>
         </section>
 
       </div>

@@ -13,6 +13,7 @@ import Journal from "../pages/Journal";
 import JournalDetailed from "../pages/JournalDetailed";
 import Contact from "../pages/Contact";
 import StartProject from "../pages/StartProject";
+import Application from "../pages/Application";
 import PageTransition from "./PageTransition";
 
 const AnimatedRoutes = () => {
@@ -32,6 +33,7 @@ const AnimatedRoutes = () => {
         <Route path="/journal/:articleId" element={<PageTransition><JournalDetailed /></PageTransition>} />
         <Route path="/contact-us" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="/start-project" element={<PageTransition><StartProject /></PageTransition>} />
+        <Route path="/application" element={<PageTransition><Application /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
       {/* Container wrapper for centering */}
       <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
-        
+
         {/* ── HERO SECTION ── */}
         <header className="mb-24">
           <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase mb-4 tracking-[0.2em]">
@@ -17,7 +18,7 @@ const Services = () => {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-8 border-2 border-black p-6 md:p-8 bg-[#f4f3f3]">
               <p className="font-['Geist'] text-[18px] leading-[1.6] text-black max-w-2xl m-0">
-                We engineer digital ecosystems that resist obsolescence. Our methodology focuses on structural integrity, high-fidelity engineering, and strategic foresight. 
+                We engineer digital ecosystems that resist obsolescence. Our methodology focuses on structural integrity, high-fidelity engineering, and strategic foresight.
               </p>
             </div>
             <div className="md:col-span-4 border-2 border-black p-6 md:p-8 flex items-center justify-center bg-black text-white">
@@ -58,9 +59,9 @@ const Services = () => {
             </div>
           </div>
           <div className="h-64 w-full border border-black mt-6 overflow-hidden">
-            <img 
-              alt="Brutalist Design" 
-              className="w-full h-full object-cover grayscale contrast-125" 
+            <img
+              alt="Brutalist Design"
+              className="w-full h-full object-cover grayscale contrast-125"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9ask3Pkgzkf1tk2OwJNypa9qMHImLhAXsfgg1I_LE61Aj6tihaf3fS_WRtt3X7x9qI-W_kjicKzitg9MMfv13cI_3j8LFig9kezOTdtzHd7nKTUOiyFA2l1XXgumPVF5iCpXcPU56QVVM861AFGAXfbKa-xu01wYxJp3zMMYPW8W36hUzo3Tarwnz1gM3Q0aHpComaIHQe90p2IwvqbECi_J_5Mn3sbizy1xs8gNbjeY0Lchb41F5hDC0tIyrQJQnp-8Ji90uKw"
             />
           </div>
@@ -96,9 +97,9 @@ const Services = () => {
             </div>
           </div>
           <div className="h-64 w-full border border-black mt-6 overflow-hidden">
-            <img 
-              alt="Clean Code Concept" 
-              className="w-full h-full object-cover grayscale brightness-90" 
+            <img
+              alt="Clean Code Concept"
+              className="w-full h-full object-cover grayscale brightness-90"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdPfdGGERaxGry8-hpaWzTKMMB40sJfgEHrdhXlZIoNFrfZUDElLnBCd0q7X-vNY9_B_I4DAuvdlu_zuWH4t18GtbKBwAwyWlrZeDvbTrUoCxGJC___ut_TYmRwtzlxtlIjiAqbY7mkbfqety5Ra3QyB2iSOAe3_nDW9styObqQDg2HKjM78GwK1AzmwtmvfpfvO7JNrrLnl3ekjuO5BUtQXdqer4uVQSALvT2ViTUwMgBeX8TwEINjmWzN2jKdpIK71BL88cU_A"
             />
           </div>
@@ -134,9 +135,9 @@ const Services = () => {
             </div>
           </div>
           <div className="h-64 w-full border border-black mt-6 overflow-hidden">
-            <img 
-              alt="Business Strategy" 
-              className="w-full h-full object-cover grayscale contrast-150" 
+            <img
+              alt="Business Strategy"
+              className="w-full h-full object-cover grayscale contrast-150"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwDg2ImQ6DWaBQrm4FDpE0tS04ypTvpAkkW5ak_l--RQGOdJXocCPP8iyPBhQGsSFuNtZgdztVGmxTDbAc85jzYBl-Gmc0ELyX-xej5bwxT5-HzC3Nk_2WuJIqajzS046B2gWkbw1nOPxoTAd5BSRvU5yLhf2sPzzRqCG5memp8oPe-XY3aPloLWXot6AzfaGo27sy1GIRyzHeY8Ie9phhninVxl5pMA8j1Vd0s7ABnUKhU3UI8QRUnIRjXWus1BHxRYXpwZPzNA"
             />
           </div>
@@ -151,12 +152,12 @@ const Services = () => {
             Join the roster of world-class brands leveraging VTRC Technologies for their critical infrastructure.
           </p>
           <div className="flex flex-col md:flex-row gap-6 justify-center w-full md:w-auto">
-            <button className="bg-white text-black px-12 py-5 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition-all duration-300 tracking-widest w-full md:w-auto cursor-pointer">
+            <Link to="/contact-us" className="bg-white text-black px-12 py-5 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition-all duration-300 tracking-widest w-full md:w-auto cursor-pointer">
               Contact Us
-            </button>
-            <button className="bg-transparent text-white px-12 py-5 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-white hover:bg-white hover:text-black transition-all duration-300 tracking-widest w-full md:w-auto cursor-pointer">
+            </Link>
+            <Link to="/work" className="bg-transparent text-white px-12 py-5 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-white hover:bg-white hover:text-black transition-all duration-300 tracking-widest w-full md:w-auto cursor-pointer">
               See Our Work
-            </button>
+            </Link>
           </div>
         </section>
 

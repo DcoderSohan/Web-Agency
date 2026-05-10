@@ -1,11 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Careers = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
       <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
-        
+
         {/* ── HERO SECTION ── */}
         <section className="pt-4 pb-16 md:pt-8 md:pb-32 flex flex-col items-start gap-8">
           <div className="inline-block bg-black text-white px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium tracking-[0.05em] uppercase">
@@ -21,7 +27,7 @@ const Careers = () => {
 
         {/* ── Culture Bento Grid ── */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-32">
-          
+
           <div className="col-span-1 md:col-span-8 border border-black p-8 flex flex-col justify-between bg-white">
             <div>
               <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black mb-4 m-0 leading-tight">Our Engineering DNA</h2>
@@ -35,23 +41,23 @@ const Careers = () => {
               <div className="border border-black px-4 py-2 font-['JetBrains_Mono'] text-[12px] font-medium text-black">03 / Speed</div>
             </div>
           </div>
-          
+
           <div className="col-span-1 md:col-span-4 border border-black aspect-square relative overflow-hidden">
-            <img 
-              alt="Office Culture" 
-              className="object-cover w-full h-full grayscale" 
+            <img
+              alt="Office Culture"
+              className="object-cover w-full h-full grayscale"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmH8-ugyYH5J56Bz9lQGkA4McbjO0cZE3tNS3mxFg8ZjA88T-mgTJ0k_uqtgKxf2sYApvFdePbGipJ5woQA7pvvVwCh2qr5HPBuMXnJrbL3PcGQWwmN0UGHuesTrVSMx6MzUh8kUhpWL9mJlHuKwaWQz5hVNQGXQZgAXTbj_KAUZICHrRDMkbZhZpi5cvj2gkrhyBYXvl9u_QGrFWpH0xiT7p6x8sujK03VtCphGHB42d-EKrpBxdz7cIXxeaWTNISqdiiwb_xyA"
             />
           </div>
-          
+
           <div className="col-span-1 md:col-span-4 border border-black aspect-[4/5] relative overflow-hidden">
-            <img 
-              alt="Workspace" 
-              className="object-cover w-full h-full grayscale" 
+            <img
+              alt="Workspace"
+              className="object-cover w-full h-full grayscale"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkvctF3YmuNo70oBNIY7NYX8I_7DMke4ZFwxtdBcpe5unOJA6aOTQ83HNyh8i4jkW9X8JHGYqFFLJPWUYNiDAN3tbXI8bq6MArrOvMiiQs2yGyJZE0iWOF2noIU_gH4AU0Q9RC9eZxmoTkX6X08doOtq5RZ0s7LR3RgoEPZdbqoNCc4djOcQAnhoiH40mvB5S6JjKnYtI8cmdDSvwewfJUlB6RXk4pwIkj1T1M1ZTpTdRow7VW1T8GR75loOpC0ILQAxqBr8NitQ"
             />
           </div>
-          
+
           <div className="col-span-1 md:col-span-8 border border-black p-8 md:p-12 bg-black text-white flex flex-col justify-center">
             <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-white mb-8 m-0 leading-tight">Manifesto</h2>
             <div className="space-y-8">
@@ -69,7 +75,7 @@ const Careers = () => {
               </div>
             </div>
           </div>
-          
+
         </section>
 
         {/* ── Open Roles Section ── */}
@@ -78,9 +84,9 @@ const Careers = () => {
             <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] leading-[1] font-bold uppercase m-0 text-black">Open Roles</h2>
             <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] mb-2 uppercase tracking-widest">AVAILABILITY: 12 POSITIONS</div>
           </div>
-          
+
           <div className="flex flex-col">
-            
+
             {/* Role Item 1 */}
             <Link to="/careers/design-lead" className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline">
               <div className="flex flex-col gap-3">
@@ -146,9 +152,9 @@ const Careers = () => {
           <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] max-w-xl m-0">
             We are always looking for exceptional talent. If you believe you can contribute to the VTRC mission, send us your dossier.
           </p>
-          <button className="bg-black text-white font-['JetBrains_Mono'] text-[12px] font-bold px-12 py-5 border-2 border-transparent hover:bg-transparent hover:text-black hover:border-black transition-colors duration-300 uppercase tracking-[0.05em] cursor-pointer">
+          <Link to="/application" className="bg-black text-white font-['JetBrains_Mono'] text-[12px] font-bold px-12 py-5 border-2 border-transparent hover:bg-transparent hover:text-black hover:border-black transition-colors duration-300 uppercase tracking-[0.05em] cursor-pointer inline-block no-underline">
             Send Speculative Application
-          </button>
+          </Link>
         </section>
 
       </div>
