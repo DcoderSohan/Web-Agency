@@ -31,7 +31,7 @@ const LoadingScreen = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <main className={`relative h-screen w-full flex flex-col items-center justify-center bg-[#faf9f9] text-[#1a1c1c] px-5 md:px-16 overflow-hidden z-[9999] transition-opacity duration-700 ease-in-out ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}>
+    <main className={`fixed inset-0 w-full flex flex-col items-center justify-center bg-[#faf9f9] text-[#1a1c1c] px-5 md:px-16 overflow-hidden z-[9999] transition-opacity duration-700 ease-in-out ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}>
 
 
       {/* Corner Technical Data Streams Removed as requested */}
@@ -46,9 +46,6 @@ const LoadingScreen = ({ onComplete }) => {
         </div>
         <div className="font-['Syne'] text-[60px] md:text-[100px] leading-none tracking-tighter font-extrabold text-black select-none mb-6">
           {progress}<span className="text-[#5d5f5f] opacity-50">%</span>
-        </div>
-        <div className="font-['JetBrains_Mono'] text-[10px] md:text-[14px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-[#5d5f5f] font-bold">
-          INITIALIZING ARCHITECTURAL RIGOR...
         </div>
       </div>
 

@@ -14,6 +14,8 @@ import JournalDetailed from "../pages/JournalDetailed";
 import Contact from "../pages/Contact";
 import StartProject from "../pages/StartProject";
 import Application from "../pages/Application";
+import Privacy from "../pages/Privacy";
+import Terms from "../pages/Terms";
 import PageTransition from "./PageTransition";
 
 const AnimatedRoutes = () => {
@@ -34,6 +36,8 @@ const AnimatedRoutes = () => {
         <Route path="/contact-us" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="/start-project" element={<PageTransition><StartProject /></PageTransition>} />
         <Route path="/application" element={<PageTransition><Application /></PageTransition>} />
+        <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
+        <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

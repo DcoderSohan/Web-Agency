@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="w-full bg-[#faf9f9] border-t-2 border-black mt-24">
       {/* MAIN FOOTER ROW */}
       <div className="flex flex-col md:flex-row justify-between items-start w-full max-w-[1440px] mx-auto px-5 md:px-16 py-10 md:py-12 flex-wrap gap-12 box-border">
-        
+
         {/* BRAND */}
         <div className="flex flex-col gap-4 max-w-[260px] m-0">
           <div className="flex items-center gap-3">
@@ -25,7 +25,7 @@ const Footer = () => {
 
         {/* LINK COLUMNS */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 w-full md:w-auto">
-          
+
           {/* Navigation */}
           <div className="flex flex-col gap-2">
             <span className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase text-[#1a1c1c] mb-2 tracking-[0.08em]">
@@ -41,15 +41,9 @@ const Footer = () => {
             <span className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase text-[#1a1c1c] mb-2 tracking-[0.08em]">
               Legal
             </span>
-            {['Privacy', 'Terms', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black"
-              >
-                {item}
-              </a>
-            ))}
+            <Link to="/privacy" className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black">Privacy</Link>
+            <Link to="/terms" className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black">Terms</Link>
+            <Link to="/contact-us" className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black">Contact</Link>
           </div>
 
           {/* Network */}
@@ -57,17 +51,10 @@ const Footer = () => {
             <span className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase text-[#1a1c1c] mb-2 tracking-[0.08em]">
               Network
             </span>
-            {['X / Twitter', 'GitHub'].map((item) => (
-              <a
-                key={item}
-                href="#"
-                className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black"
-              >
-                {item}
-              </a>
-            ))}
+            <a href="https://twitter.com/vtrc_tech" target="_blank" rel="noopener noreferrer" className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black">X / Twitter</a>
+            <a href="https://github.com/vtrc-tech" target="_blank" rel="noopener noreferrer" className="font-['JetBrains_Mono'] text-[12px] text-[#5d5f5f] underline transition-colors duration-200 hover:text-black">GitHub</a>
           </div>
-          
+
         </div>
       </div>
 
