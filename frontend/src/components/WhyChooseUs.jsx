@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
 import {
     FiZap, FiCode, FiTrendingUp, FiShield,
@@ -238,12 +238,12 @@ const ConversionCard = () => {
 /* ─────────────────────────────────────────────
    CARD 5 — UPTIME / RELIABILITY
 ───────────────────────────────────────────── */
-const UptimeCard = () => {
-    const bars2 = Array.from({ length: 30 }, (_, i) => ({
-        h: i === 11 || i === 22 ? 20 : Math.random() * 60 + 40,
-        ok: i !== 11 && i !== 22,
-    }));
+const bars2Data = Array.from({ length: 30 }, (_, i) => ({
+    h: i === 11 || i === 22 ? 20 : Math.random() * 60 + 40,
+    ok: i !== 11 && i !== 22,
+}));
 
+const UptimeCard = () => {
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -262,7 +262,7 @@ const UptimeCard = () => {
             </div>
             <p className="text-[11px] t-text-subtle mb-4">30-day monitoring window</p>
             <div className="flex items-end gap-0.5 h-12">
-                {bars2.map((b, i) => (
+                {bars2Data.map((b, i) => (
                     <div
                         key={i}
                         style={{ height: `${b.h}%` }}

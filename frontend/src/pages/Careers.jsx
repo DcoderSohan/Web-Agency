@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import axios from 'axios';
 
 const Careers = () => {
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get(`${SERVER_URL}/api/careers`);
+      if (response.data.success) {
+        setJobs(response.data.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch job openings", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
@@ -30,7 +47,7 @@ const Careers = () => {
 
           <div className="col-span-1 md:col-span-8 border border-black p-8 flex flex-col justify-between bg-white">
             <div>
-              <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black mb-4 m-0 leading-tight">Our Engineering DNA</h2>
+              <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black mb-4 m-0 leading-tight uppercase">Our Engineering DNA</h2>
               <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] max-w-xl m-0">
                 We prioritize structural integrity over superficial aesthetics. Our culture is built on radical transparency, peer review, and the pursuit of the "optimal path."
               </p>
@@ -59,19 +76,19 @@ const Careers = () => {
           </div>
 
           <div className="col-span-1 md:col-span-8 border border-black p-8 md:p-12 bg-black text-white flex flex-col justify-center">
-            <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-white mb-8 m-0 leading-tight">Manifesto</h2>
+            <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-white mb-8 m-0 leading-tight uppercase">Manifesto</h2>
             <div className="space-y-8">
               <div className="border-b border-white/20 pb-4">
                 <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">01</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0">Function defines form, always.</p>
+                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Function defines form, always.</p>
               </div>
               <div className="border-b border-white/20 pb-4">
                 <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">02</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0">Complexity is a debt we refuse to accumulate.</p>
+                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Complexity is a debt we refuse to accumulate.</p>
               </div>
               <div>
                 <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">03</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0">Humanity is served through technical precision.</p>
+                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Humanity is served through technical precision.</p>
               </div>
             </div>
           </div>
@@ -82,73 +99,52 @@ const Careers = () => {
         <section className="mb-32">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-2 border-black pb-8 mb-8 gap-4">
             <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] leading-[1] font-bold uppercase m-0 text-black">Open Roles</h2>
-            <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] mb-2 uppercase tracking-widest">AVAILABILITY: 12 POSITIONS</div>
+            <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] mb-2 uppercase tracking-widest">
+                {loading ? "SCANNING GRID..." : `AVAILABILITY: ${jobs.length} POSITIONS`}
+            </div>
           </div>
 
           <div className="flex flex-col">
-
-            {/* Role Item 1 */}
-            <Link to="/careers/design-lead" className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline">
-              <div className="flex flex-col gap-3">
-                <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors">Design Lead</h3>
-                <div className="flex gap-4">
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">LONDON / REMOTE</span>
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">FULL-TIME</span>
+            {loading ? (
+                <div className="py-20 text-center">
+                    <div className="inline-block w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
                 </div>
-              </div>
-              <div className="mt-4 md:mt-0">
-                <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
-              </div>
-            </Link>
-
-            {/* Role Item 2 */}
-            <Link to="/careers/full-stack-engineer" className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline">
-              <div className="flex flex-col gap-3">
-                <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors">Full-stack Engineer</h3>
-                <div className="flex gap-4">
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">BERLIN / REMOTE</span>
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">FULL-TIME</span>
+            ) : jobs.length === 0 ? (
+                <div className="py-20 text-center border-b border-black/10">
+                    <p className="font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest text-[#5d5f5f]">No vacancies detected in the current node cycle.</p>
                 </div>
-              </div>
-              <div className="mt-4 md:mt-0">
-                <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
-              </div>
-            </Link>
-
-            {/* Role Item 3 */}
-            <Link to="/careers/systems-architect" className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline">
-              <div className="flex flex-col gap-3">
-                <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors">Systems Architect</h3>
-                <div className="flex gap-4">
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">SINGAPORE</span>
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">CONTRACT</span>
-                </div>
-              </div>
-              <div className="mt-4 md:mt-0">
-                <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
-              </div>
-            </Link>
-
-            {/* Role Item 4 */}
-            <Link to="/careers/technical-product-manager" className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline">
-              <div className="flex flex-col gap-3">
-                <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors">Technical Product Manager</h3>
-                <div className="flex gap-4">
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">REMOTE</span>
-                  <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">FULL-TIME</span>
-                </div>
-              </div>
-              <div className="mt-4 md:mt-0">
-                <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
-              </div>
-            </Link>
-
+            ) : (
+                jobs.map((job) => (
+                    <Link 
+                        key={job._id}
+                        to={`/careers/${job.slug}`} 
+                        className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline"
+                    >
+                        <div className="flex flex-col gap-3">
+                            <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors uppercase">
+                                {job.jobTitle}
+                            </h3>
+                            <div className="flex gap-4">
+                                <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">
+                                    {job.location} / {job.department}
+                                </span>
+                                <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">
+                                    {job.jobType}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="mt-4 md:mt-0">
+                            <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
+                        </div>
+                    </Link>
+                ))
+            )}
           </div>
         </section>
 
         {/* ── CTA Section ── */}
         <section className="border-2 border-black p-12 md:p-16 flex flex-col items-center text-center gap-8 bg-[#f4f3f3]">
-          <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] font-bold text-black m-0 leading-tight">Don't see your fit?</h2>
+          <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] font-bold text-black m-0 leading-tight uppercase">Don't see your fit?</h2>
           <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] max-w-xl m-0">
             We are always looking for exceptional talent. If you believe you can contribute to the VTRC mission, send us your dossier.
           </p>

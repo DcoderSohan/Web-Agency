@@ -1,4 +1,4 @@
-import React from "react";
+
 import Hero from "../components/Hero";
 import Statement from "../components/Statement";
 import FeaturedWork from "../components/FeaturedWork";
