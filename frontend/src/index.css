@@ -133,10 +133,11 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── BENTO CARD HOVER ─────────────────────────────────── */
 .work-card img {
-  transition: transform 0.5s ease;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.7s ease;
 }
 .work-card:hover img {
   transform: scale(1.05);
+  filter: grayscale(0%);
 }
 .work-card .arrow-icon {
   transition: transform 0.3s ease;
@@ -177,10 +178,6 @@ h1, h2, h3, h4, h5, h6 {
 /* ── GRAYSCALE IMAGE HOVER ────────────────────────────── */
 .img-grayscale {
   filter: grayscale(100%);
-  transition: transform 0.5s ease;
-}
-.work-card:hover .img-grayscale {
-  transform: scale(1.05);
 }
 
 /* ══════════════════════════════════════════════════════════

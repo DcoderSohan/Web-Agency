@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import CustomCursor from "./components/CustomCursor";
-import LoadingScreen from "./components/LoadingScreen";
-import AnimatedRoutes from "./components/AnimatedRoutes";
+import Navbar from "./components/common/Navbar";
+import Footer from "./components/common/Footer";
+import CustomCursor from "./components/ui/CustomCursor";
+import LoadingScreen from "./components/common/LoadingScreen";
+import AnimatedRoutes from "./components/common/AnimatedRoutes";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

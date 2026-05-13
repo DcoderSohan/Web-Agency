@@ -1,9 +1,8 @@
 import { useContext } from "react";
-import "./App.css";
 import { Route, Routes, Navigate } from "react-router-dom";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
+import Login from "./features/auth/Login";
+import SignUp from "./features/auth/SignUp";
+import Dashboard from "./features/admin/Dashboard";
 import { userDataContext } from "./context/UserContext";
 
 function App() {

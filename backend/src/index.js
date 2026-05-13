@@ -2,19 +2,19 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";
-import authRouter from "./routes/auth.route.js";
-import messageRouter from "./routes/message.route.js";
-import todoRouter from "./routes/todo.route.js";
-import statRouter from "./routes/stat.route.js";
+import authRouter from "./features/auth/auth.route.js";
+import messageRouter from "./features/messages/message.route.js";
+import todoRouter from "./features/todo/todo.route.js";
+import statRouter from "./features/stats/stat.route.js";
 import cors from "cors";
 import { app, server } from "./config/socket.js";
 
-import projectRouter from "./routes/projectRoute.js";
-import inquiryRouter from "./routes/inquiry.route.js";
-import userRouter from "./routes/user.route.js";
-import quotationRouter from "./routes/quotation.route.js";
-import blogRouter from "./routes/blog.route.js";
-import careerRouter from "./routes/career.route.js";
+import projectRouter from "./features/projects/projectRoute.js";
+import inquiryRouter from "./features/inquiry/inquiry.route.js";
+import userRouter from "./features/user/user.route.js";
+import quotationRouter from "./features/quotation/quotation.route.js";
+import blogRouter from "./features/blog/blog.route.js";
+import careerRouter from "./features/career/career.route.js";
 
 dotenv.config();
 
