@@ -5,8 +5,8 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: '',
-    phone: 'Not Provided' // Default as the form doesn't have a phone field yet
+    phone: '',
+    message: ''
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -31,7 +31,7 @@ const Contact = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/inquiries`, formData);
       if (response.data.success) {
         setSuccess(true);
-        setFormData({ name: '', email: '', message: '', phone: 'Not Provided' });
+        setFormData({ name: '', email: '', phone: '', message: '' });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send message. Please try again.');
@@ -104,6 +104,17 @@ const Contact = () => {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="ALEX@COMPANY.IO"
+                      className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Syne'] text-[24px] md:text-[32px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 transition-all rounded-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f]">Phone Number</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      placeholder="+1 (555) 000-0000"
                       className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Syne'] text-[24px] md:text-[32px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 transition-all rounded-none"
                     />
                   </div>

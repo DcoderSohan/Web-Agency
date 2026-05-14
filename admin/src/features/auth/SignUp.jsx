@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import { userDataContext } from "../../context/UserContext";
+import { useContext } from "react";
 
 const BackgroundLayers = memo(() => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -36,7 +38,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const serverUrl = "http://localhost:5000"; // Should be from context ideally
+  const { serverUrl } = useContext(userDataContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +46,7 @@ const SignUp = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${serverUrl}/api/auth/register`,
+        `${serverUrl}/api/auth/signup`,
         { name, email, password },
         { withCredentials: true }
       );
@@ -65,10 +67,10 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#faf9f9] relative selection:bg-black/10 font-body p-6">
+    <div className="h-screen w-full flex items-center justify-center bg-[#faf9f9] relative selection:bg-black/10 font-body overflow-hidden p-4 sm:p-6 md:p-8">
       <BackgroundLayers />
 
-      <div className="relative z-10 w-full max-w-5xl flex flex-col lg:flex-row bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-black/5">
+      <div className="relative z-10 w-full max-w-5xl h-full max-h-[850px] flex flex-col lg:flex-row bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-black/5">
         {/* LEFT SIDE: Branding Statement */}
         <div className="hidden lg:flex flex-col relative w-[45%] p-20 justify-between bg-black text-white">
            <motion.div
@@ -104,7 +106,7 @@ const SignUp = () => {
         </div>
 
         {/* RIGHT SIDE: Registration Form */}
-        <div className="w-full lg:w-[55%] flex items-center justify-center p-12 sm:p-24 bg-white">
+        <div className="w-full lg:w-[55%] flex items-center justify-center p-8 sm:p-12 lg:p-20 bg-white overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

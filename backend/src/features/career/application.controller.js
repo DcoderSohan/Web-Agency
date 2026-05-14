@@ -5,7 +5,7 @@ import cloudinary from "../../config/cloudinaryConfig.js";
 const uploadToCloudinary = (fileBuffer) => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "vtrc_applications", resource_type: "auto" },
+      { folder: "vtrc_applications", resource_type: "raw" },
       (error, result) => {
         if (error) reject(error);
         else resolve(result);

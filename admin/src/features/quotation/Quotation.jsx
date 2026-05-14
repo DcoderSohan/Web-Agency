@@ -28,10 +28,11 @@ import {
   X,
   PlusCircle,
 } from "lucide-react";
-import { usePDF } from "react-to-pdf";
 import axios from "axios";
 import { userDataContext } from "../../context/UserContext";
 import { motion, AnimatePresence } from "framer-motion";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const generateRandomQuotation = () => {
   return `VTRC-SPEC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -148,20 +149,67 @@ const Quotation = ({ editData = null, onSaved = null }) => {
     }));
   };
 
-  const { toPDF, targetRef } = usePDF({
-    filename: `VTRC_SPEC_${formData.clientName.replace(/\s+/g, "_")}_${formData.quotationNo}.pdf`,
-    page: { format: "a4", orientation: "portrait" },
-  });
+  // Removed usePDF hook for manual implementation
+  const targetRef = useRef(null);
 
   const handleDownload = async () => {
     setIsExporting(true);
-    setTimeout(() => {
-      toPDF();
-      setTimeout(() => {
+    setActiveTab("preview");
+    
+    window.scrollTo(0, 0);
+
+    setTimeout(async () => {
+      try {
+        const element = targetRef.current;
+        if (!element) return;
+
+        // Use a highly stable, simplified canvas capture
+        const canvas = await html2canvas(element, {
+          scale: 1.5,
+          useCORS: true,
+          logging: false,
+          backgroundColor: "#ffffff",
+          onclone: (clonedDoc) => {
+            // CRITICAL: Ensure the overlay is hidden in the clone
+            const overlay = clonedDoc.querySelector('.fixed.inset-0');
+            if (overlay) overlay.style.display = 'none';
+            
+            const allElements = clonedDoc.getElementsByTagName("*");
+            for (let i = 0; i < allElements.length; i++) {
+              allElements[i].style.transition = "none";
+              allElements[i].style.animation = "none";
+            }
+          }
+        });
+
+        const imgData = canvas.toDataURL("image/jpeg", 0.95);
+        const jsPDFLib = typeof jsPDF === 'function' ? jsPDF : jsPDF.jsPDF;
+        const pdf = new jsPDFLib("p", "mm", "a4");
+
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+        const filename = `VTRC_SPEC_${formData.clientName.replace(/\s+/g, "_")}_${formData.quotationNo}.pdf`;
+        pdf.save(filename);
+
+      } catch (error) {
+        console.error("Manual capture failed, falling back to print:", error);
+        window.print();
+      } finally {
         setIsExporting(false);
-      }, 500);
-    }, 100);
+      }
+    }, 1000); // Increased wait for full DOM stability
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('download') === 'true' && activeTab === 'preview') {
+      handleDownload();
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [activeTab]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -227,8 +275,35 @@ const Quotation = ({ editData = null, onSaved = null }) => {
 
   return (
     <div className="flex flex-col h-full selection:bg-black/10 font-body overflow-hidden">
+      {/* Print-Only CSS to ensure perfect PDF generation */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          /* Hide everything except the quotation area */
+          body { background: white !important; margin: 0 !important; padding: 0 !important; }
+          .flex.flex-col.h-full, aside, header, .flex-1.overflow-y-auto.p-8, .flex.flex-col.sm\\:flex-row.items-center { 
+            display: none !important; 
+          }
+          #quotation-print-area {
+            display: block !important;
+            visibility: visible !important;
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 210mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            transform: none !important;
+          }
+          #quotation-print-area * {
+            visibility: visible !important;
+          }
+          /* Remove header/footer from browser print */
+          @page { size: auto; margin: 0; }
+        }
+      `}} />
+
       {/* Tab Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6 bg-white border-b border-surface-container-low">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6 bg-white border-b border-surface-container-low print:hidden">
         <div className="flex p-1 bg-surface-container-low rounded-xl border border-outline-variant/30 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("edit")}
@@ -268,13 +343,12 @@ const Quotation = ({ editData = null, onSaved = null }) => {
       {/* Toast */}
       <AnimatePresence>
         {toast && (
-          <motion.div 
+          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 20, opacity: 0 }}
-            className={`fixed bottom-10 right-10 z-[200] flex items-center gap-4 px-6 py-4 rounded-xl shadow-2xl text-white text-[10px] font-bold uppercase tracking-widest ${
-            toast.type === 'success' ? 'bg-black' : 'bg-red-600'
-          }`}>
+            className={`fixed bottom-10 right-10 z-[200] flex items-center gap-4 px-6 py-4 rounded-xl shadow-2xl text-white text-[10px] font-bold uppercase tracking-widest ${toast.type === 'success' ? 'bg-black' : 'bg-red-600'
+              }`}>
             {toast.type === 'success' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
             {toast.msg}
           </motion.div>
@@ -282,8 +356,8 @@ const Quotation = ({ editData = null, onSaved = null }) => {
       </AnimatePresence>
 
       {isExporting && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-md z-[100] flex items-center justify-center p-8">
-          <div className="flex flex-col items-center gap-6 p-12 bg-white rounded-3xl shadow-2xl max-w-md w-full border border-outline-variant">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-md z-[100] flex items-center justify-center p-8 pointer-events-none print:hidden">
+          <div className="flex flex-col items-center gap-6 p-12 bg-white rounded-3xl shadow-2xl max-w-md w-full border border-outline-variant pointer-events-auto">
             <RefreshCw className="animate-spin text-black" size={48} />
             <div className="text-center space-y-2">
               <p className="font-black text-black text-2xl uppercase font-display tracking-tight">Generating Document</p>
@@ -715,19 +789,19 @@ const Quotation = ({ editData = null, onSaved = null }) => {
               <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
                 <div className="flex items-center justify-between mb-8 border-b border-surface-container-low pb-6">
                   <div className="flex items-center gap-4">
-                     <div className="p-2.5 bg-black text-white rounded-xl">
-                        <Activity size={20} />
-                     </div>
+                    <div className="p-2.5 bg-black text-white rounded-xl">
+                      <Activity size={20} />
+                    </div>
                     <h3 className="text-xl font-black text-black uppercase font-display tracking-tight">Milestones</h3>
                   </div>
-                   <button onClick={() => setFormData(prev => ({ ...prev, milestones: [...prev.milestones, ""] }))} className="text-outline-variant hover:text-black">
-                      <PlusCircle size={20} />
-                   </button>
+                  <button onClick={() => setFormData(prev => ({ ...prev, milestones: [...prev.milestones, ""] }))} className="text-outline-variant hover:text-black">
+                    <PlusCircle size={20} />
+                  </button>
                 </div>
                 <div className="space-y-4">
                   {formData.milestones.map((ms, idx) => (
                     <div key={idx} className="relative group">
-                       <input
+                      <input
                         value={ms}
                         onChange={(e) => handleMilestoneChange(idx, e.target.value)}
                         className="w-full px-4 py-3 bg-surface-container-low border border-transparent focus:border-black rounded-xl outline-none text-[10px] font-bold font-mono uppercase tracking-tight"
@@ -744,25 +818,25 @@ const Quotation = ({ editData = null, onSaved = null }) => {
               <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
                 <div className="flex items-center justify-between mb-8 border-b border-surface-container-low pb-6">
                   <div className="flex items-center gap-4">
-                     <div className="p-2.5 bg-black text-white rounded-xl">
-                        <FileText size={20} />
-                     </div>
+                    <div className="p-2.5 bg-black text-white rounded-xl">
+                      <FileText size={20} />
+                    </div>
                     <h3 className="text-xl font-black text-black uppercase font-display tracking-tight">Terms</h3>
                   </div>
-                   <button onClick={() => setFormData(prev => ({ ...prev, terms: [...prev.terms, ""] }))} className="text-outline-variant hover:text-black">
-                      <PlusCircle size={20} />
-                   </button>
+                  <button onClick={() => setFormData(prev => ({ ...prev, terms: [...prev.terms, ""] }))} className="text-outline-variant hover:text-black">
+                    <PlusCircle size={20} />
+                  </button>
                 </div>
                 <div className="space-y-4">
                   {formData.terms.map((term, idx) => (
                     <div key={idx} className="relative group">
-                       <input
+                      <input
                         value={term}
                         onChange={(e) => handleTermChange(idx, e.target.value)}
                         className="w-full px-4 py-3 bg-surface-container-low border border-transparent focus:border-black rounded-xl outline-none text-[10px] font-bold font-mono uppercase tracking-tight"
                         placeholder="Term description..."
                       />
-                       <button onClick={() => setFormData(prev => ({ ...prev, terms: prev.terms.filter((_, i) => i !== idx) }))} className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-outline-variant hover:text-red-500 transition-all">
+                      <button onClick={() => setFormData(prev => ({ ...prev, terms: prev.terms.filter((_, i) => i !== idx) }))} className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-outline-variant hover:text-red-500 transition-all">
                         <X size={14} />
                       </button>
                     </div>
@@ -773,179 +847,210 @@ const Quotation = ({ editData = null, onSaved = null }) => {
           </div>
         ) : (
           /* Preview Mode */
-          <div className="max-w-[800px] mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden mb-20" ref={targetRef}>
-            {/* PDF Header */}
-            <div className="p-16 bg-black text-white relative">
-              <div className="flex justify-between items-start relative z-10">
-                <div className="space-y-8">
-                  <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 bg-white flex items-center justify-center rounded-2xl">
+          <div 
+            id="quotation-print-area"
+            className="w-[800px] mx-auto bg-white overflow-hidden mb-20 relative" 
+            ref={targetRef}
+            style={{ minHeight: '1122px' }} // Approx A4 height
+          >
+            {/* Dedicated PDF Style Overrides */}
+            <style dangerouslySetInnerHTML={{ __html: `
+              [data-pdf-content] {
+                font-family: 'Geist', sans-serif !important;
+                -webkit-print-color-adjust: exact;
+                width: 800px;
+                margin: 0;
+                background: white;
+              }
+              [data-pdf-content] h1, [data-pdf-content] h2, [data-pdf-content] h3, [data-pdf-content] h4 {
+                font-family: 'Syne', sans-serif !important;
+                letter-spacing: -0.02em;
+              }
+              [data-pdf-content] .font-mono {
+                font-family: 'JetBrains Mono', monospace !important;
+              }
+              [data-pdf-content] section {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+              }
+              /* Force white background for capture */
+              .bg-white { background-color: #ffffff !important; }
+              .bg-black { background-color: #000000 !important; }
+            `}} />
+            
+            <div data-pdf-content className="w-full bg-white">
+              {/* PDF Header */}
+              <div className="p-16 bg-black text-white relative">
+                <div className="flex justify-between items-start relative z-10">
+                  <div className="space-y-8">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-white flex items-center justify-center rounded-2xl">
                         <div className="w-5 h-5 bg-black rounded-md"></div>
-                     </div>
-                     <span className="text-3xl font-black tracking-tighter uppercase font-display">VTRC</span>
+                      </div>
+                      <span className="text-3xl font-black tracking-tighter uppercase font-display">VTRC</span>
+                    </div>
+                    <div className="space-y-2">
+                      <h1 className="text-5xl font-black uppercase font-display tracking-tight leading-none">
+                        Project<br />Specification
+                      </h1>
+                      <div className="h-1 w-20 bg-white/20"></div>
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <h1 className="text-5xl font-black uppercase font-display tracking-tight leading-none">
-                      Project<br />Specification
-                    </h1>
-                    <div className="h-1 w-20 bg-white/20"></div>
-                  </div>
-                </div>
-                <div className="text-right space-y-4 font-mono">
-                  <div className="space-y-1">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Document ID</p>
-                    <p className="text-xs font-black tracking-widest">{formData.quotationNo}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Issue Date</p>
-                    <p className="text-xs font-black tracking-widest uppercase">{formData.date}</p>
+                  <div className="text-right space-y-4 font-mono">
+                    <div className="space-y-1">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Document ID</p>
+                      <p className="text-xs font-black tracking-widest">{formData.quotationNo}</p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Issue Date</p>
+                      <p className="text-xs font-black tracking-widest uppercase">{formData.date}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Entity Block */}
-            <div className="p-16 border-b border-surface-container">
-               <div className="grid grid-cols-2 gap-16">
+              {/* Entity Block */}
+              <div className="p-16 border-b border-surface-container">
+                <div className="grid grid-cols-2 gap-16">
                   <div className="space-y-6">
-                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Issuing Agency</p>
-                     <div className="space-y-2">
-                        <p className="text-lg font-black text-black font-display uppercase tracking-tight">VTRC Technologies</p>
-                        <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
-                           Strategic Architecture Unit<br />
-                           VTRC.TECH / OPERATIONAL AXIS
-                        </p>
-                     </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Issuing Agency</p>
+                    <div className="space-y-2">
+                      <p className="text-lg font-black text-black font-display uppercase tracking-tight">VTRC Technologies</p>
+                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
+                        Strategic Architecture Unit<br />
+                        VTRC.TECH / OPERATIONAL AXIS
+                      </p>
+                    </div>
                   </div>
                   <div className="space-y-6">
-                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Client Entity</p>
-                     <div className="space-y-2">
-                        <p className="text-lg font-black text-black font-display uppercase tracking-tight">{formData.clientName}</p>
-                        <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
-                           {formData.clientAddress}<br />
-                           {formData.clientEmail}
-                        </p>
-                     </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Client Entity</p>
+                    <div className="space-y-2">
+                      <p className="text-lg font-black text-black font-display uppercase tracking-tight">{formData.clientName}</p>
+                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
+                        {formData.clientAddress}<br />
+                        {formData.clientEmail}
+                      </p>
+                    </div>
                   </div>
-               </div>
-            </div>
+                </div>
+              </div>
 
-            <div className="p-16 space-y-20">
-               {/* Summary */}
-               <section className="space-y-6">
+              <div className="p-16 space-y-20">
+                {/* Summary */}
+                <section className="space-y-6">
                   <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                     <div className="w-2 h-2 bg-black rounded-full"></div> 01 Executive Summary
+                    <div className="w-2 h-2 bg-black rounded-full"></div> 01 Executive Summary
                   </h3>
                   <p className="text-xl font-bold text-black font-display leading-tight uppercase italic">
-                     "{formData.executiveSummary}"
+                    "{formData.executiveSummary}"
                   </p>
-               </section>
+                </section>
 
-               {/* Deliverables */}
-               <section className="space-y-10">
+                {/* Deliverables */}
+                <section className="space-y-10">
                   <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                     <div className="w-2 h-2 bg-black rounded-full"></div> 02 Project Deliverables
+                    <div className="w-2 h-2 bg-black rounded-full"></div> 02 Project Deliverables
                   </h3>
                   <div className="grid grid-cols-1 gap-12">
-                     {formData.deliverables.map((item, idx) => (
-                        <div key={idx} className="grid grid-cols-12 gap-8 group">
-                           <div className="col-span-1 text-2xl font-black text-outline-variant font-display">0{idx+1}</div>
-                           <div className="col-span-11 space-y-2">
-                              <h4 className="text-xl font-black text-black uppercase font-display tracking-tight">{item.title}</h4>
-                              <p className="text-sm font-bold text-secondary uppercase font-mono leading-relaxed">{item.description}</p>
-                           </div>
+                    {formData.deliverables.map((item, idx) => (
+                      <div key={idx} className="grid grid-cols-12 gap-8 group">
+                        <div className="col-span-1 text-2xl font-black text-outline-variant font-display">0{idx + 1}</div>
+                        <div className="col-span-11 space-y-2">
+                          <h4 className="text-xl font-black text-black uppercase font-display tracking-tight">{item.title}</h4>
+                          <p className="text-sm font-bold text-secondary uppercase font-mono leading-relaxed">{item.description}</p>
                         </div>
-                     ))}
+                      </div>
+                    ))}
                   </div>
-               </section>
+                </section>
 
-               {/* Roadmap */}
-               <section className="space-y-10">
+                {/* Roadmap */}
+                <section className="space-y-10">
                   <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                     <div className="w-2 h-2 bg-black rounded-full"></div> 03 Strategic Roadmap
+                    <div className="w-2 h-2 bg-black rounded-full"></div> 03 Strategic Roadmap
                   </h3>
                   <div className="grid grid-cols-4 gap-4">
-                     {formData.roadmap.map((item, idx) => (
-                        <div key={idx} className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-2xl space-y-4 text-center">
-                           <p className="text-[10px] font-black font-mono text-outline-variant">{item.step}</p>
-                           <div>
-                              <p className="text-[11px] font-black text-black uppercase font-display mb-1">{item.label}</p>
-                              <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">{item.duration}</p>
-                           </div>
+                    {formData.roadmap.map((item, idx) => (
+                      <div key={idx} className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-2xl space-y-4 text-center">
+                        <p className="text-[10px] font-black font-mono text-outline-variant">{item.step}</p>
+                        <div>
+                          <p className="text-[11px] font-black text-black uppercase font-display mb-1">{item.label}</p>
+                          <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">{item.duration}</p>
                         </div>
-                     ))}
+                      </div>
+                    ))}
                   </div>
-               </section>
+                </section>
 
-               {/* Financials */}
-               <section className="space-y-10">
+                {/* Financials */}
+                <section className="space-y-10">
                   <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                     <div className="w-2 h-2 bg-black rounded-full"></div> 04 Financial Allocation
+                    <div className="w-2 h-2 bg-black rounded-full"></div> 04 Financial Allocation
                   </h3>
                   <div className="overflow-hidden border border-black rounded-2xl">
-                     <table className="w-full border-collapse">
-                        <thead>
-                           <tr className="bg-black text-white font-mono text-[10px] font-bold uppercase tracking-widest">
-                              <th className="px-8 py-4 text-left">Structural Component</th>
-                              <th className="px-8 py-4 text-right">Allocation</th>
-                           </tr>
-                        </thead>
-                        <tbody className="font-mono text-xs font-bold uppercase">
-                           {formData.investment.map((item, idx) => (
-                              <tr key={idx} className="border-b border-surface-container">
-                                 <td className="px-8 py-6 text-black">{item.item}</td>
-                                 <td className="px-8 py-6 text-right text-black">
-                                    {item.type === 'included' ? 'INCLUDED' : `₹${Number(item.price).toLocaleString('en-IN')}`}
-                                 </td>
-                              </tr>
-                           ))}
-                           <tr className="bg-surface-container-low">
-                              <td className="px-8 py-8 font-black text-black">Total Specification Value</td>
-                              <td className="px-8 py-8 text-right text-3xl font-black text-black font-display">₹{formData.totalValue.toLocaleString('en-IN')}</td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  </div>
-               </section>
-
-               {/* Maintenance */}
-               <section className="grid grid-cols-2 gap-16 pt-10 border-t border-surface-container">
-                  <div className="space-y-6">
-                     <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">05 Maintenance</h3>
-                     <div className="p-8 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-4">
-                        <div className="flex justify-between items-center">
-                           <p className="text-sm font-black text-black uppercase font-display">{formData.supportPlan.name}</p>
-                           <p className="text-lg font-black text-black font-display">₹{formData.supportPlan.price}{formData.supportPlan.unit}</p>
-                        </div>
-                        <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">{formData.supportPlan.description}</p>
-                     </div>
-                  </div>
-                  <div className="space-y-6">
-                     <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">06 Project Milestones</h3>
-                     <div className="space-y-4">
-                        {formData.milestones.map((ms, idx) => (
-                           <div key={idx} className="flex gap-4 text-[11px] font-bold text-black uppercase font-mono">
-                              <span className="text-outline-variant">M{idx+1}</span>
-                              <span>{ms}</span>
-                           </div>
+                    <table className="w-full border-collapse">
+                      <thead>
+                        <tr className="bg-black text-white font-mono text-[10px] font-bold uppercase tracking-widest">
+                          <th className="px-8 py-4 text-left">Structural Component</th>
+                          <th className="px-8 py-4 text-right">Allocation</th>
+                        </tr>
+                      </thead>
+                      <tbody className="font-mono text-xs font-bold uppercase">
+                        {formData.investment.map((item, idx) => (
+                          <tr key={idx} className="border-b border-surface-container">
+                            <td className="px-8 py-6 text-black">{item.item}</td>
+                            <td className="px-8 py-6 text-right text-black">
+                              {item.type === 'included' ? 'INCLUDED' : `₹${Number(item.price).toLocaleString('en-IN')}`}
+                            </td>
+                          </tr>
                         ))}
-                     </div>
+                        <tr className="bg-surface-container-low">
+                          <td className="px-8 py-8 font-black text-black">Total Specification Value</td>
+                          <td className="px-8 py-8 text-right text-3xl font-black text-black font-display">₹{formData.totalValue.toLocaleString('en-IN')}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
-               </section>
+                </section>
 
-               {/* Signature */}
-               <div className="pt-20 flex justify-between items-end">
+                {/* Maintenance */}
+                <section className="grid grid-cols-2 gap-16 pt-10 border-t border-surface-container">
+                  <div className="space-y-6">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">05 Maintenance</h3>
+                    <div className="p-8 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-4">
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm font-black text-black uppercase font-display">{formData.supportPlan.name}</p>
+                        <p className="text-lg font-black text-black font-display">₹{formData.supportPlan.price}{formData.supportPlan.unit}</p>
+                      </div>
+                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">{formData.supportPlan.description}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-6">
+                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">06 Project Milestones</h3>
+                    <div className="space-y-4">
+                      {formData.milestones.map((ms, idx) => (
+                        <div key={idx} className="flex gap-4 text-[11px] font-bold text-black uppercase font-mono">
+                          <span className="text-outline-variant">M{idx + 1}</span>
+                          <span>{ms}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+
+                <div className="pt-20 flex justify-between items-end">
                   <div className="space-y-8">
-                     <div className="w-48 h-1 bg-black"></div>
-                     <div className="space-y-1">
-                        <p className="text-sm font-black text-black uppercase font-display">Authorized Signature</p>
-                        <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">VTRC TECHNOLOGIES CORE UNIT</p>
-                     </div>
+                    <div className="w-48 h-1 bg-black"></div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-black text-black uppercase font-display">Authorized Signature</p>
+                      <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">VTRC TECHNOLOGIES CORE UNIT</p>
+                    </div>
                   </div>
                   <div className="text-right">
-                      <p className="text-[9px] font-bold text-outline-variant uppercase font-mono tracking-[0.5em]">DOCUMENT AUTHENTICATED</p>
+                    <p className="text-[9px] font-bold text-outline-variant uppercase font-mono tracking-[0.5em]">DOCUMENT AUTHENTICATED</p>
                   </div>
-               </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -101,7 +101,11 @@ const AdminDashboard = () => {
       case "projects": return <ProjectPostView onAddTask={handleAddTaskFromProject} />;
       case "messages": return <MessageView showChatOnMobile={isChatOpenOnMobile} setShowChatOnMobile={setIsChatOpenOnMobile} />;
       case "quotation": return <Quotation />;
-      case "quotation-history": return <QuotationHistory />;
+      case "quotation-history": return <QuotationHistory onDownload={(q) => {
+        // This is a placeholder logic: in a real app we'd pass data to the quotation tab
+        setActiveTab("quotation");
+        // We'd need a way to set the form data there, but for now we'll just navigate
+      }} />;
       case "users": return <UserView />;
       case "inquiries": return <InquiryView />;
       case "project-leads": return <ProjectInquiryView />;

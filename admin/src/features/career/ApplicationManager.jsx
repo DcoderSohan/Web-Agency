@@ -90,6 +90,36 @@ const ApplicationManager = () => {
     }
   };
 
+  const getDownloadUrl = (url) => {
+    if (!url || typeof url !== 'string') return "";
+    // If it's a Cloudinary image-type PDF, try to use raw-type for better download support
+    if (url.includes("res.cloudinary.com") && url.includes("/image/upload/")) {
+      return url.replace("/image/upload/", "/raw/upload/");
+    }
+    return url;
+  };
+
+  const handleDownload = async (url, filename) => {
+    const downloadUrl = getDownloadUrl(url);
+    try {
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed:", error);
+      // Fallback: try opening the modified URL in a new tab
+      window.open(downloadUrl, '_blank');
+    }
+  };
+
   return (
     <div className="space-y-8 pb-20 selection:bg-black/10 font-body">
       {/* Header Area */}
@@ -228,15 +258,13 @@ const ApplicationManager = () => {
                           <FileText size={18} className="text-black" />
                           <h4 className="text-sm font-black uppercase font-display text-black">Resume / CV</h4>
                        </div>
-                       <a 
-                         href={selectedApp.resume} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="flex items-center justify-between p-6 border-2 border-black rounded-2xl hover:bg-black hover:text-white transition-all group"
+                       <button 
+                         onClick={() => handleDownload(selectedApp.resume, `${selectedApp.name.replace(/\s+/g, '_')}_Resume.pdf`)}
+                         className="w-full flex items-center justify-between p-6 border-2 border-black rounded-2xl hover:bg-black hover:text-white transition-all group"
                        >
                          <span className="text-[10px] font-bold font-mono uppercase tracking-widest">Download Resume File</span>
                          <ExternalLink size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                       </a>
+                       </button>
                     </section>
 
                     <section className="space-y-4">

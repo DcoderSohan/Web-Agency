@@ -64,10 +64,10 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#faf9f9] relative selection:bg-black/10 font-body p-6">
+    <div className="h-screen w-full flex items-center justify-center bg-[#faf9f9] relative selection:bg-black/10 font-body overflow-hidden p-4 sm:p-6 md:p-8">
       <BackgroundLayers />
 
-      <div className="relative z-10 w-full max-w-5xl flex flex-col lg:flex-row bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-black/5">
+      <div className="relative z-10 w-full max-w-5xl h-full max-h-[700px] flex flex-col lg:flex-row bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-black/5">
         {/* LEFT SIDE: Branding Statement */}
         <div className="hidden lg:flex flex-col relative w-[45%] p-20 justify-between bg-black text-white">
            <motion.div
@@ -102,8 +102,8 @@ const Login = () => {
           </div>
         </div>
 
-        {/* RIGHT SIDE: Login Form */}
-        <div className="w-full lg:w-[55%] flex items-center justify-center p-12 sm:p-24 bg-white">
+        {/* RIGHT SIDE: Registration Form */}
+        <div className="w-full lg:w-[55%] flex items-center justify-center p-8 sm:p-12 lg:p-20 bg-white">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
