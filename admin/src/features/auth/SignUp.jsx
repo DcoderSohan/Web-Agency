@@ -111,13 +111,13 @@ const SignUp = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full max-w-sm"
+            className="w-full max-w-[340px]"
           >
-            <div className="mb-12">
-              <h2 className="text-4xl font-black tracking-tight text-black font-display uppercase leading-tight">
+            <div className="mb-8">
+              <h2 className="text-2xl font-black tracking-tighter text-black font-display uppercase leading-tight">
                 New Operator
               </h2>
-              <p className="mt-3 text-sm font-bold text-slate-400 font-body uppercase tracking-tight">
+              <p className="mt-2 text-[10px] font-bold text-slate-400 font-mono uppercase tracking-widest opacity-70">
                 Complete registration to initialize node.
               </p>
             </div>
@@ -139,7 +139,7 @@ const SignUp = () => {
                       value={name}
                       required
                       placeholder="e.g. John Doe"
-                      className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent focus:border-black rounded-2xl outline-none transition-all text-sm font-bold font-mono placeholder:text-slate-200 uppercase tracking-tight"
+                      className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-transparent focus:border-black rounded-xl outline-none transition-all text-xs font-bold font-mono placeholder:text-slate-200 uppercase tracking-tight"
                     />
                   </div>
                 </div>
@@ -159,7 +159,7 @@ const SignUp = () => {
                       value={email}
                       required
                       placeholder="operator@vtrc.tech"
-                      className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-transparent focus:border-black rounded-2xl outline-none transition-all text-sm font-bold font-mono placeholder:text-slate-200 uppercase tracking-tight"
+                      className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-transparent focus:border-black rounded-xl outline-none transition-all text-xs font-bold font-mono placeholder:text-slate-200 uppercase tracking-tight"
                     />
                   </div>
                 </div>
@@ -179,7 +179,7 @@ const SignUp = () => {
                       value={password}
                       required
                       placeholder="••••••••"
-                      className="w-full pl-12 pr-12 py-3.5 bg-slate-50 border border-transparent focus:border-black rounded-2xl outline-none transition-all text-sm tracking-widest placeholder:text-slate-200"
+                      className="w-full pl-12 pr-12 py-3 bg-slate-50 border border-transparent focus:border-black rounded-xl outline-none transition-all text-xs tracking-widest placeholder:text-slate-200"
                     />
                     <button
                       type="button"
@@ -196,7 +196,7 @@ const SignUp = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-red-50 text-red-600 p-5 rounded-2xl flex items-center gap-3 text-[10px] font-bold uppercase tracking-widest font-mono border border-red-100"
+                  className="bg-red-50 text-red-600 p-4 rounded-xl flex items-center gap-3 text-[9px] font-bold uppercase tracking-widest font-mono border border-red-100"
                 >
                   <Terminal size={14} />
                   <span>{err}</span>
@@ -207,7 +207,7 @@ const SignUp = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-5 bg-black text-white rounded-2xl font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3 disabled:opacity-20"
+                  className="w-full py-4 bg-black text-white rounded-xl font-mono text-[10px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-black/10 flex items-center justify-center gap-3 disabled:opacity-20"
                 >
                   {loading ? "Registering..." : "Initialize Node"}
                   {!loading && <ArrowRight size={16} />}
