@@ -75,7 +75,7 @@ const Contact = () => {
                 </div>
                 <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-4">Transmission Received</h2>
                 <p className="font-['Geist'] text-[18px] text-[#5d5f5f] mb-12">Our operators will process your brief and respond within 24 standard cycles.</p>
-                <button 
+                <button
                   onClick={() => setSuccess(false)}
                   className="bg-black text-white px-10 py-4 font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest border-2 border-black hover:bg-transparent hover:text-black transition-all"
                 >
@@ -167,9 +167,9 @@ const Contact = () => {
                 Global Headquarters
               </h3>
               <address className="not-italic font-['Syne'] text-[20px] md:text-[24px] font-bold leading-tight text-black break-words m-0">
-                1401 CONSTITUTION AVE NW<br />
-                WASHINGTON, DC 20230<br />
-                UNITED STATES
+                Ratnagiri<br />
+                Maharashtra<br />
+                415612
               </address>
               <div className="mt-8 pt-8 border-t border-black/20">
                 <img
