@@ -84,12 +84,18 @@ const Quotation = ({ editData = null, onSaved = null }) => {
         type: "fixed",
       },
       {
-        item: "Project Management & Support",
-        price: 0,
-        type: "included",
+        item: "Cloud Infrastructure & Hosting",
+        price: 5000,
+        type: "fixed",
       },
+      {
+        item: "QA & Security Audit",
+        price: 3500,
+        type: "fixed",
+      }
     ],
     totalValue: 25000,
+    signatureImage: null,
     supportPlan: {
       name: "Maintenance & Support",
       subType: "Standard",
@@ -153,53 +159,82 @@ const Quotation = ({ editData = null, onSaved = null }) => {
   const targetRef = useRef(null);
 
   const handleDownload = async () => {
-    setIsExporting(true);
-    setActiveTab("preview");
-    
-    window.scrollTo(0, 0);
+    try {
+      setIsExporting(true);
+      setActiveTab("preview");
 
-    setTimeout(async () => {
-      try {
-        const element = targetRef.current;
-        if (!element) return;
+      // Wait for tab switch and DOM stability
+      await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Use a highly stable, simplified canvas capture
-        const canvas = await html2canvas(element, {
-          scale: 1.5,
-          useCORS: true,
-          logging: false,
-          backgroundColor: "#ffffff",
-          onclone: (clonedDoc) => {
-            // CRITICAL: Ensure the overlay is hidden in the clone
-            const overlay = clonedDoc.querySelector('.fixed.inset-0');
-            if (overlay) overlay.style.display = 'none';
-            
-            const allElements = clonedDoc.getElementsByTagName("*");
-            for (let i = 0; i < allElements.length; i++) {
-              allElements[i].style.transition = "none";
-              allElements[i].style.animation = "none";
-            }
+      const element = document.getElementById("quotation-print-area");
+      if (!element) throw new Error("Print area not found");
+
+      // Scroll to top of the container
+      const container = element.parentElement;
+      if (container) container.scrollTop = 0;
+      window.scrollTo(0, 0);
+
+      // Brief pause for scroll to finish
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: false, // Changed to false for better CORS compatibility
+        backgroundColor: "#ffffff",
+        windowWidth: 1200, // Use a wider window for initial capture to ensure layout is fully expanded
+        onclone: (clonedDoc) => {
+          const area = clonedDoc.getElementById("quotation-print-area");
+          if (area) {
+            area.style.position = "static";
+            area.style.margin = "0";
+            area.style.width = "210mm";
+            area.style.visibility = "visible";
+            area.style.display = "block";
+
+            // Show PDF-only sections
+            const pdfOnly = clonedDoc.querySelectorAll(".pdf-only");
+            pdfOnly.forEach(el => {
+              el.style.setProperty('display', 'block', 'important');
+              el.style.visibility = 'visible';
+            });
           }
-        });
+        }
+      });
 
-        const imgData = canvas.toDataURL("image/jpeg", 0.95);
-        const jsPDFLib = typeof jsPDF === 'function' ? jsPDF : jsPDF.jsPDF;
-        const pdf = new jsPDFLib("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
+      const pdf = new jsPDF("p", "mm", "a4");
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-        
-        pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
-        const filename = `VTRC_SPEC_${formData.clientName.replace(/\s+/g, "_")}_${formData.quotationNo}.pdf`;
-        pdf.save(filename);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      } catch (error) {
-        console.error("Manual capture failed, falling back to print:", error);
-        window.print();
-      } finally {
-        setIsExporting(false);
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // First page
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
+      heightLeft -= pdfHeight;
+
+      // Additional pages
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight, undefined, 'FAST');
+        heightLeft -= pdfHeight;
       }
-    }, 1000); // Increased wait for full DOM stability
+
+      const filename = `VTRC_SPEC_${formData.clientName.replace(/\s+/g, "_")}_${formData.quotationNo}.pdf`;
+      pdf.save(filename);
+    } catch (error) {
+      console.error("PDF Export failed:", error);
+      // More reliable fallback: show alert then print
+      alert("Preparing browser print fallback for high-fidelity export.");
+      window.print();
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   useEffect(() => {
@@ -273,37 +308,55 @@ const Quotation = ({ editData = null, onSaved = null }) => {
     }));
   };
 
+  const handleSignatureUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, signatureImage: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full selection:bg-black/10 font-body overflow-hidden">
       {/* Print-Only CSS to ensure perfect PDF generation */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @media print {
-          /* Hide everything except the quotation area */
-          body { background: white !important; margin: 0 !important; padding: 0 !important; }
-          .flex.flex-col.h-full, aside, header, .flex-1.overflow-y-auto.p-8, .flex.flex-col.sm\\:flex-row.items-center { 
-            display: none !important; 
+          @page { size: A4; margin: 0 !important; }
+          html, body { 
+            margin: 0 !important; 
+            padding: 0 !important; 
+            width: 210mm !important;
+            background: white !important;
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important;
           }
+          /* Hide all UI elements */
+          .print-exclude, aside, header, nav, button { display: none !important; }
+          
+          /* Special handling for the quotation area to ensure it's visible even if nested */
           #quotation-print-area {
-            display: block !important;
             visibility: visible !important;
             position: absolute !important;
             left: 0 !important;
             top: 0 !important;
             width: 210mm !important;
+            z-index: 9999 !important;
+            background: white !important;
             margin: 0 !important;
-            padding: 0 !important;
-            transform: none !important;
           }
-          #quotation-print-area * {
-            visibility: visible !important;
-          }
-          /* Remove header/footer from browser print */
-          @page { size: auto; margin: 0; }
+          
+          /* Hide ancestors' other children but keep ancestors themselves visible */
+          body > div:not(#quotation-print-area) { visibility: hidden; }
+          #quotation-print-area * { visibility: visible !important; }
+          .pdf-only { display: block !important; visibility: visible !important; }
         }
       `}} />
-
       {/* Tab Header */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6 bg-white border-b border-surface-container-low print:hidden">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 py-6 bg-white border-b border-surface-container-low print-exclude">
         <div className="flex p-1 bg-surface-container-low rounded-xl border border-outline-variant/30 w-full sm:w-auto">
           <button
             onClick={() => setActiveTab("edit")}
@@ -318,23 +371,23 @@ const Quotation = ({ editData = null, onSaved = null }) => {
             Preview
           </button>
         </div>
-        <div className="flex items-center gap-4 w-full sm:w-auto">
+        <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto no-scrollbar">
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className={`btn-primary flex-1 sm:flex-none ${isSaving ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`btn-primary flex-1 sm:flex-none sm:min-w-[160px] flex items-center justify-center gap-2 whitespace-nowrap ${isSaving ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {isSaving ? <RefreshCw className="animate-spin" size={16} /> : editData?._id ? <Pencil size={16} /> : <Save size={16} />}
-            <span>{isSaving ? 'Saving...' : editData?._id ? 'Update Spec' : 'Save Spec'}</span>
+            <span className="text-[10px] uppercase tracking-widest">{isSaving ? 'Saving...' : editData?._id ? 'Update Spec' : 'Save Spec'}</span>
           </button>
           {activeTab === "preview" && (
             <button
               onClick={handleDownload}
               disabled={isExporting}
-              className={`btn-outline flex-1 sm:flex-none shadow-xl shadow-black/5 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`btn-outline flex-1 sm:flex-none sm:min-w-[160px] flex items-center justify-center gap-2 shadow-xl shadow-black/5 whitespace-nowrap ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <Download size={16} />
-              <span>{isExporting ? 'Exporting...' : 'Download PDF'}</span>
+              <span className="text-[10px] uppercase tracking-widest">{isExporting ? 'Exporting...' : 'Download PDF'}</span>
             </button>
           )}
         </div>
@@ -356,7 +409,7 @@ const Quotation = ({ editData = null, onSaved = null }) => {
       </AnimatePresence>
 
       {isExporting && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-md z-[100] flex items-center justify-center p-8 pointer-events-none print:hidden">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-md z-[100] flex items-center justify-center p-8 pointer-events-none print-exclude">
           <div className="flex flex-col items-center gap-6 p-12 bg-white rounded-3xl shadow-2xl max-w-md w-full border border-outline-variant pointer-events-auto">
             <RefreshCw className="animate-spin text-black" size={48} />
             <div className="text-center space-y-2">
@@ -373,8 +426,8 @@ const Quotation = ({ editData = null, onSaved = null }) => {
             {/* Header Info */}
             <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
               <div className="flex items-center gap-4 mb-8 border-b border-surface-container-low pb-6">
-                <div className="p-2.5 bg-black text-white rounded-xl">
-                  <Terminal size={20} />
+                <div className="p-2 bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden w-12 h-12 flex items-center justify-center">
+                  <img src="/src/assets/lgo-removebg-preview.png" alt="Agency Logo" className="w-full h-full object-contain" />
                 </div>
                 <h3 className="text-2xl font-black text-black uppercase font-display tracking-tight">
                   Document Metadata
@@ -476,97 +529,6 @@ const Quotation = ({ editData = null, onSaved = null }) => {
                     placeholder="e.g. Mobile App Development"
                   />
                 </div>
-              </div>
-            </section>
-
-            {/* Project Summary */}
-            <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
-              <div className="flex items-center gap-4 mb-8 border-b border-surface-container-low pb-6">
-                <div className="p-2.5 bg-black text-white rounded-xl">
-                  <Briefcase size={20} />
-                </div>
-                <h3 className="text-2xl font-black text-black uppercase font-display tracking-tight">
-                  Executive Summary
-                </h3>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[9px] font-bold text-secondary uppercase tracking-widest font-mono">
-                  Objective Overview
-                </label>
-                <textarea
-                  name="executiveSummary"
-                  value={formData.executiveSummary}
-                  onChange={handleInputChange}
-                  rows="4"
-                  className="w-full px-5 py-3.5 bg-surface-container-low border border-transparent focus:border-black rounded-xl outline-none transition-all font-bold text-xs uppercase font-mono resize-none leading-relaxed"
-                  placeholder="Summarize the core project goals..."
-                ></textarea>
-              </div>
-            </section>
-
-            {/* Deliverables */}
-            <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
-              <div className="flex items-center justify-between mb-8 border-b border-surface-container-low pb-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-2.5 bg-black text-white rounded-xl">
-                    <Layers size={20} />
-                  </div>
-                  <h3 className="text-2xl font-black text-black uppercase font-display tracking-tight">
-                    Deliverable Nodes
-                  </h3>
-                </div>
-                <button
-                  onClick={() =>
-                    addItem("deliverables", { title: "", description: "" })
-                  }
-                  className="flex items-center gap-2 bg-surface-container-low text-secondary text-[9px] font-bold uppercase tracking-widest px-4 py-2 hover:bg-black hover:text-white transition-all rounded-lg border border-outline-variant/30"
-                >
-                  <Plus size={14} /> Add Node
-                </button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {formData.deliverables.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="group relative p-6 bg-surface-container-low/30 border border-outline-variant/20 rounded-2xl hover:border-black transition-all"
-                  >
-                    <button
-                      onClick={() => removeItem(idx, "deliverables")}
-                      className="absolute -top-2 -right-2 bg-white border border-outline-variant text-outline-variant p-1.5 rounded-lg shadow-sm hover:text-red-500 hover:border-red-100 transition-all z-10"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                    <div className="space-y-3">
-                      <input
-                        value={item.title}
-                        onChange={(e) =>
-                          handleArrayChange(
-                            idx,
-                            "title",
-                            e.target.value,
-                            "deliverables",
-                          )
-                        }
-                        className="w-full bg-transparent font-black text-black text-sm uppercase font-display outline-none placeholder:text-outline-variant"
-                        placeholder="Node Title..."
-                      />
-                      <textarea
-                        value={item.description}
-                        onChange={(e) =>
-                          handleArrayChange(
-                            idx,
-                            "description",
-                            e.target.value,
-                            "deliverables",
-                          )
-                        }
-                        className="w-full bg-transparent text-[11px] text-secondary font-bold font-mono uppercase tracking-tight outline-none resize-none"
-                        placeholder="Technical description..."
-                        rows="2"
-                      ></textarea>
-                    </div>
-                  </div>
-                ))}
               </div>
             </section>
 
@@ -784,81 +746,76 @@ const Quotation = ({ editData = null, onSaved = null }) => {
               </div>
             </section>
 
-            {/* Milestones & Terms */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-10">
-              <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
-                <div className="flex items-center justify-between mb-8 border-b border-surface-container-low pb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-2.5 bg-black text-white rounded-xl">
-                      <Activity size={20} />
-                    </div>
-                    <h3 className="text-xl font-black text-black uppercase font-display tracking-tight">Milestones</h3>
+            {/* Signature Upload Card */}
+            <section className="px-8 pb-12">
+              <div className="card-premium space-y-6">
+                <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
+                  <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center text-white">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
                   </div>
-                  <button onClick={() => setFormData(prev => ({ ...prev, milestones: [...prev.milestones, ""] }))} className="text-outline-variant hover:text-black">
-                    <PlusCircle size={20} />
-                  </button>
+                  <div>
+                    <h3 className="font-bold text-slate-900">Authorized Signature</h3>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider font-mono font-bold">Authentication Node</p>
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  {formData.milestones.map((ms, idx) => (
-                    <div key={idx} className="relative group">
-                      <input
-                        value={ms}
-                        onChange={(e) => handleMilestoneChange(idx, e.target.value)}
-                        className="w-full px-4 py-3 bg-surface-container-low border border-transparent focus:border-black rounded-xl outline-none text-[10px] font-bold font-mono uppercase tracking-tight"
-                        placeholder="Milestone description..."
-                      />
-                      <button onClick={() => setFormData(prev => ({ ...prev, milestones: prev.milestones.filter((_, i) => i !== idx) }))} className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-outline-variant hover:text-red-500 transition-all">
-                        <X size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </section>
 
-              <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
-                <div className="flex items-center justify-between mb-8 border-b border-surface-container-low pb-6">
-                  <div className="flex items-center gap-4">
-                    <div className="p-2.5 bg-black text-white rounded-xl">
-                      <FileText size={20} />
-                    </div>
-                    <h3 className="text-xl font-black text-black uppercase font-display tracking-tight">Terms</h3>
-                  </div>
-                  <button onClick={() => setFormData(prev => ({ ...prev, terms: [...prev.terms, ""] }))} className="text-outline-variant hover:text-black">
-                    <PlusCircle size={20} />
-                  </button>
-                </div>
                 <div className="space-y-4">
-                  {formData.terms.map((term, idx) => (
-                    <div key={idx} className="relative group">
-                      <input
-                        value={term}
-                        onChange={(e) => handleTermChange(idx, e.target.value)}
-                        className="w-full px-4 py-3 bg-surface-container-low border border-transparent focus:border-black rounded-xl outline-none text-[10px] font-bold font-mono uppercase tracking-tight"
-                        placeholder="Term description..."
-                      />
-                      <button onClick={() => setFormData(prev => ({ ...prev, terms: prev.terms.filter((_, i) => i !== idx) }))} className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-outline-variant hover:text-red-500 transition-all">
-                        <X size={14} />
-                      </button>
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest font-mono">Upload Signature Image</label>
+                  <div className="flex items-center gap-6">
+                    {formData.signatureImage ? (
+                      <div className="relative group">
+                        <img
+                          src={formData.signatureImage}
+                          alt="Signature Preview"
+                          className="h-20 w-48 object-contain bg-slate-50 rounded-lg border border-slate-200"
+                        />
+                        <button
+                          onClick={() => setFormData(prev => ({ ...prev, signatureImage: null }))}
+                          className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="h-20 w-48 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-lg cursor-pointer hover:border-black/20 hover:bg-slate-50 transition-all">
+                        <svg className="w-6 h-6 text-slate-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono tracking-widest">Select Image</span>
+                        <input type="file" className="hidden" accept="image/*" onChange={handleSignatureUpload} />
+                      </label>
+                    )}
+                    <div className="flex-1 space-y-2">
+                      <p className="text-[10px] font-bold text-slate-500 leading-relaxed uppercase font-mono">
+                        Upload a transparent PNG signature for best results. This will be embedded in the final PDF specification at the legal section.
+                      </p>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </section>
-            </div>
+              </div>
+            </section>
+
+
           </div>
         ) : (
           /* Preview Mode */
-          <div 
+          <div
             id="quotation-print-area"
-            className="w-[800px] mx-auto bg-white overflow-hidden mb-20 relative" 
+            className="w-[210mm] mx-auto bg-white overflow-hidden relative"
             ref={targetRef}
-            style={{ minHeight: '1122px' }} // Approx A4 height
+            style={{ minHeight: '297mm' }}
           >
             {/* Dedicated PDF Style Overrides */}
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style dangerouslySetInnerHTML={{
+              __html: `
               [data-pdf-content] {
                 font-family: 'Geist', sans-serif !important;
                 -webkit-print-color-adjust: exact;
-                width: 800px;
+                width: 210mm;
                 margin: 0;
                 background: white;
               }
@@ -877,180 +834,170 @@ const Quotation = ({ editData = null, onSaved = null }) => {
               .bg-white { background-color: #ffffff !important; }
               .bg-black { background-color: #000000 !important; }
             `}} />
-            
+
             <div data-pdf-content className="w-full bg-white">
-              {/* PDF Header */}
-              <div className="p-16 bg-black text-white relative">
+              {/* PDF Header - Full Width & Bleed Top */}
+              <div className="px-16 pt-12 pb-10 bg-black text-white relative w-full">
                 <div className="flex justify-between items-start relative z-10">
-                  <div className="space-y-8">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white flex items-center justify-center rounded-2xl">
-                        <div className="w-5 h-5 bg-black rounded-md"></div>
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-white flex items-center justify-center rounded-xl overflow-hidden p-1.5 shadow-sm">
+                        <img src="/src/assets/lgo-removebg-preview.png" alt="Agency Logo" className="w-full h-full object-contain" />
                       </div>
-                      <span className="text-3xl font-black tracking-tighter uppercase font-display">VTRC</span>
+                      <span className="text-2xl font-black tracking-tighter uppercase font-display">VTRC</span>
                     </div>
                     <div className="space-y-2">
-                      <h1 className="text-5xl font-black uppercase font-display tracking-tight leading-none">
+                      <h1 className="text-3xl font-black uppercase font-display tracking-tight leading-none">
                         Project<br />Specification
                       </h1>
-                      <div className="h-1 w-20 bg-white/20"></div>
+                      <div className="h-0.5 w-12 bg-white/20"></div>
                     </div>
                   </div>
-                  <div className="text-right space-y-4 font-mono">
-                    <div className="space-y-1">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Document ID</p>
-                      <p className="text-xs font-black tracking-widest">{formData.quotationNo}</p>
-                    </div>
-                    <div className="space-y-1">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">Issue Date</p>
-                      <p className="text-xs font-black tracking-widest uppercase">{formData.date}</p>
-                    </div>
+                  <div className="text-right pt-2">
+                    <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white/50 mb-3 font-mono">Prepared For</p>
+                    <h2 className="text-2xl font-black text-white uppercase font-display leading-none mb-2">{formData.clientName}</h2>
+                    <p className="text-[9px] font-bold text-white/40 uppercase font-mono tracking-widest">{formData.clientProject}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Entity Block */}
-              <div className="p-16 border-b border-surface-container">
+              {/* Entity Details Block */}
+              <div className="p-12 border-b border-surface-container bg-surface-container-low/20">
                 <div className="grid grid-cols-2 gap-16">
-                  <div className="space-y-6">
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Issuing Agency</p>
-                    <div className="space-y-2">
-                      <p className="text-lg font-black text-black font-display uppercase tracking-tight">VTRC Technologies</p>
-                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
-                        Strategic Architecture Unit<br />
-                        VTRC.TECH / OPERATIONAL AXIS
-                      </p>
+                  <div className="space-y-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 font-mono">Issuing Agency</p>
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-black text-black uppercase font-display">VTRC Technologies</h3>
+                      <p className="text-[10px] font-bold text-secondary uppercase font-mono tracking-tight">Strategic Architecture Unit</p>
+                      <p className="text-[10px] font-bold text-secondary uppercase font-mono tracking-tight">VTRC.TECH / OPERATIONAL AXIS</p>
                     </div>
                   </div>
-                  <div className="space-y-6">
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-secondary font-mono">Client Entity</p>
-                    <div className="space-y-2">
-                      <p className="text-lg font-black text-black font-display uppercase tracking-tight">{formData.clientName}</p>
-                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">
-                        {formData.clientAddress}<br />
-                        {formData.clientEmail}
-                      </p>
+                  <div className="space-y-4">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-black/40 font-mono">Client Entity</p>
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-black text-black uppercase font-display">{formData.clientName}</h3>
+                      <p className="text-[10px] font-bold text-secondary uppercase font-mono tracking-tight">{formData.clientAddress}</p>
+                      <p className="text-[10px] font-bold text-secondary uppercase font-mono tracking-tight">{formData.clientEmail}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-16 space-y-20">
-                {/* Summary */}
-                <section className="space-y-6">
+              <div className="p-10 space-y-12">
+                {/* 01 Financial Allocation */}
+                <section className="space-y-8 pt-6">
                   <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                    <div className="w-2 h-2 bg-black rounded-full"></div> 01 Executive Summary
+                    <div className="w-2 h-2 bg-black rounded-full"></div> 01 Financial Allocation
                   </h3>
-                  <p className="text-xl font-bold text-black font-display leading-tight uppercase italic">
-                    "{formData.executiveSummary}"
-                  </p>
-                </section>
-
-                {/* Deliverables */}
-                <section className="space-y-10">
-                  <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                    <div className="w-2 h-2 bg-black rounded-full"></div> 02 Project Deliverables
-                  </h3>
-                  <div className="grid grid-cols-1 gap-12">
-                    {formData.deliverables.map((item, idx) => (
-                      <div key={idx} className="grid grid-cols-12 gap-8 group">
-                        <div className="col-span-1 text-2xl font-black text-outline-variant font-display">0{idx + 1}</div>
-                        <div className="col-span-11 space-y-2">
-                          <h4 className="text-xl font-black text-black uppercase font-display tracking-tight">{item.title}</h4>
-                          <p className="text-sm font-bold text-secondary uppercase font-mono leading-relaxed">{item.description}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Roadmap */}
-                <section className="space-y-10">
-                  <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                    <div className="w-2 h-2 bg-black rounded-full"></div> 03 Strategic Roadmap
-                  </h3>
-                  <div className="grid grid-cols-4 gap-4">
-                    {formData.roadmap.map((item, idx) => (
-                      <div key={idx} className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-2xl space-y-4 text-center">
-                        <p className="text-[10px] font-black font-mono text-outline-variant">{item.step}</p>
-                        <div>
-                          <p className="text-[11px] font-black text-black uppercase font-display mb-1">{item.label}</p>
-                          <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">{item.duration}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-
-                {/* Financials */}
-                <section className="space-y-10">
-                  <h3 className="text-xs font-black uppercase tracking-[0.4em] text-black border-b border-black pb-4 font-mono flex items-center gap-4">
-                    <div className="w-2 h-2 bg-black rounded-full"></div> 04 Financial Allocation
-                  </h3>
-                  <div className="overflow-hidden border border-black rounded-2xl">
-                    <table className="w-full border-collapse">
+                  <div className="overflow-hidden border border-black rounded-2xl mx-12">
+                    <table className="w-full border-collapse table-fixed">
                       <thead>
-                        <tr className="bg-black text-white font-mono text-[10px] font-bold uppercase tracking-widest">
-                          <th className="px-8 py-4 text-left">Structural Component</th>
-                          <th className="px-8 py-4 text-right">Allocation</th>
+                        <tr className="bg-black text-white font-mono text-[9px] font-bold uppercase tracking-widest">
+                          <th className="px-6 py-4 text-left w-2/3">Structural Component</th>
+                          <th className="px-6 py-4 text-right w-1/3">Allocation</th>
                         </tr>
                       </thead>
                       <tbody className="font-mono text-xs font-bold uppercase">
                         {formData.investment.map((item, idx) => (
                           <tr key={idx} className="border-b border-surface-container">
-                            <td className="px-8 py-6 text-black">{item.item}</td>
-                            <td className="px-8 py-6 text-right text-black">
+                            <td className="px-6 py-5 text-black truncate">{item.item}</td>
+                            <td className="px-6 py-5 text-right text-black font-black">
                               {item.type === 'included' ? 'INCLUDED' : `₹${Number(item.price).toLocaleString('en-IN')}`}
                             </td>
                           </tr>
                         ))}
+                        {/* Integrated Maintenance Row */}
+                        <tr className="border-b border-surface-container bg-surface-container-low/20">
+                          <td className="px-6 py-5">
+                            <p className="text-black font-black">{formData.supportPlan.name}</p>
+                            <p className="text-[9px] text-secondary lowercase font-mono">{formData.supportPlan.description}</p>
+                          </td>
+                          <td className="px-6 py-5 text-right text-black font-black">
+                            ₹{formData.supportPlan.price}{formData.supportPlan.unit}
+                          </td>
+                        </tr>
                         <tr className="bg-surface-container-low">
-                          <td className="px-8 py-8 font-black text-black">Total Specification Value</td>
-                          <td className="px-8 py-8 text-right text-3xl font-black text-black font-display">₹{formData.totalValue.toLocaleString('en-IN')}</td>
+                          <td className="px-6 py-6 font-black text-black">Total Initial Value</td>
+                          <td className="px-6 py-6 text-right text-2xl font-black text-black font-display">₹{formData.totalValue.toLocaleString('en-IN')}</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Note Section */}
+                  <div className="mx-12 mt-6 p-6 border-l-2 border-black bg-surface-container-low/30">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-black/40 mb-2 font-mono">Note</p>
+                    <p className="text-[11px] font-bold text-black font-mono leading-relaxed uppercase">
+                      The above financial allocation is a comprehensive estimate based on initial strategic analysis. Final figures may be adjusted according to scope refinements.
+                    </p>
+                  </div>
                 </section>
 
-                {/* Maintenance */}
-                <section className="grid grid-cols-2 gap-16 pt-10 border-t border-surface-container">
-                  <div className="space-y-6">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">05 Maintenance</h3>
-                    <div className="p-8 bg-surface-container-low border border-outline-variant/30 rounded-3xl space-y-4">
-                      <div className="flex justify-between items-center">
-                        <p className="text-sm font-black text-black uppercase font-display">{formData.supportPlan.name}</p>
-                        <p className="text-lg font-black text-black font-display">₹{formData.supportPlan.price}{formData.supportPlan.unit}</p>
+
+                {/* Terms & Conditions - PDF ONLY COMPACT */}
+                <section className="pdf-only hidden space-y-8 pt-12 border-t border-surface-container">
+                  <div className="text-center mb-10">
+                    <h2 className="text-2xl font-black text-black uppercase font-display tracking-tight mb-2">Terms & Conditions</h2>
+                    <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-[0.5em]">LEGAL GOVERNANCE PROTOCOL</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-8 text-[9px] font-bold text-secondary uppercase font-mono leading-relaxed max-w-3xl mx-auto">
+                    <div className="space-y-8">
+                      <div className="space-y-4">
+                        <h4 className="text-black font-black border-b border-black pb-2">01. INTELLECTUAL PROPERTY NODE</h4>
+                        <p>ALL INTELLECTUAL PROPERTY RIGHTS, PATENTS, AND TRADE SECRETS RELATING TO THE DEVELOPED SOLUTION REMAIN THE EXCLUSIVE PROPERTY OF VTRC TECHNOLOGIES UNTIL ALL OUTSTANDING INVOICES ARE SETTLED IN FULL. UPON FINAL PAYMENT, A NON-EXCLUSIVE, PERPETUAL LICENSE IS GRANTED TO THE CLIENT ENTITY.</p>
                       </div>
-                      <p className="text-[11px] font-bold text-secondary uppercase font-mono leading-relaxed">{formData.supportPlan.description}</p>
+
+                      <div className="space-y-4">
+                        <h4 className="text-black font-black border-b border-black pb-2">02. ESTIMATE VALIDITY AXIS</h4>
+                        <p>THIS QUOTATION REPRESENTS A STRATEGIC ESTIMATE AND REMAINS VALID FOR A PERIOD OF 30 CALENDAR DAYS FROM THE DATE OF ISSUE. VTRC TECHNOLOGIES RESERVES THE RIGHT TO RENEGOTIATE TERMS IF COMMENCEMENT IS DELAYED BEYOND THIS WINDOW.</p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-black font-black border-b border-black pb-2">03. SCOPE DYNAMICS</h4>
+                        <p>ANY MODIFICATIONS, ADDITIONS, OR REMOVALS FROM THE DEFINED PROJECT SCOPE AFTER THE INITIAL KICK-OFF WILL BE SUBJECT TO A CHANGE REQUEST PROTOCOL. THIS MAY RESULT IN ADJUSTMENTS TO BOTH THE FINANCIAL ALLOCATION AND THE PROJECT TIMELINE.</p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-black font-black border-b border-black pb-2">04. PAYMENT MILESTONES</h4>
+                        <p>ENGAGEMENT REQUIRES A 50% INITIAL DEPOSIT TO INITIALIZE RESOURCE ALLOCATION. THE REMAINING 50% IS PAYABLE UPON PROJECT COMPLETION AND PRIOR TO FINAL DEPLOYMENT OR HANDOVER OF PRODUCTION ASSETS.</p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <h4 className="text-black font-black border-b border-black pb-2">05. CONFIDENTIALITY PROTOCOL</h4>
+                        <p>BOTH PARTIES AGREE TO MAINTAIN THE STRICTEST CONFIDENTIALITY REGARDING ALL PROPRIETARY INFORMATION, STRATEGIC DATA, AND INTERNAL WORKFLOWS SHARED DURING THE COURSE OF THIS ENGAGEMENT.</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-6">
-                    <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-secondary font-mono">06 Project Milestones</h3>
-                    <div className="space-y-4">
-                      {formData.milestones.map((ms, idx) => (
-                        <div key={idx} className="flex gap-4 text-[11px] font-bold text-black uppercase font-mono">
-                          <span className="text-outline-variant">M{idx + 1}</span>
-                          <span>{ms}</span>
-                        </div>
-                      ))}
+
+                  <div className="pt-24 flex justify-between items-end">
+                    <div className="space-y-8">
+                      <div className="relative">
+                        {formData.signatureImage ? (
+                          <img
+                            src={formData.signatureImage}
+                            alt="Signature"
+                            className="h-16 w-48 object-contain absolute bottom-4 left-0"
+                          />
+                        ) : (
+                          <div className="h-16 w-48"></div> // Spacer
+                        )}
+                        <div className="w-48 h-1 bg-black"></div>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-sm font-black text-black uppercase font-display">Authorized Signature</p>
+                        <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">VTRC TECHNOLOGIES CORE UNIT</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[9px] font-bold text-outline-variant uppercase font-mono tracking-[0.5em]">DOCUMENT AUTHENTICATED</p>
                     </div>
                   </div>
                 </section>
 
-                <div className="pt-20 flex justify-between items-end">
-                  <div className="space-y-8">
-                    <div className="w-48 h-1 bg-black"></div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-black text-black uppercase font-display">Authorized Signature</p>
-                      <p className="text-[9px] font-bold text-secondary uppercase font-mono tracking-widest">VTRC TECHNOLOGIES CORE UNIT</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[9px] font-bold text-outline-variant uppercase font-mono tracking-[0.5em]">DOCUMENT AUTHENTICATED</p>
-                  </div>
-                </div>
               </div>
+
+              <div className="h-24 w-full bg-white"></div>
             </div>
           </div>
         )}

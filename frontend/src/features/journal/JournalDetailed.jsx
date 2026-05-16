@@ -6,7 +6,7 @@ const JournalDetailed = () => {
   const { articleId } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
-  const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
     window.scrollTo(0, 0);

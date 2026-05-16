@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const userDataContext = createContext();
 
-const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:8000";
+const serverUrl = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 function UserContext({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
