@@ -24,9 +24,11 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
+      "https://vtrc-technologies.vercel.app",
+      "https://vtrc-technologies-admin.vercel.app",
       process.env.FRONTEND_URL,
       process.env.ADMIN_URL,
-    ],
+    ].filter(Boolean),
     credentials: true,
   }),
 );
