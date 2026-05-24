@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import LogoAnimation from '../ui/LogoAnimation';
+import AnimatedLogo from '../ui/AnimatedLogo';
 
 const LoadingScreen = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isFadingOut, setIsFadingOut] = useState(false);
+  const [logoAnimate, setLogoAnimate] = useState(false);
 
   useEffect(() => {
-    // We want to reach 100% in about 3.5 seconds
-    const totalDuration = 3500;
-    const intervalTime = 35; // update every 35ms
+    // Loop the logo animation
+    setLogoAnimate(true);
+    const logoInterval = setInterval(() => {
+      setLogoAnimate(prev => !prev);
+    }, 1500);
+
+    // We want to reach 100% in about 3.0 seconds
+    const totalDuration = 3000;
+    const intervalTime = 30; // update every 30ms
     const totalSteps = totalDuration / intervalTime; // 100 steps
     let currentStep = 0;
 
@@ -27,61 +34,40 @@ const LoadingScreen = ({ onComplete }) => {
       }
     }, intervalTime);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearInterval(logoInterval);
+    };
   }, [onComplete]);
 
   return (
-    <main className={`fixed inset-0 w-full flex flex-col items-center justify-center bg-[#faf9f9] text-[#1a1c1c] px-5 md:px-16 overflow-hidden z-[9999] transition-opacity duration-700 ease-in-out ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}>
-
-
-      {/* Corner Technical Data Streams Removed as requested */}
-
-      {/* Central Content */}
-      <div className="flex flex-col items-center z-10">
-        <div className="flex items-center gap-[15px] mb-12">
-          <LogoAnimation className="w-24 h-16 flex-shrink-0" color="#000000" />
-          <span className="font-['Syne'] text-[36px] md:text-[56px] font-bold tracking-[-0.02em] text-black whitespace-nowrap leading-none">
-            VTRC
-          </span>
+    <main 
+      className={`fixed inset-0 w-full flex flex-col items-center justify-center bg-[#faf9f9] text-[#1a1c1c] z-[9999] overflow-hidden transition-opacity duration-700 ease-in-out ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}
+    >
+      <div className="flex flex-col items-center z-10 gap-12">
+        
+        {/* Animated Logo Container */}
+        <div className="scale-[1.8] sm:scale-[2.2] translate-y-4">
+          <AnimatedLogo size="md" forceHover={logoAnimate} />
         </div>
-        <div className="font-['Syne'] text-[60px] md:text-[100px] leading-none tracking-tighter font-extrabold text-black select-none mb-6">
-          {progress}<span className="text-[#5d5f5f] opacity-50">%</span>
+
+        {/* Progress Counter & Bar */}
+        <div className="flex flex-col items-center gap-6 mt-8">
+          <div className="font-['Syne'] text-[64px] sm:text-[80px] leading-none font-bold text-black select-none tabular-nums tracking-tighter flex items-baseline">
+            {progress}
+            <span className="text-[#a0a0a0] text-[32px] sm:text-[40px] ml-2">%</span>
+          </div>
+
+          {/* Minimalist Progress Line */}
+          <div className="w-[180px] sm:w-[240px] h-[3px] bg-[#e3e2e2] overflow-hidden rounded-full">
+            <div 
+              className="h-full bg-black transition-all duration-[30ms] ease-linear rounded-full"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
+        
       </div>
-
-      {/* Geometric Accents */}
-      <div className="absolute inset-0 pointer-events-none border-[12px] border-black/5 m-4"></div>
-      <div className="absolute top-1/2 left-0 w-8 h-[2px] bg-black opacity-20"></div>
-      <div className="absolute top-1/2 right-0 w-8 h-[2px] bg-black opacity-20"></div>
-
-      {/* Background Image Texture Overlay */}
-      <div className="absolute inset-0 opacity-5 mix-blend-overlay pointer-events-none">
-        <img
-          className="w-full h-full object-cover grayscale"
-          alt="Texture"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG0GtjSKU2xeXSNixQchXi0l-GvgAG7WnPeqWtI7160_VCrnZtnJdvrr4THA-WSe9jVVZWC7bPz2ctyVUAsfXOh3hYjqYMxFdihdcp2MOIUCakOKbglg9uYoPOBYg3NLdjNOgr-sJsQTn0w9JSElMDuAzwEc3lInqUktAvQYdyadPZwrPMw0J62-0r434cHeVOBbx112wSvKZxYl0EncDLPkwAcP_PVqqeeCtJ4oDbSkhnrwwC7mNfNxPcXqEdFbHBWkLPaLlMYw"
-        />
-      </div>
-
-      {/* Footer Progress Bar */}
-      <div className="absolute bottom-0 left-0 w-full z-10">
-        {/* Progress Bar Rail */}
-        <div className="h-2 w-full bg-[#eeeeee]">
-          {/* Progress Bar Fill */}
-          <div
-            className="h-full bg-black transition-all duration-[35ms] ease-linear"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-
-        {/* Copyright & Meta */}
-        <div className="flex justify-center items-center px-5 md:px-16 py-6">
-          <span className="font-['JetBrains_Mono'] text-[12px] uppercase tracking-widest text-[#5d5f5f] font-medium text-center">
-            © 2026 VTRC TECHNOLOGIES
-          </span>
-        </div>
-      </div>
-
     </main>
   );
 };

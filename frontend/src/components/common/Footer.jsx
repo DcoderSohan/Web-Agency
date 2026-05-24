@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import LogoAnimation from '../ui/LogoAnimation';
+import AnimatedLogo from '../ui/AnimatedLogo';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,10 +12,7 @@ const Footer = () => {
         {/* BRAND */}
         <div className="flex flex-col gap-4 max-w-[260px] m-0">
           <div className="flex items-center gap-3">
-            <LogoAnimation className="w-10 h-7 flex-shrink-0" color="#000000" />
-            <span className="font-['Syne'] text-[32px] font-bold tracking-[-0.02em] text-black">
-              VTRC
-            </span>
+            <AnimatedLogo size="md" />
           </div>
           <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase leading-[1.6]">
             VTRC TECHNOLOGIES: Engineering the infrastructure of the next century.

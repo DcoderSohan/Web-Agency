@@ -15,9 +15,72 @@ const StartProject = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+
+  // Strict email validation — must have @ and a real domain (e.g. @gmail.com)
+  const validateEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setInterval(() => setCooldown((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
+  const handleSendOtp = async () => {
+    if (!validateEmail(formData.email)) {
+      setOtpError('Please enter a valid Gmail address (e.g. name@gmail.com)');
+      return;
+    }
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/otp/send-email-otp`, { email: formData.email });
+      if (res.data.success) {
+        setOtpSent(true);
+        setCooldown(30);
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.message || 'Failed to send OTP.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp) {
+      setOtpError('Please enter the OTP.');
+      return;
+    }
+    setVerifyLoading(true);
+    setOtpError('');
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/otp/verify-email-otp`, { email: formData.email, otp });
+      if (res.data.success) {
+        setEmailVerified(true);
+        setOtpSent(false); // Hide OTP input
+        setOtp('');
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.message || 'Invalid OTP.');
+    } finally {
+      setVerifyLoading(false);
+    }
+  };
 
   const handleScopeChange = (item) => {
     setFormData(prev => ({
@@ -30,6 +93,12 @@ const StartProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
+    if (!emailVerified) {
+      setError('Please verify your email address before submitting.');
+      return;
+    }
     if (formData.scope.length === 0) {
       setError('Please select at least one scope of work.');
       return;
@@ -45,6 +114,18 @@ const StartProject = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/inquiries/project`, formData);
       if (response.data.success) {
         setSuccess(true);
+        setFormData({
+          name: '',
+          organization: '',
+          email: '',
+          scope: [],
+          timeline: '',
+          brief: ''
+        });
+        setEmailVerified(false);
+        setOtpSent(false);
+        setOtp('');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Submission failed. Please try again.');
@@ -142,8 +223,8 @@ const StartProject = () => {
                   <div className="group">
                     <label className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest block mb-2 text-[#5d5f5f] group-focus-within:text-black transition-colors">Full Name</label>
                     <input 
-                      className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black uppercase outline-none transition-all" 
-                      placeholder="LEAD OPERATOR NAME" 
+                      className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black outline-none transition-all" 
+                      placeholder="Lead operator name" 
                       type="text"
                       required
                       value={formData.name}
@@ -153,8 +234,8 @@ const StartProject = () => {
                   <div className="group">
                     <label className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest block mb-2 text-[#5d5f5f] group-focus-within:text-black transition-colors">Organization</label>
                     <input 
-                      className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black uppercase outline-none transition-all" 
-                      placeholder="ENTITY / BUREAU" 
+                      className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black outline-none transition-all" 
+                      placeholder="Entity / Bureau" 
                       type="text"
                       required
                       value={formData.organization}
@@ -164,14 +245,55 @@ const StartProject = () => {
                 </div>
                 <div className="group">
                   <label className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest block mb-2 text-[#5d5f5f] group-focus-within:text-black transition-colors">Email Address</label>
-                  <input 
-                    className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black uppercase outline-none transition-all" 
-                    placeholder="COMMS@DOMAIN.EXT" 
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  />
+                  <div className="flex items-center border-b-2 border-black focus-within:border-b-4 transition-all">
+                    <input 
+                      className="w-full bg-transparent border-none focus:ring-0 focus:outline-none px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black disabled:opacity-50 disabled:cursor-not-allowed" 
+                      placeholder="comms@gmail.com" 
+                      type="email"
+                      required
+                      disabled={emailVerified}
+                      value={formData.email}
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        setEmailVerified(false);
+                        setOtpSent(false);
+                      }}
+                    />
+                    {emailVerified ? (
+                      <span className="font-['JetBrains_Mono'] text-[12px] font-bold text-green-600 uppercase whitespace-nowrap px-4">Verified</span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSendOtp}
+                        disabled={otpLoading || cooldown > 0 || !formData.email}
+                        className="font-['JetBrains_Mono'] text-[12px] font-bold text-white bg-black px-4 py-2 uppercase disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {otpLoading ? 'Sending...' : cooldown > 0 ? `Wait ${cooldown}s` : 'Send OTP'}
+                      </button>
+                    )}
+                  </div>
+                  {otpError && <p className="font-['JetBrains_Mono'] text-[12px] text-red-600 mt-1 font-bold tracking-widest uppercase">{otpError}</p>}
+                  
+                  {otpSent && !emailVerified && (
+                    <div className="flex items-center gap-2 mt-4">
+                      <input
+                        type="text"
+                        maxLength="6"
+                        placeholder="ENTER 6-DIGIT OTP"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                        className="w-full bg-transparent border-b-2 border-black py-2 font-['Syne'] text-[18px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerifyOtp}
+                        disabled={verifyLoading || otp.length !== 6}
+                        className="font-['JetBrains_Mono'] text-[12px] font-bold text-white bg-black px-4 py-2 uppercase disabled:opacity-50 whitespace-nowrap"
+                      >
+                        {verifyLoading ? 'Verifying...' : 'Verify'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </section>
 
@@ -243,8 +365,8 @@ const StartProject = () => {
                   <h2 className="font-['Syne'] text-[32px] font-bold uppercase leading-none text-black">Architectural Requirements</h2>
                 </div>
                 <textarea 
-                  className="w-full bg-[#f4f3f3] border-2 border-black font-['JetBrains_Mono'] text-[14px] text-black font-bold focus:outline-none focus:bg-white focus:border-b-4 focus:border-r-4 p-6 uppercase tracking-widest resize-none transition-all placeholder:text-[#a0a0a0]" 
-                  placeholder="DESCRIBE PROJECT SPECIFICATIONS, CONSTRAINTS, AND TECHNICAL DEBT CHALLENGES." 
+                  className="w-full bg-[#f4f3f3] border-2 border-black font-['JetBrains_Mono'] text-[14px] text-black font-bold focus:outline-none focus:bg-white focus:border-b-4 focus:border-r-4 p-6 tracking-widest resize-none transition-all placeholder:text-[#a0a0a0]" 
+                  placeholder="Describe project specifications, constraints, and technical debt challenges." 
                   rows="6"
                   required
                   value={formData.brief}

@@ -15,6 +15,7 @@ import userRouter from "./features/user/user.route.js";
 import quotationRouter from "./features/quotation/quotation.route.js";
 import blogRouter from "./features/blog/blog.route.js";
 import careerRouter from "./features/career/career.route.js";
+import otpRouter from "./features/otp/otp.route.js";
 
 dotenv.config();
 
@@ -42,6 +43,7 @@ app.use("/api/users", userRouter);
 app.use("/api/quotations", quotationRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/careers", careerRouter);
+app.use("/api/otp", otpRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

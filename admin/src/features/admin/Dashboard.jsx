@@ -42,6 +42,7 @@ import CareerManager from "../career/CareerManager";
 import ApplicationManager from "../career/ApplicationManager";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import AnimatedLogo from "../../components/ui/AnimatedLogo";
 
 const AdminDashboard = () => {
   const { user: currentUser, setIsAuthenticated, serverUrl } = useContext(userDataContext);
@@ -126,27 +127,8 @@ const AdminDashboard = () => {
         className={`hidden lg:flex flex-col bg-white border-r border-outline-variant/30 transition-all duration-300 relative z-40 ${isSidebarOpen ? "w-72" : "w-20"
           }`}
       >
-        <div className="p-8 flex items-center justify-between border-b border-surface-container h-24">
-          <AnimatePresence mode="wait">
-            {isSidebarOpen ? (
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-                className="text-2xl font-black tracking-tighter font-display uppercase"
-              >
-                VTRC
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-xl font-black font-display mx-auto"
-              >
-                V
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="p-6 flex items-center justify-center border-b border-surface-container h-24">
+          <AnimatedLogo size={isSidebarOpen ? 'md' : 'sm'} />
         </div>
 
         <nav className="flex-1 overflow-y-auto custom-scrollbar py-6">
@@ -196,8 +178,8 @@ const AdminDashboard = () => {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 left-0 bottom-0 w-[85%] max-w-xs bg-white z-[60] lg:hidden flex flex-col"
             >
-              <div className="p-8 flex items-center justify-between border-b border-slate-100">
-                <div className="text-2xl font-black tracking-tighter font-display uppercase">VTRC</div>
+              <div className="p-6 flex items-center justify-between border-b border-slate-100">
+                <AnimatedLogo size="md" />
                 <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 border border-slate-200 rounded-lg">
                   <X size={20} />
                 </button>

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import LogoAnimation from '../ui/LogoAnimation';
+import AnimatedLogo from '../ui/AnimatedLogo';
 
 const navLinks = [
   { label: 'Work', path: '/work' },
@@ -11,6 +11,7 @@ const navLinks = [
   { label: 'Contact', path: '/contact-us' },
 ];
 
+/* ── Navbar ────────────────────────────────────────────────────────────── */
 const Navbar = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -34,11 +35,8 @@ const Navbar = () => {
         <div className="flex justify-between items-center w-full max-w-[1440px] mx-auto px-5 md:px-16 py-3 box-border">
 
           {/* LOGO */}
-          <Link to="/" className="flex items-center gap-[10px] no-underline">
-            <LogoAnimation className="w-10 h-7 flex-shrink-0" color="#000000" />
-            <span className="font-['Syne'] text-[18px] font-bold tracking-[-0.02em] text-black whitespace-nowrap">
-              VTRC TECHNOLOGIES
-            </span>
+          <Link to="/" className="flex items-center no-underline">
+            <AnimatedLogo size="md" />
           </Link>
 
           {/* DESKTOP NAV LINKS — hidden on mobile */}
@@ -105,7 +103,7 @@ const Navbar = () => {
 
             {/* LOGO IN MOBILE MENU */}
             <div className="absolute top-4 left-5 flex items-center gap-2">
-              <LogoAnimation className="w-8 h-6" color="#000000" />
+              <AnimatedLogo size="sm" />
               <span className="font-['Syne'] text-[18px] font-bold text-black">
                 VTRC
               </span>

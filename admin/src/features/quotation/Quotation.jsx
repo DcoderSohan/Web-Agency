@@ -426,9 +426,6 @@ const Quotation = ({ editData = null, onSaved = null }) => {
             {/* Header Info */}
             <section className="bg-white p-10 border border-outline-variant rounded-3xl shadow-sm">
               <div className="flex items-center gap-4 mb-8 border-b border-surface-container-low pb-6">
-                <div className="p-2 bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden w-12 h-12 flex items-center justify-center">
-                  <img src="/src/assets/lgo-removebg-preview.png" alt="Agency Logo" className="w-full h-full object-contain" />
-                </div>
                 <h3 className="text-2xl font-black text-black uppercase font-display tracking-tight">
                   Document Metadata
                 </h3>
@@ -841,9 +838,6 @@ const Quotation = ({ editData = null, onSaved = null }) => {
                 <div className="flex justify-between items-start relative z-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-white flex items-center justify-center rounded-xl overflow-hidden p-1.5 shadow-sm">
-                        <img src="/src/assets/lgo-removebg-preview.png" alt="Agency Logo" className="w-full h-full object-contain" />
-                      </div>
                       <span className="text-2xl font-black tracking-tighter uppercase font-display">VTRC</span>
                     </div>
                     <div className="space-y-2">
