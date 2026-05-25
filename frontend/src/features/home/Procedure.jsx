@@ -112,7 +112,7 @@ const StepCard = ({ step, index, total, progress }) => {
                     filter: `brightness(${brightness})`,
                     top: `calc(10% + ${index * 2.5}rem)`
                 }}
-                className="w-full max-w-5xl bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-[3rem] p-10 md:p-20 relative overflow-hidden pointer-events-auto group shadow-2xl"
+                className="w-full max-w-5xl bg-zinc-900/60 backdrop-blur-xl border border-white/10 rounded-[3rem] p-10 md:p-20 relative overflow-hidden pointer-events-auto group"
             >
                 {/* Accent Background */}
                 <div

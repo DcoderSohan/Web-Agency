@@ -49,7 +49,7 @@ const Application = () => {
 
   const handleSendOtp = async () => {
     if (!validateEmail(formData.email)) {
-      setOtpError('Please enter a valid Gmail address (e.g. name@gmail.com)');
+      setOtpError('Please enter a valid email address (e.g. name@example.com)');
       return;
     }
     setOtpLoading(true);

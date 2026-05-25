@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
     FiZap, FiCode, FiTrendingUp, FiShield,
     FiSmartphone, FiSearch, FiCheckCircle, FiArrowUpRight
@@ -459,16 +460,16 @@ const WhyChooseUs = () => {
                     transition={{ delay: 0.2 }}
                     className="flex items-center justify-center mt-12"
                 >
-                    <a
-                        href="#contact"
+                    <Link
+                        to="/start-project"
                         className="group flex items-center gap-3 px-8 py-4 rounded-full
                             text-[12px] font-bold uppercase tracking-[0.18em] text-black
                             bg-white hover:bg-zinc-200 transition-all duration-300
-                            shadow-lg shadow-white/5 hover:shadow-white/10 hover:-translate-y-0.5"
+                            hover:-translate-y-0.5"
                     >
                         Start Your Project
                         <FiArrowUpRight size={14} className="group-hover:rotate-45 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-                    </a>
+                    </Link>
                 </motion.div>
             </div>
         </section>

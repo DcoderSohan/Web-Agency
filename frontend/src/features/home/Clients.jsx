@@ -336,7 +336,7 @@ const Clients = () => {
           </div>
           <Link
             to="/start-project"
-            className="px-8 py-3 rounded-lg font-bold text-xs uppercase tracking-widest bg-white text-black transition-all duration-300 hover:bg-gray-100 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] shrink-0 no-underline"
+            className="px-8 py-3 rounded-lg font-bold text-xs uppercase tracking-widest bg-white text-black transition-all duration-300 hover:bg-gray-100 shrink-0 no-underline"
             style={{ fontFamily: "Orbitron, sans-serif" }}
           >
             Start a Project →

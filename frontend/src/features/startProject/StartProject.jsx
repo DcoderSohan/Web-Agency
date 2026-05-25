@@ -43,7 +43,7 @@ const StartProject = () => {
 
   const handleSendOtp = async () => {
     if (!validateEmail(formData.email)) {
-      setOtpError('Please enter a valid Gmail address (e.g. name@gmail.com)');
+      setOtpError('Please enter a valid email address (e.g. name@example.com)');
       return;
     }
     setOtpLoading(true);
@@ -141,13 +141,13 @@ const StartProject = () => {
           <div className="w-24 h-24 bg-black text-white rounded-full flex items-center justify-center mx-auto">
             <span className="material-symbols-outlined text-[48px]">terminal</span>
           </div>
-          <h1 className="font-['Syne'] text-[60px] md:text-[80px] font-extrabold uppercase leading-none text-black">Protocol Initialized</h1>
-          <p className="font-['Geist'] text-[20px] text-[#5d5f5f]">Your project dossier has been securely transmitted. Our architects will analyze the parameters and contact you via secure channel within 48 hours.</p>
+          <h1 className="font-['Syne'] text-[60px] md:text-[80px] font-extrabold uppercase leading-none text-black">Project Brief Sent</h1>
+          <p className="font-['Geist'] text-[20px] text-[#5d5f5f]">Your project brief has been received. Our team will review your goals and contact you within 48 hours.</p>
           <button 
             onClick={() => window.location.href = '/'}
             className="bg-black text-white px-12 py-5 font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest border-2 border-black hover:bg-transparent hover:text-black transition-all"
           >
-            Return to Terminal
+            Return Home
           </button>
         </div>
       </div>
@@ -164,7 +164,7 @@ const StartProject = () => {
             Initialize Project
           </h1>
           <p className="font-['JetBrains_Mono'] text-[12px] tracking-[0.2em] text-[#5d5f5f] uppercase font-bold">
-            Project Intake Protocol / v2.4.0
+            Website Project Brief
           </p>
         </div>
 
@@ -174,18 +174,18 @@ const StartProject = () => {
           <aside className="lg:col-span-4 order-2 lg:order-1 flex flex-col gap-12">
             
             <div className="border-2 border-black p-6 md:p-8 bg-[#f4f3f3]">
-              <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold uppercase mb-6 leading-tight text-black">Technical Contact</h3>
+              <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold uppercase mb-6 leading-tight text-black">Project Contact</h3>
               <div className="space-y-6">
                 <div>
                   <p className="font-['JetBrains_Mono'] text-[10px] uppercase text-[#5d5f5f] tracking-widest font-bold mb-1">Location</p>
-                  <p className="font-['Geist'] text-[18px] font-bold text-black">VTRC North Terminal, DC-1</p>
+                  <p className="font-['Geist'] text-[18px] font-bold text-black">Ratnagiri, Maharashtra</p>
                 </div>
                 <div>
-                  <p className="font-['JetBrains_Mono'] text-[10px] uppercase text-[#5d5f5f] tracking-widest font-bold mb-1">Transmission</p>
+                  <p className="font-['JetBrains_Mono'] text-[10px] uppercase text-[#5d5f5f] tracking-widest font-bold mb-1">Email</p>
                   <p className="font-['Geist'] text-[18px] font-bold text-black">ops@vtrc.tech</p>
                 </div>
                 <div>
-                  <p className="font-['JetBrains_Mono'] text-[10px] uppercase text-[#5d5f5f] tracking-widest font-bold mb-1">Secure Channel</p>
+                  <p className="font-['JetBrains_Mono'] text-[10px] uppercase text-[#5d5f5f] tracking-widest font-bold mb-1">Phone</p>
                   <p className="font-['Geist'] text-[18px] font-bold text-black">+1 (800) 555-VTRC</p>
                 </div>
               </div>
@@ -195,8 +195,8 @@ const StartProject = () => {
               <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold uppercase mb-6 leading-tight text-black">Documentation</h3>
               <ul className="space-y-4 font-['JetBrains_Mono'] text-[12px] uppercase underline underline-offset-4 decoration-2 font-bold tracking-widest text-black">
                 <li><a className="hover:bg-black hover:text-white p-1 transition-colors cursor-pointer" href="#">Terms of Engagement</a></li>
-                <li><a className="hover:bg-black hover:text-white p-1 transition-colors cursor-pointer" href="#">SLA Protocol</a></li>
-                <li><a className="hover:bg-black hover:text-white p-1 transition-colors cursor-pointer" href="#">Architecture Standards</a></li>
+                <li><a className="hover:bg-black hover:text-white p-1 transition-colors cursor-pointer" href="#">Project Timeline</a></li>
+                <li><a className="hover:bg-black hover:text-white p-1 transition-colors cursor-pointer" href="#">Website Standards</a></li>
               </ul>
             </div>
 
@@ -224,7 +224,7 @@ const StartProject = () => {
                     <label className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest block mb-2 text-[#5d5f5f] group-focus-within:text-black transition-colors">Full Name</label>
                     <input 
                       className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black outline-none transition-all" 
-                      placeholder="Lead operator name" 
+                      placeholder="Your full name" 
                       type="text"
                       required
                       value={formData.name}
@@ -235,7 +235,7 @@ const StartProject = () => {
                     <label className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest block mb-2 text-[#5d5f5f] group-focus-within:text-black transition-colors">Organization</label>
                     <input 
                       className="w-full bg-transparent border-0 border-b-2 border-black focus:ring-0 focus:border-b-4 px-0 py-2 font-['Geist'] text-[18px] placeholder:text-[#dadada] text-black outline-none transition-all" 
-                      placeholder="Entity / Bureau" 
+                      placeholder="Business or organization" 
                       type="text"
                       required
                       value={formData.organization}
@@ -304,7 +304,7 @@ const StartProject = () => {
                   <h2 className="font-['Syne'] text-[32px] font-bold uppercase leading-none text-black">Scope of Work</h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {['Technical Infrastructure', 'System Architecture', 'UI/UX Design'].map((item) => (
+                  {['Website Design', 'Web Development', 'UI/UX Design'].map((item) => (
                     <label key={item} className={`flex items-center gap-3 p-4 border-2 border-black cursor-pointer hover:bg-[#eeeeee] transition-colors ${formData.scope.includes(item) ? 'bg-black text-white' : 'bg-transparent text-black'} group relative`}>
                       <input 
                         className="absolute opacity-0" 
@@ -362,11 +362,11 @@ const StartProject = () => {
               <section className="space-y-8">
                 <div className="flex items-center gap-4">
                   <span className="font-['JetBrains_Mono'] text-[14px] font-bold bg-black text-white px-3 py-1">04</span>
-                  <h2 className="font-['Syne'] text-[32px] font-bold uppercase leading-none text-black">Architectural Requirements</h2>
+                  <h2 className="font-['Syne'] text-[32px] font-bold uppercase leading-none text-black">Project Goals</h2>
                 </div>
                 <textarea 
                   className="w-full bg-[#f4f3f3] border-2 border-black font-['JetBrains_Mono'] text-[14px] text-black font-bold focus:outline-none focus:bg-white focus:border-b-4 focus:border-r-4 p-6 tracking-widest resize-none transition-all placeholder:text-[#a0a0a0]" 
-                  placeholder="Describe project specifications, constraints, and technical debt challenges." 
+                  placeholder="Describe the website you want, your audience, must-have features, and any examples you like." 
                   rows="6"
                   required
                   value={formData.brief}
@@ -385,7 +385,7 @@ const StartProject = () => {
                   type="submit"
                   disabled={loading}
                 >
-                  <span>{loading ? 'Executing...' : 'Execute Submission'}</span>
+                  <span>{loading ? 'Submitting...' : 'Submit Project Brief'}</span>
                   <span className="material-symbols-outlined text-[32px] md:text-[40px] group-hover:translate-x-2 transition-transform">arrow_forward</span>
                 </button>
               </div>

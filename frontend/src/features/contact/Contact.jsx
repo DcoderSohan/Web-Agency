@@ -47,7 +47,7 @@ const Contact = () => {
 
   const handleSendOtp = async () => {
     if (!validateEmail(formData.email)) {
-      setOtpError('Please enter a valid Gmail address (e.g. name@gmail.com)');
+      setOtpError('Please enter a valid email address (e.g. name@example.com)');
       return;
     }
     setOtpLoading(true);
@@ -130,12 +130,12 @@ const Contact = () => {
           <div className="grid grid-cols-12 gap-6 border-t-2 border-black pt-8">
             <div className="col-span-12 md:col-span-6">
               <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] max-w-lg m-0">
-                We partner with ambitious organizations to build resilient digital infrastructure. Let's discuss your next engineering challenge.
+                We help businesses plan, design, and build websites that feel right for their brand and work for their customers.
               </p>
             </div>
             <div className="col-span-12 md:col-span-6 flex justify-start md:justify-end items-end mt-4 md:mt-0">
               <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-black border border-black px-4 py-2 uppercase tracking-widest">
-                Availability: Q4 2024
+                Availability: Taking new projects
               </div>
             </div>
           </div>
@@ -151,8 +151,8 @@ const Contact = () => {
                 <div className="w-20 h-20 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-8">
                   <span className="material-symbols-outlined text-[40px]">check</span>
                 </div>
-                <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-4">Transmission Received</h2>
-                <p className="font-['Geist'] text-[18px] text-[#5d5f5f] mb-12">Our operators will process your brief and respond within 24 standard cycles.</p>
+                <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-4">Message Received</h2>
+                <p className="font-['Geist'] text-[18px] text-[#5d5f5f] mb-12">Our team will review your message and respond within 24 hours.</p>
                 <button
                   onClick={() => setSuccess(false)}
                   className="bg-black text-white px-10 py-4 font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest border-2 border-black hover:bg-transparent hover:text-black transition-all"
@@ -248,7 +248,7 @@ const Contact = () => {
                     required
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Describe your system architecture needs..."
+                    placeholder="Tell us what kind of website or web app you want to build..."
                     className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Geist'] text-[18px] text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 resize-none break-words transition-all rounded-none"
                   ></textarea>
                 </div>

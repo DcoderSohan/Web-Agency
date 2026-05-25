@@ -18,12 +18,12 @@ const Services = () => {
             [ OUR CAPABILITIES ]
           </p>
           <h1 className="font-['Syne'] text-[clamp(40px,8vw,120px)] leading-[0.9] tracking-[-0.04em] font-extrabold uppercase max-w-4xl break-words mb-12 text-black m-0">
-            CAPABILITIES BUILT FOR <span className="italic text-transparent" style={{ WebkitTextStroke: '2px black' }}>PERMANENCE</span>
+            WEBSITES BUILT FOR <span className="italic text-transparent" style={{ WebkitTextStroke: '2px black' }}>GROWTH</span>
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             <div className="md:col-span-8 border-2 border-black p-6 md:p-8 bg-[#f4f3f3]">
               <p className="font-['Geist'] text-[18px] leading-[1.6] text-black max-w-2xl m-0">
-                We engineer digital ecosystems that resist obsolescence. Our methodology focuses on structural integrity, high-fidelity engineering, and strategic foresight.
+                We design and develop custom websites, web apps, and digital platforms that look sharp, load fast, and help your business win better customers.
               </p>
             </div>
             <div className="md:col-span-4 border-2 border-black p-6 md:p-8 flex items-center justify-center bg-black text-white">
@@ -96,7 +96,7 @@ const Services = () => {
               <div className="flex flex-wrap gap-2">
                 <span className="border border-black px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium bg-[#eeeeee] text-black uppercase">Cloud Infrastructure</span>
                 <span className="border border-black px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium bg-[#eeeeee] text-black uppercase">Node.JS / React</span>
-                <span className="border border-black px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium bg-[#eeeeee] text-black uppercase">System Architecture</span>
+                <span className="border border-black px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium bg-[#eeeeee] text-black uppercase">Backend Systems</span>
                 <span className="border border-black px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium bg-[#eeeeee] text-black uppercase">CI/CD Pipelines</span>
               </div>
             </div>
@@ -154,7 +154,7 @@ const Services = () => {
             Ready to Build?
           </h2>
           <p className="max-w-2xl w-full font-['Geist'] text-[18px] leading-[1.6] text-[#858383] mb-12 m-0">
-            Join the roster of world-class brands leveraging VTRC Technologies for their critical infrastructure.
+            Share your idea, goals, or current website problem. We will help turn it into a clear plan and a polished web experience.
           </p>
           <div className="flex flex-col md:flex-row gap-6 justify-center w-full md:w-auto">
             <Link to="/contact-us" className="bg-white text-black px-12 py-5 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition-all duration-300 tracking-widest w-full md:w-auto cursor-pointer">
