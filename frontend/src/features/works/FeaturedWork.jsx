@@ -57,7 +57,7 @@ const FeaturedWork = () => {
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="img-grayscale w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                        className="img-grayscale w-full h-full object-cover"
                       />
                     </div>
                     <div className="p-7 md:p-8 bg-[#faf9f9] border-t-2 border-black flex justify-between items-center gap-4">
@@ -98,7 +98,7 @@ const FeaturedWork = () => {
                       <img
                         src={project.image}
                         alt={project.title}
-                        className="img-grayscale w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        className="img-grayscale w-full h-full object-cover"
                       />
                     </div>
                   </Link>
@@ -116,7 +116,7 @@ const FeaturedWork = () => {
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="img-grayscale w-full h-full object-cover block transition-transform duration-1000 group-hover:scale-105"
+                          className="img-grayscale w-full h-full object-cover block"
                         />
                       </div>
                       <div className="p-7 md:p-12 flex flex-col justify-center bg-[#faf9f9]">

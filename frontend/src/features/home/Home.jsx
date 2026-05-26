@@ -1,9 +1,9 @@
 
 import Hero from "./Hero";
 import HomeMarquee from "./HomeMarquee";
-import Statement from "./Statement";
+// import Statement from "./Statement";
 import HomeServices from "./HomeServices";
-import HomeProcess from "./HomeProcess";
+// import HomeProcess from "./HomeProcess";
 import FeaturedWork from "../works/FeaturedWork";
 import CTA from "./CTA";
 
@@ -12,9 +12,9 @@ const Home = () => {
         <>
             <Hero />
             <HomeMarquee />
-            <Statement />
+            {/* <Statement /> */}
             <HomeServices />
-            <HomeProcess />
+            {/* <HomeProcess /> */}
             <FeaturedWork />
             <CTA />
         </>

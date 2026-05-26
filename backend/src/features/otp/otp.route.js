@@ -1,9 +1,3 @@
-import express from "express";
-import { sendEmailOtp, verifyEmailOtp } from "./otp.controller.js";
+import otpRouter from "./otpRoutes.js";
+export default otpRouter;
 
-const router = express.Router();
-
-router.post("/send-email-otp", sendEmailOtp);
-router.post("/verify-email-otp", verifyEmailOtp);
-
-export default router;
