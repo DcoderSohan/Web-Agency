@@ -23,7 +23,6 @@ import {
   ListTodo,
   Layout,
   Terminal,
-  Palette,
 } from "lucide-react";
 import { userDataContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +40,6 @@ import AdminProfile from "../auth/AdminProfile";
 import BlogManager from "../blog/BlogManager";
 import CareerManager from "../career/CareerManager";
 import ApplicationManager from "../career/ApplicationManager";
-import FunkifyManager from "../funkify/FunkifyManager";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import AnimatedLogo from "../../components/ui/AnimatedLogo";
@@ -70,7 +68,6 @@ const AdminDashboard = () => {
   const navItems = [
     { id: "stats", label: "Statistics", icon: <BarChart3 /> },
     { id: "projects", label: "Projects", icon: <FolderPlus /> },
-    { id: "funkify", label: "Funkify Studio", icon: <Palette /> },
     { id: "tasks", label: "Directives", icon: <ListTodo /> },
     { id: "messages", label: "Nodes Chat", icon: <MessageSquare /> },
     { id: "inquiries", label: "Contact Messages", icon: <FileQuestion /> },
@@ -103,7 +100,6 @@ const AdminDashboard = () => {
     switch (activeTab) {
       case "stats": return <Statistic />;
       case "projects": return <ProjectPostView onAddTask={handleAddTaskFromProject} />;
-      case "funkify": return <FunkifyManager />;
       case "messages": return <MessageView showChatOnMobile={isChatOpenOnMobile} setShowChatOnMobile={setIsChatOpenOnMobile} />;
       case "quotation": return <Quotation />;
       case "quotation-history": return <QuotationHistory onDownload={(q) => {

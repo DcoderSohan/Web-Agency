@@ -17,12 +17,6 @@ import Privacy from "../../features/privacy/Privacy";
 import Terms from "../../features/terms/Terms";
 import PageTransition from "./PageTransition";
 
-// Funkify Feature Pages
-import FunkifyHome from "../../features/funkify/FunkifyHome";
-import FunkifyEditor from "../../features/funkify/FunkifyEditor";
-import FunkifyCheckout from "../../features/funkify/FunkifyCheckout";
-import FunkifyOrders from "../../features/funkify/FunkifyOrders";
-
 const AnimatedRoutes = () => {
   const location = useLocation();
 
@@ -43,12 +37,6 @@ const AnimatedRoutes = () => {
         <Route path="/application" element={<PageTransition><Application /></PageTransition>} />
         <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
         <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
-        
-        {/* Funkify It routes */}
-        <Route path="/funkify" element={<PageTransition><FunkifyHome /></PageTransition>} />
-        <Route path="/funkify/editor/:id" element={<PageTransition><FunkifyEditor /></PageTransition>} />
-        <Route path="/funkify/checkout" element={<PageTransition><FunkifyCheckout /></PageTransition>} />
-        <Route path="/funkify/orders" element={<PageTransition><FunkifyOrders /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );

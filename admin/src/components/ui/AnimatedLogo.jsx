@@ -11,21 +11,33 @@ const VTRC_LETTERS = ["V", "T", "R", "C"];
  * size: 'sm' | 'md' (default 'md')
  * inverted: true → white letters (for dark backgrounds)
  */
-const AnimatedLogo = ({ size = "md", inverted = false }) => {
-  const [hovered, setHovered] = useState(false);
+const AnimatedLogo = ({
+  size = "md",
+  inverted = false,
+  forceHover = false,
+}) => {
+  const [isHovered, setHovered] = useState(false);
+  const hovered = forceHover || isHovered;
 
+  const containerWidth = size === "sm" ? 80 : 100;
+  const containerHeight = size === "sm" ? 30 : 36;
   const imgSize =
-    size === "sm" ? { width: 44, height: 28 } : { width: 60, height: 36 };
-  const fontSize = size === "sm" ? 14 : 18;
+    size === "sm" ? { width: 50, height: 30 } : { width: 60, height: 36 };
+  const fontSize = size === "sm" ? 14 : 22;
   const letterColor = inverted ? "#fff" : "#000";
 
   return (
     <div
       style={{
         position: "relative",
-        width: imgSize.width,
-        height: imgSize.height,
-        clipPath: "inset(0 -60px)",
+        width: containerWidth,
+        height: containerHeight,
+        /* Generous horizontal and top insets to prevent any letter clipping
+           on any browser/fallback-font, while clipping strictly at the bottom
+           to keep letters hidden when not hovered */
+        clipPath: size === "sm"
+          ? "inset(-5px -15px 0 -15px)"
+          : "inset(-10px -40px 0 -40px)",
         cursor: "pointer",
         flexShrink: 0,
       }}
@@ -38,9 +50,10 @@ const AnimatedLogo = ({ size = "md", inverted = false }) => {
         alt="VTRC Logo"
         style={{
           position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
+          top: 0,
+          left: (containerWidth - imgSize.width) / 2,
+          width: imgSize.width,
+          height: imgSize.height,
           objectFit: "contain",
         }}
         animate={hovered ? { y: "-110%", opacity: 0 } : { y: "0%", opacity: 1 }}
@@ -55,7 +68,7 @@ const AnimatedLogo = ({ size = "md", inverted = false }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 2,
+          gap: size === "sm" ? 3 : 4,
         }}
       >
         {VTRC_LETTERS.map((letter, i) => (
@@ -70,7 +83,7 @@ const AnimatedLogo = ({ size = "md", inverted = false }) => {
               display: "block",
               letterSpacing: "0.05em",
             }}
-            animate={hovered ? { y: 0, opacity: 1 } : { y: "130%", opacity: 0 }}
+            animate={hovered ? { y: 0, opacity: 1 } : { y: "160%", opacity: 0 }}
             transition={{
               duration: 0.32,
               ease: [0.4, 0, 0.2, 1],

@@ -5,7 +5,6 @@ import Footer from "./components/common/Footer";
 import CustomCursor from "./components/ui/CustomCursor";
 import LoadingScreen from "./components/common/LoadingScreen";
 import AnimatedRoutes from "./components/common/AnimatedRoutes";
-import FunkifyCTA from "./components/ui/FunkifyCTA";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +20,6 @@ function App() {
       <main>
         <AnimatedRoutes />
       </main>
-      <FunkifyCTA />
       <Footer />
     </Router>
   );
