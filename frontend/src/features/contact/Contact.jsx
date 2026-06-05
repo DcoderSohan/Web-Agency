@@ -20,17 +20,15 @@ const Contact = () => {
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
 
-  // Strict email validation — must have @ and a real domain (e.g. @gmail.com)
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
   };
 
-  // Easily change the map location here
   const mapConfig = {
     lat: 16.8103151,
     lng: 73.3370135,
-    name: "RATNAGIRI, MAHARASHTRA"
+    name: 'RATNAGIRI, MAHARASHTRA'
   };
 
   useEffect(() => {
@@ -76,7 +74,7 @@ const Contact = () => {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/otp/verify-email-otp`, { email: formData.email, otp });
       if (res.data.success) {
         setEmailVerified(true);
-        setOtpSent(false); // Hide OTP input
+        setOtpSent(false);
         setOtp('');
       }
     } catch (err) {
@@ -120,114 +118,160 @@ const Contact = () => {
 
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen overflow-x-hidden">
-      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
+      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-8 lg:px-16 pt-14 md:pt-20 pb-24">
 
         {/* ── HERO SECTION ── */}
-        <section className="mb-24">
-          <h1 className="font-['Syne'] text-[clamp(40px,8vw,120px)] leading-[0.9] tracking-[-0.04em] font-extrabold text-black mb-12 break-words m-0 uppercase">
-            SAY HELLO
+        <section className="mb-16">
+          {/* Label */}
+          <div className="mb-5 inline-flex items-center gap-2 px-3 py-1 border border-black">
+            <span className="w-2 h-2 rounded-full bg-black inline-block animate-pulse"></span>
+            <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-black">
+              Available — Taking New Projects
+            </span>
+          </div>
+
+          {/* Heading */}
+          <h1 className="font-['Syne'] text-[clamp(32px,5vw,68px)] leading-[1] tracking-[-0.03em] font-extrabold text-black uppercase m-0 mb-6">
+            Let's Build<br />Something Great
           </h1>
-          <div className="grid grid-cols-12 gap-6 border-t-2 border-black pt-8">
-            <div className="col-span-12 md:col-span-6">
-              <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] max-w-lg m-0">
-                We help businesses plan, design, and build websites that feel right for their brand and work for their customers.
-              </p>
-            </div>
-            <div className="col-span-12 md:col-span-6 flex justify-start md:justify-end items-end mt-4 md:mt-0">
-              <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-black border border-black px-4 py-2 uppercase tracking-widest">
-                Availability: Taking new projects
-              </div>
-            </div>
+
+          {/* Divider row */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-t-2 border-black pt-6">
+            <p className="font-['Geist'] text-[15px] leading-[1.7] text-[#5d5f5f] max-w-md m-0">
+              We help businesses plan, design, and build websites that feel right
+              for their brand — and work for their customers.
+            </p>
+            <a
+              href="mailto:hello@vtrc.tech"
+              className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase tracking-widest text-black border-b-2 border-black pb-0.5 hover:opacity-50 transition-opacity whitespace-nowrap self-start md:self-auto"
+            >
+              hello@vtrc.tech
+            </a>
           </div>
         </section>
 
-        {/* ── Main Content Cluster (Bento Layout) ── */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+        {/* ── MAIN BENTO GRID ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-          {/* Contact Form Section */}
-          <section className="md:col-span-8 border-2 border-black p-6 md:p-8 bg-white">
-            {success ? (
-              <div className="py-20 text-center">
-                <div className="w-20 h-20 bg-black text-white rounded-full flex items-center justify-center mx-auto mb-8">
-                  <span className="material-symbols-outlined text-[40px]">check</span>
-                </div>
-                <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-4">Message Received</h2>
-                <p className="font-['Geist'] text-[18px] text-[#5d5f5f] mb-12">Our team will review your message and respond within 24 hours.</p>
-                <button
-                  onClick={() => setSuccess(false)}
-                  className="bg-black text-white px-10 py-4 font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest border-2 border-black hover:bg-transparent hover:text-black transition-all"
-                >
-                  Send Another
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-12" onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-6">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f]">Your Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Alex Rivera"
-                      className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Syne'] text-[24px] md:text-[32px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 transition-all rounded-none"
-                    />
+          {/* ── CONTACT FORM ── */}
+          <section className="lg:col-span-8 border-2 border-black bg-white">
+            {/* Form header bar */}
+            <div className="border-b-2 border-black px-6 md:px-8 py-4 flex items-center justify-between">
+              <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                Project Inquiry
+              </span>
+              <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-black">
+                01 / Form
+              </span>
+            </div>
+
+            <div className="px-6 md:px-8 py-8">
+              {success ? (
+                <div className="py-16 text-center flex flex-col items-center gap-6">
+                  <div className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[28px]">check</span>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f]">Email Address</label>
-                    <div className="flex items-center border-b-2 border-black focus-within:border-b-4 transition-all">
+                  <div>
+                    <h2 className="font-['Syne'] text-[24px] font-bold uppercase mb-2">Message Received</h2>
+                    <p className="font-['Geist'] text-[15px] text-[#5d5f5f]">
+                      Our team will review your message and respond within 24 hours.
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setSuccess(false)}
+                    className="bg-black text-white px-8 py-3 font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest border-2 border-black hover:bg-transparent hover:text-black transition-all"
+                  >
+                    Send Another
+                  </button>
+                </div>
+              ) : (
+                <form className="space-y-8" onSubmit={handleSubmit}>
+
+                  {/* Row 1: Name + Email */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Name */}
+                    <div className="flex flex-col gap-2">
+                      <label className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                        Your Name
+                      </label>
                       <input
-                        type="email"
+                        type="text"
                         required
-                        disabled={emailVerified}
-                        value={formData.email}
-                        onChange={(e) => {
-                          setFormData({ ...formData, email: e.target.value });
-                          setEmailVerified(false);
-                          setOtpSent(false);
-                        }}
-                        placeholder="alex@gmail.com"
-                        className="w-full bg-transparent border-none py-4 font-['Syne'] text-[24px] md:text-[32px] font-bold text-black placeholder-black/20 focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="John Doe"
+                        className="w-full bg-transparent border-b-2 border-black py-3 font-['Geist'] text-[15px] font-medium text-black placeholder-black/25 focus:outline-none focus:border-b-[3px] transition-all rounded-none"
                       />
-                      {emailVerified ? (
-                        <span className="font-['JetBrains_Mono'] text-[12px] font-bold text-green-600 uppercase whitespace-nowrap px-4">Verified</span>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={handleSendOtp}
-                          disabled={otpLoading || cooldown > 0 || !formData.email}
-                          className="font-['JetBrains_Mono'] text-[12px] font-bold text-white bg-black px-4 py-2 uppercase disabled:opacity-50 whitespace-nowrap"
-                        >
-                          {otpLoading ? 'Sending...' : cooldown > 0 ? `Wait ${cooldown}s` : 'Send OTP'}
-                        </button>
+                    </div>
+
+                    {/* Email + OTP */}
+                    <div className="flex flex-col gap-2">
+                      <label className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                        Email Address
+                      </label>
+                      <div className="flex items-center border-b-2 border-black focus-within:border-b-[3px] transition-all">
+                        <input
+                          type="email"
+                          required
+                          disabled={emailVerified}
+                          value={formData.email}
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            setEmailVerified(false);
+                            setOtpSent(false);
+                          }}
+                          placeholder="alex@gmail.com"
+                          className="w-full min-w-0 bg-transparent border-none py-3 font-['Geist'] text-[15px] font-medium text-black placeholder-black/25 focus:outline-none focus:ring-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                        />
+                        {emailVerified ? (
+                          <span className="font-['JetBrains_Mono'] text-[11px] font-bold text-green-600 uppercase whitespace-nowrap px-3 flex-shrink-0 flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                            Verified
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={handleSendOtp}
+                            disabled={otpLoading || cooldown > 0 || !formData.email}
+                            className="font-['JetBrains_Mono'] text-[11px] font-bold text-white bg-black px-3 py-1.5 uppercase disabled:opacity-40 whitespace-nowrap flex-shrink-0 transition-opacity hover:opacity-70"
+                          >
+                            {otpLoading ? 'Sending…' : cooldown > 0 ? `${cooldown}s` : 'Send OTP'}
+                          </button>
+                        )}
+                      </div>
+                      {otpError && (
+                        <p className="font-['JetBrains_Mono'] text-[11px] text-red-600 font-bold tracking-widest uppercase mt-1">
+                          {otpError}
+                        </p>
+                      )}
+                      {otpSent && !emailVerified && (
+                        <div className="flex items-center gap-2 mt-3 border border-black/10 bg-[#f4f3f3] px-3 py-2">
+                          <input
+                            type="text"
+                            maxLength="6"
+                            placeholder="6-digit OTP"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                            className="w-full min-w-0 bg-transparent border-none py-1 font-['JetBrains_Mono'] text-[14px] font-bold text-black placeholder-black/30 focus:outline-none tracking-widest"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleVerifyOtp}
+                            disabled={verifyLoading || otp.length !== 6}
+                            className="font-['JetBrains_Mono'] text-[11px] font-bold text-white bg-black px-3 py-1.5 uppercase disabled:opacity-40 whitespace-nowrap flex-shrink-0"
+                          >
+                            {verifyLoading ? '…' : 'Verify'}
+                          </button>
+                        </div>
                       )}
                     </div>
-                    {otpError && <p className="font-['JetBrains_Mono'] text-[12px] text-red-600 mt-1 font-bold tracking-widest uppercase">{otpError}</p>}
-                    
-                    {otpSent && !emailVerified && (
-                      <div className="flex items-center gap-2 mt-4">
-                        <input
-                          type="text"
-                          maxLength="6"
-                          placeholder="ENTER 6-DIGIT OTP"
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                          className="w-full bg-transparent border-b-2 border-black py-2 font-['Syne'] text-[18px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 transition-all"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleVerifyOtp}
-                          disabled={verifyLoading || otp.length !== 6}
-                          className="font-['JetBrains_Mono'] text-[12px] font-bold text-white bg-black px-4 py-2 uppercase disabled:opacity-50 whitespace-nowrap"
-                        >
-                          {verifyLoading ? 'Verifying...' : 'Verify'}
-                        </button>
-                      </div>
-                    )}
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f]">Phone Number</label>
+
+                  {/* Row 2: Phone */}
+                  <div className="flex flex-col gap-2 max-w-xs">
+                    <label className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                      Phone Number
+                    </label>
                     <input
                       type="tel"
                       required
@@ -236,121 +280,154 @@ const Contact = () => {
                         const val = e.target.value.replace(/\D/g, '').slice(0, 10);
                         setFormData({ ...formData, phone: val });
                       }}
-                      placeholder="1234567890"
-                      className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Syne'] text-[24px] md:text-[32px] font-bold text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 transition-all rounded-none"
+                      placeholder="10-digit number"
+                      className="w-full bg-transparent border-b-2 border-black py-3 font-['Geist'] text-[15px] font-medium text-black placeholder-black/25 focus:outline-none focus:border-b-[3px] transition-all rounded-none"
                     />
                   </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f]">Project Details</label>
-                  <textarea
-                    rows="4"
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Tell us what kind of website or web app you want to build..."
-                    className="w-full bg-transparent border-t-0 border-x-0 border-b-2 border-black py-4 font-['Geist'] text-[18px] text-black placeholder-black/20 focus:outline-none focus:border-b-4 focus:ring-0 resize-none break-words transition-all rounded-none"
-                  ></textarea>
-                </div>
 
-                {error && (
-                  <p className="font-['JetBrains_Mono'] text-[12px] text-red-600 font-bold uppercase tracking-widest">{error}</p>
-                )}
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pt-8">
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      id="nda"
-                      className="w-6 h-6 border-2 border-black rounded-none checked:bg-black focus:ring-0 cursor-pointer appearance-none checked:after:content-['✓'] checked:after:text-white flex items-center justify-center text-sm font-bold"
+                  {/* Row 3: Message */}
+                  <div className="flex flex-col gap-2">
+                    <label className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                      Project Details
+                    </label>
+                    <textarea
+                      rows="5"
+                      required
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      placeholder="Tell us about the website or web app you want to build…"
+                      className="w-full bg-transparent border-b-2 border-black py-3 font-['Geist'] text-[15px] text-black placeholder-black/25 focus:outline-none focus:border-b-[3px] resize-none break-words transition-all rounded-none"
                     />
-                    <label htmlFor="nda" className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-black cursor-pointer">Request NDA</label>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full md:w-auto bg-black text-white font-['Syne'] text-[20px] md:text-[24px] font-bold px-12 py-5 border-2 border-black transition-colors duration-300 hover:bg-transparent hover:text-black flex items-center justify-center gap-4 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loading ? 'SENDING...' : 'SEND BRIEF'}
-                    <span className="material-symbols-outlined text-[24px]">arrow_forward</span>
-                  </button>
-                </div>
-              </form>
-            )}
+
+                  {/* Error */}
+                  {error && (
+                    <p className="font-['JetBrains_Mono'] text-[11px] text-red-600 font-bold uppercase tracking-widest">
+                      {error}
+                    </p>
+                  )}
+
+                  {/* Footer row */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5 pt-4 border-t border-black/10">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="checkbox"
+                        id="nda"
+                        className="w-5 h-5 border-2 border-black rounded-none checked:bg-black focus:ring-0 cursor-pointer appearance-none"
+                        style={{ accentColor: '#000' }}
+                      />
+                      <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-black group-hover:opacity-60 transition-opacity">
+                        Request NDA
+                      </span>
+                    </label>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full sm:w-auto bg-black text-white font-['Syne'] text-[15px] font-bold px-10 py-4 border-2 border-black transition-all duration-200 hover:bg-transparent hover:text-black flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed uppercase tracking-wide"
+                    >
+                      {loading ? 'Sending…' : 'Send Brief'}
+                      <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </section>
 
-          {/* Sidebar Info Section */}
-          <aside className="md:col-span-4 space-y-6">
+          {/* ── SIDEBAR ── */}
+          <aside className="lg:col-span-4 flex flex-col gap-5">
 
-            {/* Location Box */}
-            <div className="border-2 border-black p-6 md:p-8 bg-[#f4f3f3]">
-              <h3 className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f] mb-6 flex items-center gap-2">
-                <span className="material-symbols-outlined text-[16px]">location_on</span>
-                Global Headquarters
-              </h3>
-              <address className="not-italic font-['Syne'] text-[20px] md:text-[24px] font-bold leading-tight text-black break-words m-0">
-                Ratnagiri<br />
-                Maharashtra<br />
-                415612
-              </address>
-              <div className="mt-8 pt-8 border-t border-black/20">
+            {/* Location Card */}
+            <div className="border-2 border-black bg-[#f4f3f3]">
+              <div className="border-b-2 border-black px-6 py-3 flex items-center justify-between">
+                <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f] flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[13px]">location_on</span>
+                  Headquarters
+                </span>
+                <span className="font-['JetBrains_Mono'] text-[11px] tracking-widest text-[#5d5f5f] uppercase">IN</span>
+              </div>
+              <div className="px-6 py-6">
+                <address className="not-italic font-['Syne'] text-[20px] font-bold leading-snug text-black m-0">
+                  Ratnagiri<br />
+                  Maharashtra<br />
+                  <span className="text-[14px] font-normal text-[#5d5f5f] font-['JetBrains_Mono'] tracking-widest">415612</span>
+                </address>
+              </div>
+              <div className="border-t border-black/10">
                 <img
-                  alt="HQ Building"
+                  alt="Ratnagiri, Maharashtra"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsZA6Yb7hO6LwJtKuuXH7L982AXEBD2EJQg-AQJ120KmC3R3oDnM7lOY2EoGKG3fx9oOv4MUc6TgNY8l3p4-SvTzUUQUiWcHDrUY0ewVcV1wk2z5yb7Lrm8RyVffBda8PpRMq86clqBIyepm_Hn_08KGNFoUs0OAf-T-PnxDLvceVBCVU6EXJssPm_qRGN5j86z7ogMmZnvEh7tFg9FgME3zL56pV6EfPzPluZx6mgskjeaR7hAqyWioq8gmkcN_Ua3NO3JhYsTg"
-                  className="w-full grayscale h-48 object-cover border border-black"
+                  className="w-full grayscale h-40 object-cover"
                 />
               </div>
             </div>
 
-            {/* Connect Box */}
-            <div className="border-2 border-black p-6 md:p-8 bg-black text-white">
-              <h3 className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase opacity-60 mb-6 flex items-center gap-2 text-white">
-                <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>alternate_email</span>
-                Connect
-              </h3>
-              <ul className="flex flex-wrap gap-x-6 gap-y-4 list-none p-0 m-0">
-                <li>
-                  <a href="#" className="font-['Syne'] text-[18px] font-bold text-white no-underline hover:underline flex items-center gap-1 group">
-                    LINKEDIN <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-[18px]">north_east</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="font-['Syne'] text-[18px] font-bold text-white no-underline hover:underline flex items-center gap-1 group">
-                    GITHUB <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-[18px]">north_east</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="font-['Syne'] text-[18px] font-bold text-white no-underline hover:underline flex items-center gap-1 group">
-                    TWITTER / X <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity text-[18px]">north_east</span>
-                  </a>
-                </li>
-              </ul>
+            {/* Direct Contact Card */}
+            <div className="border-2 border-black bg-white">
+              <div className="border-b-2 border-black px-6 py-3">
+                <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+                  Direct Inquiry
+                </span>
+              </div>
+              <div className="px-6 py-5">
+                <a
+                  href="mailto:hello@vtrc.tech"
+                  className="font-['Syne'] text-[17px] font-bold text-black no-underline hover:opacity-50 transition-opacity break-all select-all"
+                >
+                  hello@vtrc.tech
+                </a>
+              </div>
             </div>
 
-            {/* Direct Contact */}
-            <div className="border-2 border-black p-6 md:p-8 bg-white flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-              <h3 className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase text-[#5d5f5f] m-0">Direct Inquiry</h3>
-              <p className="font-['Syne'] text-[18px] md:text-[20px] font-bold text-black select-all m-0 break-all">hello@vtrc.tech</p>
+            {/* Connect / Socials Card */}
+            <div className="border-2 border-black bg-black text-white">
+              <div className="border-b-2 border-white/10 px-6 py-3 flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-[13px] opacity-60" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  alternate_email
+                </span>
+                <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest opacity-60">
+                  Connect
+                </span>
+              </div>
+              <ul className="px-6 py-5 flex flex-col gap-3 list-none m-0">
+                {[
+                  { label: 'LinkedIn', href: '#' },
+                  { label: 'GitHub', href: '#' },
+                  { label: 'Twitter / X', href: '#' },
+                ].map(({ label, href }) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      className="font-['Syne'] text-[15px] font-bold text-white no-underline flex items-center justify-between group hover:opacity-60 transition-opacity"
+                    >
+                      {label}
+                      <span className="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">
+                        north_east
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
 
           </aside>
         </div>
 
-        {/* ── Featured Map Section ── */}
-        <section className="mt-24 border-2 border-black overflow-hidden relative group">
-          <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors z-10 pointer-events-none"></div>
-          <div className="w-full h-[400px] bg-[#e3e2e2] flex items-center justify-center relative">
+        {/* ── MAP SECTION ── */}
+        <section className="mt-16 border-2 border-black overflow-hidden relative group">
+          <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors z-10 pointer-events-none" />
+          <div className="w-full h-[340px] bg-[#e3e2e2] relative">
             <iframe
               src={`https://maps.google.com/maps?q=${mapConfig.lat},${mapConfig.lng}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
               className="w-full h-full border-0 grayscale opacity-80"
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Washington DC Map"
-            ></iframe>
-            <div className="absolute z-20 top-6 left-6 bg-black text-white p-4 border border-white">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium whitespace-normal m-0 uppercase tracking-widest">
-                {mapConfig.name} // {Math.abs(mapConfig.lat)}° {mapConfig.lat >= 0 ? 'N' : 'S'}, {Math.abs(mapConfig.lng)}° {mapConfig.lng >= 0 ? 'E' : 'W'}
+              title="Ratnagiri Maharashtra Map"
+            />
+            <div className="absolute z-20 top-5 left-5 bg-black text-white px-4 py-2.5 border border-white/20">
+              <p className="font-['JetBrains_Mono'] text-[11px] font-medium whitespace-nowrap m-0 uppercase tracking-widest">
+                {mapConfig.name} &nbsp;·&nbsp; {Math.abs(mapConfig.lat)}° {mapConfig.lat >= 0 ? 'N' : 'S'}, {Math.abs(mapConfig.lng)}° {mapConfig.lng >= 0 ? 'E' : 'W'}
               </p>
             </div>
           </div>

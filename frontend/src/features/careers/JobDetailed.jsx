@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 const JobDetailed = () => {
   const { role } = useParams();
@@ -32,7 +32,9 @@ const JobDetailed = () => {
       <main className="bg-[#faf9f9] min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest">SCANNING TALENT NODE...</p>
+          <p className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase tracking-widest">
+            LOADING POSITION DETAILS...
+          </p>
         </div>
       </main>
     );
@@ -42,165 +44,277 @@ const JobDetailed = () => {
     return (
       <main className="bg-[#faf9f9] min-h-screen flex items-center justify-center p-5">
         <div className="text-center max-w-md border-2 border-black p-12">
-          <h1 className="font-['Syne'] text-[32px] font-black mb-4 uppercase">NODE NOT FOUND</h1>
-          <p className="font-['Geist'] text-[16px] text-[#5d5f5f] mb-8 uppercase font-bold">The requested position has been filled or deprecated.</p>
-          <Link to="/careers" className="inline-block bg-black text-white px-8 py-4 font-['JetBrains_Mono'] text-[12px] font-bold uppercase no-underline">Return to Careers</Link>
+          <h1 className="font-['Syne'] text-[32px] font-black mb-4 uppercase">
+            Position Not Found
+          </h1>
+          <p className="font-['Geist'] text-[16px] text-[#5d5f5f] mb-8 uppercase font-bold">
+            The requested position has been filled or is no longer available.
+          </p>
+          <Link
+            to="/careers"
+            className="inline-block bg-black text-white px-8 py-4 font-['JetBrains_Mono'] text-[12px] font-bold uppercase no-underline"
+          >
+            Return to Careers
+          </Link>
         </div>
       </main>
     );
   }
 
   // Format the jobTitle for display split
-  const jobTitleWords = job.jobTitle.split(' ');
+  const jobTitleWords = job.jobTitle.split(" ");
   const word1 = jobTitleWords[0];
-  const word2 = jobTitleWords.slice(1).join(' ');
+  const word2 = jobTitleWords.slice(1).join(" ");
 
   return (
-    <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen overflow-x-hidden">
-      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
-        
+    <main className="bg-white text-[#1a1c1c] min-h-screen">
+      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-16 md:pt-24 pb-24">
         {/* ── HERO SECTION ── */}
-        <header className="pt-4 pb-16 md:pt-8 md:pb-32 border-b-2 border-black">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
-            <div className="md:col-span-8">
+        <header className="mb-20">
+          <Link
+            to="/careers"
+            className="inline-flex items-center gap-2 text-[14px] font-medium text-[#5d5f5f] hover:text-black mb-8 transition-colors no-underline"
+          >
+            <span className="material-symbols-outlined text-[18px]">
+              arrow_back
+            </span>
+            Back to Careers
+          </Link>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+            <div className="md:col-span-2">
               <div className="mb-8">
-                <span className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase bg-black text-white px-3 py-1">
-                    {job.isOpen ? "Hiring: Open Position" : "Position Closed"}
+                <span
+                  className={`inline-block px-4 py-2 rounded-full text-[12px] font-bold uppercase tracking-wide ${job.isOpen ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                >
+                  {job.isOpen ? "✓ Open Position" : "Position Closed"}
                 </span>
               </div>
-              <h1 className="font-['Syne'] text-[clamp(40px,12vw,120px)] font-extrabold uppercase leading-[0.9] m-0 break-words text-black">
-                {word1}<br/>{word2}
+              <h1 className="font-['Syne'] text-[56px] md:text-[72px] font-bold leading-[1.1] text-black mb-6">
+                {job.jobTitle}
               </h1>
+              <p className="font-['Geist'] text-[18px] text-[#5d5f5f] leading-[1.6]">
+                {job.description}
+              </p>
             </div>
-            <div className="md:col-span-4 flex flex-col gap-4 mt-8 md:mt-0">
-              <div className="flex items-center gap-3 border-b border-black pb-3">
-                <span className="material-symbols-outlined text-black">location_on</span>
-                <p className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase m-0 text-black">{job.location}</p>
-              </div>
-              <div className="flex items-center gap-3 border-b border-black pb-3">
-                <span className="material-symbols-outlined text-black">schedule</span>
-                <p className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase m-0 text-black">{job.jobType}</p>
-              </div>
-              {job.salaryRange && (
-                  <div className="flex items-center gap-3 border-b border-black pb-3">
-                    <span className="material-symbols-outlined text-black">payments</span>
-                    <p className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase m-0 text-black">{job.salaryRange}</p>
+
+            {/* Quick Info */}
+            <div className="bg-[#f8f7f7] p-8 rounded-lg">
+              <h3 className="font-bold text-[12px] uppercase text-[#5d5f5f] mb-6 tracking-wide">
+                Quick Info
+              </h3>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-[12px] font-medium text-[#5d5f5f] uppercase tracking-wide mb-2">
+                    Department
+                  </p>
+                  <p className="font-['Syne'] text-[18px] font-bold">
+                    {job.department}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[12px] font-medium text-[#5d5f5f] uppercase tracking-wide mb-2">
+                    Employment Type
+                  </p>
+                  <p className="font-['Syne'] text-[18px] font-bold">
+                    {job.jobType}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[12px] font-medium text-[#5d5f5f] uppercase tracking-wide mb-2">
+                    Location
+                  </p>
+                  <p className="font-['Syne'] text-[18px] font-bold">
+                    {job.location}
+                  </p>
+                </div>
+                {job.salaryRange && (
+                  <div>
+                    <p className="text-[12px] font-medium text-[#5d5f5f] uppercase tracking-wide mb-2">
+                      Salary Range
+                    </p>
+                    <p className="font-['Syne'] text-[18px] font-bold">
+                      {job.salaryRange}
+                    </p>
                   </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </header>
 
-        {/* ── Content Sections: Bento Grid Approach ── */}
-        <section className="grid grid-cols-1 md:grid-cols-12 border-x-2 border-black bg-white">
-          
-          {/* Role Overview */}
-          <div className="md:col-span-7 border-b-2 md:border-r-2 border-black p-8 md:p-12">
-            <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-8 text-black m-0">The Mission</h2>
-            <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] mb-6 m-0">
-              {job.description}
-            </p>
-          </div>
-          
-          {/* Key Stats/Context */}
-          <div className="md:col-span-5 border-b-2 border-black p-8 md:p-12 bg-[#f4f3f3]">
-            <h3 className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase mb-8 opacity-60 text-black m-0">Context</h3>
-            <ul className="space-y-6 list-none p-0 m-0">
-              <li className="flex gap-4">
-                <span className="font-['Syne'] text-[32px] font-bold leading-none text-black">01</span>
-                <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] m-0 mt-1">Department: {job.department}</p>
-              </li>
-              <li className="flex gap-4">
-                <span className="font-['Syne'] text-[32px] font-bold leading-none text-black">02</span>
-                <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] m-0 mt-1">Reporting to the Core Operations Unit.</p>
-              </li>
-              <li className="flex gap-4">
-                <span className="font-['Syne'] text-[32px] font-bold leading-none text-black">03</span>
-                <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] m-0 mt-1">Responsible for scaling the {job.department.toLowerCase()} axis.</p>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Requirements */}
-          <div className="md:col-span-6 border-b-2 md:border-r-2 border-black p-8 md:p-12">
-            <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-8 text-black m-0">Requirements</h2>
-            <ul className="space-y-6 font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] list-none p-0 m-0">
-              {job.requirements.map((req, idx) => (
-                <li key={idx} className="flex items-start gap-4">
-                    <span className="material-symbols-outlined text-black mt-1" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                    <span>{req}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Benefits */}
-          <div className="md:col-span-6 border-b-2 border-black p-8 md:p-12">
-            <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-8 text-black m-0">Benefits</h2>
-            <div className="space-y-4">
-              {job.benefits.map((benefit, idx) => (
-                <div key={idx} className="p-6 border border-black hover:bg-black hover:text-white transition-all duration-300 group cursor-pointer">
-                    <h4 className="font-['JetBrains_Mono'] text-[12px] uppercase font-bold text-black group-hover:text-white m-0">
-                        {benefit}
-                    </h4>
+        {/* ── REQUIREMENTS SECTION ── */}
+        <section className="mb-20 pb-20 border-b border-black/10">
+          <h2 className="font-['Syne'] text-[40px] font-bold mb-12 uppercase">
+            What We're Looking For
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {job.requirements.map((req, idx) => (
+              <div key={idx} className="flex items-start gap-4">
+                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-black flex items-center justify-center mt-1">
+                  <span className="text-white text-[12px] font-bold">✓</span>
                 </div>
-              ))}
-            </div>
-          </div>
-          
-        </section>
-
-        {/* ── Application Section ── */}
-        <section className="grid grid-cols-1 md:grid-cols-12 border-x-2 border-b-2 border-black w-full bg-white">
-          <div className="md:col-span-5 p-8 md:p-12 md:border-r-2 border-b-2 md:border-b-0 border-black bg-black text-white">
-            <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-8 text-white m-0">Apply for this role</h2>
-            <p className="font-['Geist'] text-[16px] leading-[1.6] mb-12 opacity-80 m-0">
-              We do not require cover letters. We require clarity. Submit your portfolio and a brief statement on why functional minimalism matters in industrial software.
-            </p>
-            <div className="flex flex-col gap-6">
-              <div className="p-6 border border-white">
-                <p className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase mb-2 m-0 opacity-80">Step 01</p>
-                <p className="font-['Geist'] text-[16px] font-bold m-0">Portfolio Review (Technical Focus)</p>
+                <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f]">
+                  {req}
+                </p>
               </div>
-              <div className="p-6 border border-white">
-                <p className="font-['JetBrains_Mono'] text-[12px] font-bold uppercase mb-2 m-0 opacity-80">Step 02</p>
-                <p className="font-['Geist'] text-[16px] font-bold m-0">Technical Interview with Core Operators</p>
+            ))}
+          </div>
+        </section>
+
+        {/* ── BENEFITS SECTION ── */}
+        <section className="mb-20 pb-20 border-b border-black/10">
+          <h2 className="font-['Syne'] text-[40px] font-bold mb-12 uppercase">
+            Benefits & Perks
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {job.benefits.map((benefit, idx) => (
+              <div
+                key={idx}
+                className="p-8 bg-[#f8f7f7] rounded-lg hover:bg-black hover:text-white transition-all duration-300 group cursor-pointer"
+              >
+                <h4 className="font-['Syne'] text-[18px] font-bold uppercase mb-3">
+                  {benefit}
+                </h4>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── APPLICATION SECTION ── */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* Process */}
+            <div>
+              <h2 className="font-['Syne'] text-[40px] font-bold mb-8 uppercase">
+                Application Process
+              </h2>
+              <div className="space-y-6">
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white font-bold text-[14px]">
+                      1
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[16px] mb-2 uppercase">
+                      Submit Your Application
+                    </h4>
+                    <p className="text-[14px] text-[#5d5f5f]">
+                      Share your portfolio and tell us why you're excited about
+                      this role.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white font-bold text-[14px]">
+                      2
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[16px] mb-2 uppercase">
+                      Review & Interview
+                    </h4>
+                    <p className="text-[14px] text-[#5d5f5f]">
+                      We'll review your work and schedule a technical
+                      conversation if it's a fit.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-6">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-black text-white font-bold text-[14px]">
+                      3
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[16px] mb-2 uppercase">
+                      Join the Team
+                    </h4>
+                    <p className="text-[14px] text-[#5d5f5f]">
+                      If we're both excited, we'll make you an offer and bring
+                      you on board.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="flex flex-col justify-center">
+              <div className="bg-black text-white p-12 rounded-lg">
+                <h3 className="font-['Syne'] text-[28px] font-bold mb-4 uppercase">
+                  Ready to Apply?
+                </h3>
+                <p className="font-['Geist'] text-[16px] leading-[1.6] text-white/80 mb-8">
+                  We'd love to hear from you. Submit your application and let's
+                  start building something amazing together.
+                </p>
+                <Link
+                  to={`/application?jobId=${job._id}&role=${encodeURIComponent(job.jobTitle)}`}
+                  className={`inline-block w-full text-center px-8 py-4 rounded-lg font-['Syne'] text-[16px] font-bold uppercase transition-all duration-300 no-underline ${
+                    job.isOpen
+                      ? "bg-white text-black hover:bg-[#f8f7f7]"
+                      : "bg-gray-600 text-white cursor-not-allowed"
+                  }`}
+                >
+                  {job.isOpen ? "Start Application" : "Position Closed"}
+                </Link>
               </div>
             </div>
           </div>
-          <div className="md:col-span-7 p-8 md:p-12 flex flex-col justify-center items-start bg-white">
-            <h2 className="font-['Syne'] text-[32px] font-bold uppercase mb-8 text-black m-0">Ready to join?</h2>
-            <p className="font-['Geist'] text-[18px] leading-[1.6] mb-12 text-[#5d5f5f] m-0">
-              Our application process is streamlined for clarity. You will be redirected to our secure candidate portal to submit your technical dossier and portfolio.
-            </p>
-            <Link 
-              to={`/application?jobId=${job._id}&role=${encodeURIComponent(job.jobTitle)}`}
-              className={`group relative inline-flex items-center gap-6 px-12 py-6 border-2 border-black font-['Syne'] text-[24px] font-bold uppercase tracking-tighter transition-all duration-300 ${job.isOpen ? 'bg-black text-white hover:bg-transparent hover:text-black' : 'bg-gray-200 text-gray-500 cursor-not-allowed border-gray-200 pointer-events-none'}`}
-            >
-              {job.isOpen ? (
-                <>
-                  Begin Application
-                  <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform">arrow_forward</span>
-                </>
-              ) : 'Position Closed'}
-            </Link>
-          </div>
         </section>
 
-        {/* ── Visual Anchor / Office Culture ── */}
-        <section className="py-16">
-          <div className="relative w-full aspect-[21/9] border-2 border-black overflow-hidden group">
-            <img 
-              alt="Office Culture"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7Y_h21gegpC9ojcfKniYH-jwqyFAlGbCoCNMM41_RICs7Z8XcydDmZvSZUwamCaej1WjPl2yN5035hWNyh5Ijnm8h_jYuLBm3NYpaqfEAWqOTYRRO5ZmTXBoMgJ1wUwnUSe3Qg8Ka-YSs-aAH70jCpc75LaGIWiiRZjvv6RY-M7IA0EFB-esCd_ptRrABWfnG6ZFVDHPkatPl7HR0r9GZgA4Ss9Qk6Un-lb27Fa2gfnjb8OYnJZsqOpxiL1FMfFJrxTHFSNSr8g"
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
-            />
-            <div className="absolute bottom-6 left-6 bg-[#faf9f9] px-4 py-2 border border-black">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase m-0 text-black">VTRC HQ // London Sector 04</p>
+        {/* ── CULTURE SECTION ── */}
+        <section className="mb-0">
+          <h2 className="font-['Syne'] text-[40px] font-bold mb-12 uppercase">
+            About Working with Us
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="font-['Geist'] text-[18px] leading-[1.8] text-[#5d5f5f] mb-6">
+                VTRC Technologies is more than just a workplace. We're a team of
+                passionate professionals dedicated to crafting exceptional
+                digital experiences. We believe in collaboration, continuous
+                learning, and supporting each other's growth.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3">
+                  <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                  <span className="text-[16px] text-[#5d5f5f]">
+                    Supportive and inclusive culture
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                  <span className="text-[16px] text-[#5d5f5f]">
+                    Opportunities for professional growth
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                  <span className="text-[16px] text-[#5d5f5f]">
+                    Work-life balance
+                  </span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                  <span className="text-[16px] text-[#5d5f5f]">
+                    Exciting projects with great clients
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div className="bg-[#f8f7f7] rounded-lg aspect-square overflow-hidden">
+              <img
+                alt="Team Culture"
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7Y_h21gegpC9ojcfKniYH-jwqyFAlGbCoCNMM41_RICs7Z8XcydDmZvSZUwamCaej1WjPl2yN5035hWNyh5Ijnm8h_jYuLBm3NYpaqfEAWqOTYRRO5ZmTXBoMgJ1wUwnUSe3Qg8Ka-YSs-aAH70jCpc75LaGIWiiRZjvv6RY-M7IA0EFB-esCd_ptRrABWfnG6ZFVDHPkatPl7HR0r9GZgA4Ss9Qk6Un-lb27Fa2gfnjb8OYnJZsqOpxiL1FMfFJrxTHFSNSr8g"
+              />
             </div>
           </div>
         </section>
-
       </div>
     </main>
   );

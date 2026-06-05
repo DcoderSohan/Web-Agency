@@ -1,9 +1,9 @@
 import { OTP } from "./otp.model.js";
 import otpGenerator from "otp-generator";
-import resend from "../../config/resendConfig.js";
+import { sendMail } from "../../config/mailConfig.js";
 
 /**
- * Controller to handle sending OTP via Resend
+ * Controller to handle sending OTP via Nodemailer
  * POST /send-otp or /send-email-otp
  */
 export const sendEmailOtp = async (req, res) => {
@@ -71,9 +71,6 @@ export const sendEmailOtp = async (req, res) => {
       otp,
     });
 
-    // 7. Get sender email address from environment variable or default to Resend sandbox sender
-    const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
-
     // 8. Prepare email content: exact subject & text format required by user
     const emailSubject = "Email Verification OTP";
     const emailBody = `Your OTP is: ${otp}\nThis OTP expires in 5 minutes.`;
@@ -101,41 +98,20 @@ export const sendEmailOtp = async (req, res) => {
       </div>
     `;
 
-    // 9. Send the email using Resend
-    const { data, error } = await resend.emails.send({
-      from: fromEmail,
+    // 9. Send the email using Nodemailer
+    const info = await sendMail({
       to: trimmedEmail,
       subject: emailSubject,
       text: emailBody,
       html: emailHtmlBody,
     });
 
-    // 10. Handle errors or send successful JSON response
-    if (error) {
-      console.error("Resend API error:", error);
-      
-      let clientMessage = "Failed to send OTP email via Resend.";
-      
-      // Provide custom descriptive messages for sandbox and domain limits
-      if (error.message && error.message.includes("testing emails")) {
-        clientMessage = `Resend Sandbox Limit: During development, you can only send test emails to your registered Resend account address (dcoder0709@gmail.com). To send to other emails, please verify your custom domain at resend.com/domains.`;
-      } else if (error.message && error.message.includes("domain is not verified")) {
-        clientMessage = `Resend Configuration Error: The sender domain is not verified. Please verify your custom domain at resend.com/domains, or use "onboarding@resend.dev" as your EMAIL_FROM during testing.`;
-      }
-
-      return res.status(500).json({
-        success: false,
-        message: clientMessage,
-        error: error.message,
-      });
-    }
-
-    console.log(`OTP sent successfully via Resend. ID: ${data.id}`);
+    console.log(`OTP sent successfully. Message ID: ${info.messageId}`);
 
     return res.status(200).json({
       success: true,
       message: "OTP sent successfully to your email.",
-      id: data.id,
+      id: info.messageId,
     });
   } catch (error) {
     console.error("Error in sendEmailOtp:", error);

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Careers = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedDept, setSelectedDept] = useState("All");
   const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
   useEffect(() => {
@@ -25,134 +26,261 @@ const Careers = () => {
     }
   };
 
+  const departments = ["All", ...new Set(jobs.map((job) => job.department))];
+  const filteredJobs =
+    selectedDept === "All"
+      ? jobs
+      : jobs.filter((job) => job.department === selectedDept);
+
   return (
-    <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
-      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
-
-        {/* ── HERO SECTION ── */}
-        <section className="pt-4 pb-16 md:pt-8 md:pb-32 flex flex-col items-start gap-8">
-          <div className="inline-block bg-black text-white px-3 py-1 font-['JetBrains_Mono'] text-[12px] font-medium tracking-[0.05em] uppercase">
-            JOIN THE REVOLUTION
+    <main className="bg-white text-[#1a1c1c] min-h-screen">
+      {/* ── HERO SECTION ── */}
+      <section className="w-full px-5 md:px-16 pt-16 md:pt-32 pb-12 md:pb-16 border-b border-black/10">
+        <div className="w-full max-w-[1440px] mx-auto">
+          <div className="max-w-3xl">
+            <span className="text-[12px] font-medium text-[#5d5f5f] uppercase tracking-widest">
+              Join Our Team
+            </span>
+            <h1 className="font-['Syne'] text-[64px] md:text-[88px] font-bold leading-[0.95] mt-4 mb-6 text-black">
+              Let's Build Something Great
+            </h1>
+            <p className="font-['Geist'] text-[18px] md:text-[20px] leading-[1.6] text-[#5d5f5f]">
+              We're looking for creative minds and skilled developers ready to
+              craft digital experiences that matter. Join a team that values
+              quality, innovation, and collaboration.
+            </p>
           </div>
-          <h1 className="font-['Syne'] text-[clamp(40px,8vw,120px)] leading-[0.9] tracking-[-0.04em] font-extrabold uppercase max-w-4xl break-words m-0 text-black">
-            JOIN THE FUTURE
-          </h1>
-          <p className="font-['Geist'] text-[18px] leading-[1.6] max-w-2xl text-[#5d5f5f] m-0">
-            We are building the next generation of digital infrastructure. VTRC Technologies is seeking architects, engineers, and visionaries to redefine technical excellence.
-          </p>
-        </section>
+        </div>
+      </section>
 
-        {/* ── Culture Bento Grid ── */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-32">
-
-          <div className="col-span-1 md:col-span-8 border border-black p-8 flex flex-col justify-between bg-white">
-            <div>
-              <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black mb-4 m-0 leading-tight uppercase">Our Engineering DNA</h2>
-              <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f] max-w-xl m-0">
-                We prioritize structural integrity over superficial aesthetics. Our culture is built on radical transparency, peer review, and the pursuit of the "optimal path."
+      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 py-16 md:py-24">
+        {/* ── VALUES SECTION ── */}
+        <section className="mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="p-8 bg-[#f8f7f7] rounded-lg">
+              <div className="text-[32px] font-bold text-black mb-4">01</div>
+              <h3 className="font-['Syne'] text-[24px] font-bold text-black mb-3 uppercase">
+                Craft
+              </h3>
+              <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f]">
+                We prioritize quality and attention to detail in everything we
+                build. Excellence is non-negotiable.
               </p>
             </div>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <div className="border border-black px-4 py-2 font-['JetBrains_Mono'] text-[12px] font-medium text-black">01 / Rigor</div>
-              <div className="border border-black px-4 py-2 font-['JetBrains_Mono'] text-[12px] font-medium text-black">02 / Clarity</div>
-              <div className="border border-black px-4 py-2 font-['JetBrains_Mono'] text-[12px] font-medium text-black">03 / Speed</div>
+            <div className="p-8 bg-[#f8f7f7] rounded-lg">
+              <div className="text-[32px] font-bold text-black mb-4">02</div>
+              <h3 className="font-['Syne'] text-[24px] font-bold text-black mb-3 uppercase">
+                Creativity
+              </h3>
+              <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f]">
+                Bold ideas meet technical expertise. We encourage innovation and
+                experimentation in everything.
+              </p>
+            </div>
+            <div className="p-8 bg-[#f8f7f7] rounded-lg">
+              <div className="text-[32px] font-bold text-black mb-4">03</div>
+              <h3 className="font-['Syne'] text-[24px] font-bold text-black mb-3 uppercase">
+                Collaboration
+              </h3>
+              <p className="font-['Geist'] text-[16px] leading-[1.6] text-[#5d5f5f]">
+                Great work happens when talented people work together. We're a
+                team of supportive, curious minds.
+              </p>
             </div>
           </div>
+        </section>
 
-          <div className="col-span-1 md:col-span-4 border border-black aspect-square relative overflow-hidden">
+        {/* ── PERKS SECTION ── */}
+        <section className="mb-24 bg-black text-white p-12 md:p-16 rounded-lg">
+          <h2 className="font-['Syne'] text-[40px] md:text-[48px] font-bold mb-12 uppercase">
+            What We Offer
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="flex gap-4">
+              <div className="text-[32px] font-bold flex-shrink-0 w-12">✓</div>
+              <div>
+                <h4 className="font-bold text-[18px] mb-2 uppercase">
+                  Competitive Compensation
+                </h4>
+                <p className="text-white/70 text-[16px]">
+                  Salary and benefits that reflect your skills and experience.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="text-[32px] font-bold flex-shrink-0 w-12">✓</div>
+              <div>
+                <h4 className="font-bold text-[18px] mb-2 uppercase">
+                  Growth Opportunities
+                </h4>
+                <p className="text-white/70 text-[16px]">
+                  Continuous learning and professional development programs.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="text-[32px] font-bold flex-shrink-0 w-12">✓</div>
+              <div>
+                <h4 className="font-bold text-[18px] mb-2 uppercase">
+                  Flexible Work
+                </h4>
+                <p className="text-white/70 text-[16px]">
+                  Remote-friendly options and flexible working arrangements.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="text-[32px] font-bold flex-shrink-0 w-12">✓</div>
+              <div>
+                <h4 className="font-bold text-[18px] mb-2 uppercase">
+                  Great Team
+                </h4>
+                <p className="text-white/70 text-[16px]">
+                  Work alongside passionate, talented, and friendly
+                  professionals.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── FILTER & JOB LISTINGS ── */}
+        <section className="mb-24">
+          <div className="mb-12">
+            <h2 className="font-['Syne'] text-[48px] md:text-[56px] font-bold mb-8 text-black uppercase">
+              Open Positions
+            </h2>
+
+            {/* Department Filter */}
+            {!loading && departments.length > 1 && (
+              <div className="flex flex-wrap gap-3 mb-8">
+                {departments.map((dept) => (
+                  <button
+                    key={dept}
+                    onClick={() => setSelectedDept(dept)}
+                    className={`px-6 py-3 rounded-full font-['Geist'] text-[14px] font-medium uppercase transition-all ${
+                      selectedDept === dept
+                        ? "bg-black text-white"
+                        : "bg-[#f8f7f7] text-black hover:bg-[#efefef]"
+                    }`}
+                  >
+                    {dept}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Job Cards */}
+          {loading ? (
+            <div className="py-20 text-center">
+              <div className="inline-block w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filteredJobs.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="font-['Geist'] text-[18px] text-[#5d5f5f]">
+                No positions available at the moment. Check back soon!
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {filteredJobs.map((job) => (
+                <Link
+                  key={job._id}
+                  to={`/careers/${job.slug}`}
+                  className="group p-8 bg-[#f8f7f7] rounded-lg border border-black/10 hover:border-black hover:shadow-lg transition-all duration-300 no-underline"
+                >
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="flex-1">
+                      <h3 className="font-['Syne'] text-[24px] md:text-[28px] font-bold text-black mb-2 group-hover:text-black transition-colors uppercase">
+                        {job.jobTitle}
+                      </h3>
+                      <p className="font-['Geist'] text-[14px] text-[#5d5f5f] uppercase tracking-wide">
+                        {job.department}
+                      </p>
+                    </div>
+                    <span className="material-symbols-outlined text-[24px] text-black group-hover:translate-x-1 transition-transform flex-shrink-0">
+                      arrow_forward
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <span className="px-4 py-2 bg-white border border-black/20 rounded-full font-['Geist'] text-[12px] font-medium text-[#5d5f5f] uppercase">
+                      {job.jobType}
+                    </span>
+                    <span className="px-4 py-2 bg-white border border-black/20 rounded-full font-['Geist'] text-[12px] font-medium text-[#5d5f5f] uppercase">
+                      {job.location}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* ── TEAM CULTURE SECTION ── */}
+        <section className="mb-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="font-['Syne'] text-[48px] font-bold mb-6 text-black uppercase">
+              Our Culture
+            </h2>
+            <p className="font-['Geist'] text-[18px] leading-[1.8] text-[#5d5f5f] mb-6">
+              We believe in building a workplace where creativity thrives,
+              collaboration flourishes, and every team member feels valued. We
+              celebrate diverse perspectives and foster an environment of
+              continuous learning.
+            </p>
+            <ul className="space-y-4">
+              <li className="flex items-center gap-3">
+                <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                <span className="font-['Geist'] text-[16px] text-[#5d5f5f]">
+                  Transparent communication and mutual respect
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                <span className="font-['Geist'] text-[16px] text-[#5d5f5f]">
+                  Work-life balance that actually matters
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                <span className="font-['Geist'] text-[16px] text-[#5d5f5f]">
+                  Regular team events and community building
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="inline-block w-2 h-2 bg-black rounded-full"></span>
+                <span className="font-['Geist'] text-[16px] text-[#5d5f5f]">
+                  Support for personal and professional growth
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="bg-[#f8f7f7] rounded-lg aspect-square overflow-hidden">
             <img
-              alt="Office Culture"
-              className="object-cover w-full h-full grayscale"
+              alt="Team Culture"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmH8-ugyYH5J56Bz9lQGkA4McbjO0cZE3tNS3mxFg8ZjA88T-mgTJ0k_uqtgKxf2sYApvFdePbGipJ5woQA7pvvVwCh2qr5HPBuMXnJrbL3PcGQWwmN0UGHuesTrVSMx6MzUh8kUhpWL9mJlHuKwaWQz5hVNQGXQZgAXTbj_KAUZICHrRDMkbZhZpi5cvj2gkrhyBYXvl9u_QGrFWpH0xiT7p6x8sujK03VtCphGHB42d-EKrpBxdz7cIXxeaWTNISqdiiwb_xyA"
             />
           </div>
-
-          <div className="col-span-1 md:col-span-4 border border-black aspect-[4/5] relative overflow-hidden">
-            <img
-              alt="Workspace"
-              className="object-cover w-full h-full grayscale"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkvctF3YmuNo70oBNIY7NYX8I_7DMke4ZFwxtdBcpe5unOJA6aOTQ83HNyh8i4jkW9X8JHGYqFFLJPWUYNiDAN3tbXI8bq6MArrOvMiiQs2yGyJZE0iWOF2noIU_gH4AU0Q9RC9eZxmoTkX6X08doOtq5RZ0s7LR3RgoEPZdbqoNCc4djOcQAnhoiH40mvB5S6JjKnYtI8cmdDSvwewfJUlB6RXk4pwIkj1T1M1ZTpTdRow7VW1T8GR75loOpC0ILQAxqBr8NitQ"
-            />
-          </div>
-
-          <div className="col-span-1 md:col-span-8 border border-black p-8 md:p-12 bg-black text-white flex flex-col justify-center">
-            <h2 className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-white mb-8 m-0 leading-tight uppercase">Manifesto</h2>
-            <div className="space-y-8">
-              <div className="border-b border-white/20 pb-4">
-                <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">01</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Function defines form, always.</p>
-              </div>
-              <div className="border-b border-white/20 pb-4">
-                <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">02</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Complexity is a debt we refuse to accumulate.</p>
-              </div>
-              <div>
-                <span className="font-['JetBrains_Mono'] text-[12px] opacity-60 block mb-2 font-medium">03</span>
-                <p className="font-['Syne'] text-[24px] md:text-[32px] font-bold leading-tight m-0 uppercase">Humanity is served through technical precision.</p>
-              </div>
-            </div>
-          </div>
-
         </section>
 
-        {/* ── Open Roles Section ── */}
-        <section className="mb-32">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b-2 border-black pb-8 mb-8 gap-4">
-            <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] leading-[1] font-bold uppercase m-0 text-black">Open Roles</h2>
-            <div className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] mb-2 uppercase tracking-widest">
-                {loading ? "SCANNING GRID..." : `AVAILABILITY: ${jobs.length} POSITIONS`}
-            </div>
-          </div>
-
-          <div className="flex flex-col">
-            {loading ? (
-                <div className="py-20 text-center">
-                    <div className="inline-block w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                </div>
-            ) : jobs.length === 0 ? (
-                <div className="py-20 text-center border-b border-black/10">
-                    <p className="font-['JetBrains_Mono'] text-[14px] font-bold uppercase tracking-widest text-[#5d5f5f]">No vacancies detected in the current node cycle.</p>
-                </div>
-            ) : (
-                jobs.map((job) => (
-                    <Link 
-                        key={job._id}
-                        to={`/careers/${job.slug}`} 
-                        className="group border-b border-black/20 py-8 flex flex-col md:flex-row md:items-center justify-between hover:bg-black hover:text-white transition-all duration-300 px-4 cursor-pointer no-underline"
-                    >
-                        <div className="flex flex-col gap-3">
-                            <h3 className="font-['Syne'] text-[24px] md:text-[32px] font-bold text-black group-hover:text-white m-0 transition-colors uppercase">
-                                {job.jobTitle}
-                            </h3>
-                            <div className="flex gap-4">
-                                <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">
-                                    {job.location} / {job.department}
-                                </span>
-                                <span className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] group-hover:text-white/70 uppercase">
-                                    {job.jobType}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="mt-4 md:mt-0">
-                            <span className="material-symbols-outlined text-[32px] group-hover:translate-x-2 transition-transform text-black group-hover:text-white">arrow_forward</span>
-                        </div>
-                    </Link>
-                ))
-            )}
-          </div>
-        </section>
-
-        {/* ── CTA Section ── */}
-        <section className="border-2 border-black p-12 md:p-16 flex flex-col items-center text-center gap-8 bg-[#f4f3f3]">
-          <h2 className="font-['Syne'] text-[clamp(40px,5vw,64px)] font-bold text-black m-0 leading-tight uppercase">Don't see your fit?</h2>
-          <p className="font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] max-w-xl m-0">
-            We are always looking for exceptional talent. If you believe you can contribute to the VTRC mission, send us your dossier.
+        {/* ── FINAL CTA SECTION ── */}
+        <section className="bg-black text-white p-12 md:p-20 rounded-lg text-center">
+          <h2 className="font-['Syne'] text-[48px] md:text-[56px] font-bold mb-6 uppercase">
+            Ready to Join Us?
+          </h2>
+          <p className="font-['Geist'] text-[18px] leading-[1.6] text-white/80 max-w-2xl mx-auto mb-10">
+            Found the perfect opportunity? Apply now and let's start building
+            something amazing together.
           </p>
-          <Link to="/application" className="bg-black text-white font-['JetBrains_Mono'] text-[12px] font-bold px-12 py-5 border-2 border-transparent hover:bg-transparent hover:text-black hover:border-black transition-colors duration-300 uppercase tracking-[0.05em] cursor-pointer inline-block no-underline">
-            Send Speculative Application
+          <Link
+            to="/application"
+            className="inline-block bg-white text-black font-['Syne'] text-[16px] font-bold px-12 py-4 rounded-full hover:bg-[#f8f7f7] transition-colors duration-300 uppercase tracking-wide no-underline"
+          >
+            View Open Positions
           </Link>
         </section>
-
       </div>
     </main>
   );
