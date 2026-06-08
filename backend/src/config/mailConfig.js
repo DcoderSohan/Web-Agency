@@ -1,33 +1,44 @@
-import nodemailer from "nodemailer";
+import axios from "axios";
 
 /**
- * Send an email using Nodemailer and Gmail SMTP
+ * Send an email using Brevo (Sendinblue) REST API
  */
 export const sendMail = async ({ to, subject, text, html }) => {
-  const emailUser = process.env.EMAIL_FROM;
-  const emailPass = process.env.EMAIL_PASS;
+  const apiKey = process.env.BREVO_API_KEY;
+  const senderEmail = process.env.SENDER_EMAIL;
+  const senderName = process.env.SENDER_NAME || "VTRC Technologies";
 
-  if (!emailUser || !emailPass) {
-    throw new Error("Missing EMAIL_FROM or EMAIL_PASS in environment variables.");
+  if (!apiKey || !senderEmail) {
+    throw new Error("Missing BREVO_API_KEY or SENDER_EMAIL in environment variables.");
   }
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: emailUser,
-      pass: emailPass,
+  const payload = {
+    sender: {
+      name: senderName,
+      email: senderEmail,
     },
-  });
+    to: [
+      {
+        email: to,
+      },
+    ],
+    subject: subject,
+    htmlContent: html,
+    textContent: text,
+  };
 
-  console.log(`✉️ Sending email via Gmail SMTP from: ${emailUser} to: ${to}`);
+  try {
+    const response = await axios.post("https://api.brevo.com/v3/smtp/email", payload, {
+      headers: {
+        "api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+    });
 
-  const info = await transporter.sendMail({
-    from: `"VTRC Technologies" <${emailUser}>`,
-    to,
-    subject,
-    text,
-    html,
-  });
-
-  return info;
+    console.log(`✉️ Sending email via Brevo API from: ${senderEmail} to: ${to}`);
+    return response.data;
+  } catch (error) {
+    console.error("Brevo API Error:", error.response ? error.response.data : error.message);
+    throw error;
+  }
 };

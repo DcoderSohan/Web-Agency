@@ -16,12 +16,15 @@ services:
       - key: JWT_SECRET
         sync: false
         placeholder: "Your JWT secret key"
-      - key: RESEND_API_KEY
+      - key: BREVO_API_KEY
         sync: false
-        placeholder: "Your Resend API Key"
-      - key: EMAIL_FROM
-        value: onboarding@resend.dev
-        placeholder: "Verified sender email or onboarding@resend.dev"
+        placeholder: "Your Brevo API Key"
+      - key: SENDER_EMAIL
+        sync: false
+        placeholder: "Your Verified Sender Email"
+      - key: SENDER_NAME
+        value: "VTRC Technologies"
+        placeholder: "Sender Name"
       - key: FRONTEND_URL
         sync: false
         placeholder: "Your frontend URL"
