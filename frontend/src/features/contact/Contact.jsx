@@ -12,19 +12,6 @@ const Contact = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
-  const [otp, setOtp] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [cooldown, setCooldown] = useState(0);
-  const [otpLoading, setOtpLoading] = useState(false);
-  const [verifyLoading, setVerifyLoading] = useState(false);
-  const [otpError, setOtpError] = useState('');
-
-  const validateEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return regex.test(email);
-  };
-
   const mapConfig = {
     lat: 16.8103151,
     lng: 73.3370135,
@@ -35,63 +22,11 @@ const Contact = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    let timer;
-    if (cooldown > 0) {
-      timer = setInterval(() => setCooldown((prev) => prev - 1), 1000);
-    }
-    return () => clearInterval(timer);
-  }, [cooldown]);
 
-  const handleSendOtp = async () => {
-    if (!validateEmail(formData.email)) {
-      setOtpError('Please enter a valid email address (e.g. name@example.com)');
-      return;
-    }
-    setOtpLoading(true);
-    setOtpError('');
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/otp/send-email-otp`, { email: formData.email });
-      if (res.data.success) {
-        setOtpSent(true);
-        setCooldown(30);
-      }
-    } catch (err) {
-      setOtpError(err.response?.data?.message || 'Failed to send OTP.');
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!otp) {
-      setOtpError('Please enter the OTP.');
-      return;
-    }
-    setVerifyLoading(true);
-    setOtpError('');
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/otp/verify-email-otp`, { email: formData.email, otp });
-      if (res.data.success) {
-        setEmailVerified(true);
-        setOtpSent(false);
-        setOtp('');
-      }
-    } catch (err) {
-      setOtpError(err.response?.data?.message || 'Invalid OTP.');
-    } finally {
-      setVerifyLoading(false);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    if (!emailVerified) {
-      setError('Please verify your email address before submitting.');
-      return;
-    }
 
     const phoneRegex = /^[0-9]{10}$/;
     if (!phoneRegex.test(formData.phone)) {
@@ -105,9 +40,6 @@ const Contact = () => {
       if (response.data.success) {
         setSuccess(true);
         setFormData({ name: '', email: '', phone: '', message: '' });
-        setEmailVerified(false);
-        setOtpSent(false);
-        setOtp('');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send message. Please try again.');
@@ -115,6 +47,7 @@ const Contact = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen overflow-x-hidden">
@@ -204,66 +137,19 @@ const Contact = () => {
                       />
                     </div>
 
-                    {/* Email + OTP */}
+                    {/* Email */}
                     <div className="flex flex-col gap-2">
                       <label className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
                         Email Address
                       </label>
-                      <div className="flex items-center border-b-2 border-black focus-within:border-b-[3px] transition-all">
-                        <input
-                          type="email"
-                          required
-                          disabled={emailVerified}
-                          value={formData.email}
-                          onChange={(e) => {
-                            setFormData({ ...formData, email: e.target.value });
-                            setEmailVerified(false);
-                            setOtpSent(false);
-                          }}
-                          placeholder="alex@gmail.com"
-                          className="w-full min-w-0 bg-transparent border-none py-3 font-['Geist'] text-[15px] font-medium text-black placeholder-black/25 focus:outline-none focus:ring-0 disabled:opacity-40 disabled:cursor-not-allowed"
-                        />
-                        {emailVerified ? (
-                          <span className="font-['JetBrains_Mono'] text-[11px] font-bold text-green-600 uppercase whitespace-nowrap px-3 flex-shrink-0 flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                            Verified
-                          </span>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={handleSendOtp}
-                            disabled={otpLoading || cooldown > 0 || !formData.email}
-                            className="font-['JetBrains_Mono'] text-[11px] font-bold text-white bg-black px-3 py-1.5 uppercase disabled:opacity-40 whitespace-nowrap flex-shrink-0 transition-opacity hover:opacity-70"
-                          >
-                            {otpLoading ? 'Sending…' : cooldown > 0 ? `${cooldown}s` : 'Send OTP'}
-                          </button>
-                        )}
-                      </div>
-                      {otpError && (
-                        <p className="font-['JetBrains_Mono'] text-[11px] text-red-600 font-bold tracking-widest uppercase mt-1">
-                          {otpError}
-                        </p>
-                      )}
-                      {otpSent && !emailVerified && (
-                        <div className="flex items-center gap-2 mt-3 border border-black/10 bg-[#f4f3f3] px-3 py-2">
-                          <input
-                            type="text"
-                            maxLength="6"
-                            placeholder="6-digit OTP"
-                            value={otp}
-                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                            className="w-full min-w-0 bg-transparent border-none py-1 font-['JetBrains_Mono'] text-[14px] font-bold text-black placeholder-black/30 focus:outline-none tracking-widest"
-                          />
-                          <button
-                            type="button"
-                            onClick={handleVerifyOtp}
-                            disabled={verifyLoading || otp.length !== 6}
-                            className="font-['JetBrains_Mono'] text-[11px] font-bold text-white bg-black px-3 py-1.5 uppercase disabled:opacity-40 whitespace-nowrap flex-shrink-0"
-                          >
-                            {verifyLoading ? '…' : 'Verify'}
-                          </button>
-                        </div>
-                      )}
+                      <input
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="alex@gmail.com"
+                        className="w-full bg-transparent border-b-2 border-black py-3 font-['Geist'] text-[15px] font-medium text-black placeholder-black/25 focus:outline-none focus:border-b-[3px] transition-all rounded-none"
+                      />
                     </div>
                   </div>
 
