@@ -2,6 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+/* ── Project Card ── */
+const ProjectCard = ({ project, index }) => {
+  const isFeatured = index % 5 === 4; // every 5th card is a wide featured card
+
+  return (
+    <Link
+      to={project.link || '#'}
+      className={`group block no-underline border-2 border-black bg-white overflow-hidden flex flex-col${
+        isFeatured ? ' md:col-span-2' : ''
+      }`}
+    >
+      {/* Image */}
+      <div className="relative overflow-hidden bg-[#eeeeee]" style={{ height: isFeatured ? '360px' : '260px' }}>
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover grayscale transition-transform duration-700 group-hover:scale-105"
+        />
+        {/* index badge */}
+        <span className="absolute top-4 left-4 bg-black text-white font-['JetBrains_Mono'] text-[11px] font-bold uppercase tracking-widest px-2 py-1">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 py-5 border-t-2 border-black flex items-center justify-between gap-4 bg-[#faf9f9]">
+        <div>
+          <h2 className="font-['Syne'] text-[20px] font-bold uppercase text-black m-0 leading-tight">
+            {project.title}
+          </h2>
+          <p className="font-['JetBrains_Mono'] text-[11px] font-medium text-[#5d5f5f] uppercase mt-1 mb-0 tracking-widest">
+            {project.subtitle || project.category}
+          </p>
+        </div>
+        <span className="material-symbols-outlined text-[22px] text-black flex-shrink-0 transition-transform duration-300 group-hover:translate-x-1">
+          arrow_forward
+        </span>
+      </div>
+    </Link>
+  );
+};
+
+/* ── Page ── */
 const Work = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,158 +61,147 @@ const Work = () => {
         setProjects(response.data.data);
       }
     } catch (error) {
-      console.error("Error fetching projects:", error);
+      console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Logic to determine column span based on index
-  const getColSpan = (index) => {
-    const pattern = [8, 4, 4, 8, 12];
-    return pattern[index % pattern.length];
-  };
+  const stats = [
+    { label: 'Projects', value: projects.length > 0 ? `${projects.length}+` : '0' },
+    { label: 'Years Active', value: '12' },
+    { label: 'Uptime', value: '99.9%' },
+    { label: 'Awards', value: '42' },
+  ];
 
   return (
-    <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen">
-      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-16 pt-12 md:pt-24 pb-24">
+    <main className="bg-[#faf9f9] text-[#1a1c1c] min-h-screen overflow-x-hidden">
+      <div className="w-full max-w-[1440px] mx-auto px-5 md:px-8 lg:px-16 pt-14 md:pt-20 pb-24">
 
-        {/* ── HERO SECTION ── */}
-        <section className="pb-16 md:pb-24 border-b-2 border-black flex flex-col justify-center">
-          <div className="mb-12">
-            <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-black mb-6 uppercase tracking-[0.2em]">
+        {/* ── HERO ── */}
+        <section className="mb-16">
+          {/* Label badge */}
+          <div className="mb-5 inline-flex items-center gap-2 px-3 py-1 border border-black">
+            <span className="w-2 h-2 rounded-full bg-black inline-block" />
+            <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-black">
               Selected Works // 2026
-            </p>
-            <h1 className="font-['Syne'] text-[clamp(40px,8vw,120px)] leading-[0.9] tracking-[-0.04em] font-extrabold text-black uppercase break-words">
-              PROVING THE<br className="hidden md:block" /> IMPOSSIBLE<br className="hidden md:block" /> PERMANENT
-            </h1>
+            </span>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-            <p className="max-w-[560px] font-['Geist'] text-[18px] leading-[1.6] text-[#5d5f5f] m-0">
-              VTRC Technologies architected the digital foundations for the world's most ambitious industrial and creative entities. We do not design interfaces; we engineer digital monuments.
+
+          {/* Heading */}
+          <h1 className="font-['Syne'] text-[clamp(32px,5vw,68px)] leading-[1] tracking-[-0.03em] font-extrabold text-black uppercase m-0 mb-6">
+            Proving the{' '}
+            <span className="italic text-transparent" style={{ WebkitTextStroke: '2px black' }}>
+              Impossible
+            </span>
+            <br />
+            Permanent
+          </h1>
+
+          {/* Divider row */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-t-2 border-black pt-6">
+            <p className="font-['Geist'] text-[15px] leading-[1.7] text-[#5d5f5f] max-w-md m-0">
+              VTRC Technologies architects the digital foundations for the world's most ambitious
+              industrial and creative entities. We engineer digital monuments.
             </p>
-            <div className="flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[32px] text-black animate-bounce">
-                arrow_downward
-              </span>
+            <Link
+              to="/contact-us"
+              className="font-['JetBrains_Mono'] text-[12px] font-medium uppercase tracking-widest text-black border-b-2 border-black pb-0.5 hover:opacity-50 transition-opacity whitespace-nowrap self-start md:self-auto"
+            >
+              Start a Project →
+            </Link>
+          </div>
+        </section>
+
+        {/* ── STATS BAR ── */}
+        <section className="border-2 border-black mb-5 grid grid-cols-2 md:grid-cols-4 divide-x-0 md:divide-x-2 divide-black">
+          {stats.map((s, i) => (
+            <div
+              key={s.label}
+              className={`px-6 md:px-8 py-5 flex flex-col gap-1 bg-white${
+                i < 2 ? ' border-b-2 md:border-b-0 border-black' : ''
+              }`}
+            >
+              <p className="font-['JetBrains_Mono'] text-[11px] font-medium text-[#5d5f5f] uppercase m-0 tracking-widest">
+                {s.label}
+              </p>
+              <p className="font-['Syne'] text-[28px] md:text-[32px] font-bold text-black m-0 leading-none">
+                {s.value}
+              </p>
             </div>
-          </div>
+          ))}
         </section>
 
         {/* ── PROJECT GRID ── */}
-        <section className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-6">
-          {loading ? (
-            <div className="col-span-12 py-32 flex flex-col items-center justify-center">
-               <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
-               <p className="mt-6 font-['JetBrains_Mono'] text-xs uppercase tracking-widest font-bold">Initializing Monuments...</p>
-            </div>
-          ) : (
-            projects.map((project, index) => {
-              const span = getColSpan(index);
-              const isOverlay = span === 12;
+        <section className="border-2 border-black bg-white">
+          {/* Header bar */}
+          <div className="border-b-2 border-black px-6 md:px-8 py-3.5 flex items-center justify-between">
+            <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-[#5d5f5f]">
+              Project Archive
+            </span>
+            <span className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-black">
+              {loading ? '—' : `${projects.length} Entries`}
+            </span>
+          </div>
 
-              if (isOverlay) {
-                return (
-                  <Link 
-                    key={project._id}
-                    to={project.link || "#"} 
-                    className="col-span-1 md:col-span-12 border-2 border-black overflow-hidden group relative block no-underline cursor-pointer h-[400px] md:h-[600px]"
-                  >
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center p-4">
-                      <div className="bg-black text-white p-8 md:p-12 border-2 border-black text-center w-full max-w-2xl mx-auto flex flex-col items-center">
-                        <h2 className="font-['Syne'] text-[clamp(32px,5vw,64px)] leading-none font-bold uppercase mb-4 text-white m-0">
-                          {project.title}
-                        </h2>
-                        <p className="font-['JetBrains_Mono'] text-[11px] md:text-[12px] font-medium uppercase tracking-[0.2em] mb-8 text-white m-0">
-                          {project.subtitle || project.category}
-                        </p>
-                        <button className="bg-white text-black px-8 py-3 border-2 border-transparent font-['JetBrains_Mono'] text-[12px] font-bold uppercase cursor-pointer hover:bg-black hover:text-white hover:border-white transition-colors duration-200">
-                          View Project
-                        </button>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              }
-
-              return (
-                <Link 
-                  key={project._id}
-                  to={project.link || "#"} 
-                  className={`col-span-1 md:col-span-${span} border-2 border-black overflow-hidden group cursor-pointer bg-white flex flex-col block no-underline`}
-                >
-                  <div className={`h-[300px] md:h-[500px] bg-[#eeeeee] relative overflow-hidden ${span === 8 ? '' : 'flex-grow'}`}>
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover grayscale transition-transform duration-1000 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6 md:p-8 bg-[#faf9f9] border-t-2 border-black flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                      <h2 className="font-['Syne'] text-[24px] md:text-[32px] font-bold uppercase text-black m-0 leading-tight">
-                        {project.title}
-                      </h2>
-                      <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase mt-2 mb-0 tracking-widest">
-                        {project.subtitle || project.category}
-                      </p>
-                    </div>
-                    <span className="material-symbols-outlined text-[32px] text-black transition-transform duration-300 group-hover:translate-x-2 shrink-0 self-end md:self-center">
-                      arrow_forward
-                    </span>
-                  </div>
-                </Link>
-              );
-            })
-          )}
-          
-          {!loading && projects.length === 0 && (
-            <div className="col-span-12 py-32 border-2 border-dashed border-black/10 flex flex-col items-center justify-center text-center">
-               <p className="font-['Syne'] text-2xl font-bold uppercase text-black">No Monuments Found</p>
-               <p className="font-['Geist'] text-[#5d5f5f] mt-2">The digital archive is currently empty.</p>
-            </div>
-          )}
-        </section>
-
-        {/* ── STATS SECTION ── */}
-        <section className="py-16 md:py-24 border-t-2 border-black">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="p-6 md:p-8 bg-[#f4f3f3] border border-black flex flex-col gap-2">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase m-0 tracking-widest">Projects</p>
-              <p className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black m-0 leading-none">{projects.length > 0 ? `${projects.length}+` : "0"}</p>
-            </div>
-            <div className="p-6 md:p-8 bg-[#f4f3f3] border border-black flex flex-col gap-2">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase m-0 tracking-widest">Years</p>
-              <p className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black m-0 leading-none">12</p>
-            </div>
-            <div className="p-6 md:p-8 bg-[#f4f3f3] border border-black flex flex-col gap-2">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase m-0 tracking-widest">Uptime</p>
-              <p className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black m-0 leading-none">99.9%</p>
-            </div>
-            <div className="p-6 md:p-8 bg-[#f4f3f3] border border-black flex flex-col gap-2">
-              <p className="font-['JetBrains_Mono'] text-[12px] font-medium text-[#5d5f5f] uppercase m-0 tracking-widest">Awards</p>
-              <p className="font-['Syne'] text-[32px] md:text-[40px] font-bold text-black m-0 leading-none">42</p>
-            </div>
+          {/* Grid body */}
+          <div className="p-5">
+            {loading ? (
+              <div className="py-32 flex flex-col items-center justify-center gap-6">
+                <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin" />
+                <p className="font-['JetBrains_Mono'] text-[11px] uppercase tracking-widest font-bold text-[#5d5f5f]">
+                  Loading Archive…
+                </p>
+              </div>
+            ) : projects.length === 0 ? (
+              <div className="py-32 border-2 border-dashed border-black/10 flex flex-col items-center justify-center text-center gap-3">
+                <p className="font-['Syne'] text-[20px] font-bold uppercase text-black m-0">
+                  No Monuments Found
+                </p>
+                <p className="font-['Geist'] text-[14px] text-[#5d5f5f] m-0">
+                  The digital archive is currently empty.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {projects.map((project, index) => (
+                  <ProjectCard key={project._id} project={project} index={index} />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
-        {/* ── CTA SECTION ── */}
-        <section className="bg-black text-white p-12 md:p-20 text-center flex flex-col items-center">
-          <h2 className="font-['Syne'] text-[clamp(32px,5vw,64px)] leading-none font-bold uppercase mb-8 text-white m-0">
-            BUILD THE PERMANENT
-          </h2>
-          <p className="max-w-[600px] w-full font-['Geist'] text-[18px] leading-[1.6] text-[#858383] mb-12 m-0">
-            Our queue for Q4 is opening. We seek partners who value structural integrity and long-form digital strategy.
-          </p>
-          <Link to="/contact-us" className="bg-white text-black px-12 py-5 border-2 border-transparent font-['JetBrains_Mono'] text-[12px] font-bold uppercase cursor-pointer hover:bg-transparent hover:text-white hover:border-white transition-colors duration-200 tracking-widest w-full md:w-auto">
-            Contact Strategy Team
-          </Link>
+        {/* ── CTA ── */}
+        <section className="mt-5 border-2 border-black bg-black text-white px-6 md:px-12 py-12 md:py-16 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+          <div>
+            <p className="font-['JetBrains_Mono'] text-[11px] font-medium uppercase tracking-widest text-white/50 m-0 mb-3">
+              Ready to Begin?
+            </p>
+            <h2 className="font-['Syne'] text-[clamp(24px,3.5vw,44px)] leading-[1.1] font-bold uppercase text-white m-0">
+              Build the Permanent
+            </h2>
+            <p className="font-['Geist'] text-[14px] leading-[1.7] text-white/60 mt-4 m-0 max-w-md">
+              Our queue for Q4 is opening. We seek partners who value structural integrity and
+              long-form digital strategy.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              to="/contact-us"
+              className="bg-white text-black px-8 py-4 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-white hover:bg-transparent hover:text-white transition-all duration-300 tracking-widest whitespace-nowrap"
+            >
+              Contact Strategy Team
+            </Link>
+            <Link
+              to="/services"
+              className="bg-transparent text-white px-8 py-4 font-['JetBrains_Mono'] text-[12px] font-bold uppercase border-2 border-white/30 hover:border-white transition-all duration-300 tracking-widest whitespace-nowrap"
+            >
+              Our Services
+            </Link>
+          </div>
         </section>
+
       </div>
     </main>
   );
